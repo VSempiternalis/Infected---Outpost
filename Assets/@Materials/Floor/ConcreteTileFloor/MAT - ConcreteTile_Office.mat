@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-1084746174745487149
+--- !u!114 &-118294683491309385
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
@@ -20,14 +20,14 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: MAT - WoodWall_750
+  m_Name: MAT - ConcreteTile_Office
   m_Shader: {fileID: 4800000, guid: 933532a4fcc9baf4fa0491de14d08ed7, type: 3}
   m_ValidKeywords:
   - _METALLICSPECGLOSSMAP
   - _NORMALMAP
   - _OCCLUSIONMAP
   m_InvalidKeywords: []
-  m_LightmapFlags: 6
+  m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
@@ -38,16 +38,16 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _BaseMap:
-        m_Texture: {fileID: 2800000, guid: 350c3e091cc34a146bbf5d631f8bfb82, type: 3}
-        m_Scale: {x: 1, y: 14}
-        m_Offset: {x: 0, y: 0}
+        m_Texture: {fileID: 2800000, guid: b70347d5b7cd5a940869f2a35f9cd6f0, type: 3}
+        m_Scale: {x: 7, y: 6}
+        m_Offset: {x: 0.4, y: 0.3}
     - _BumpMap:
-        m_Texture: {fileID: 2800000, guid: 4c1e01106567a6d42991b0df2a88474a, type: 3}
+        m_Texture: {fileID: 2800000, guid: ebe2e00921c5ea7439b383ec2076c3f8, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _DetailAlbedoMap:
         m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
+        m_Scale: {x: 0, y: 1}
         m_Offset: {x: 0, y: 0}
     - _DetailMask:
         m_Texture: {fileID: 0}
@@ -62,15 +62,15 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 350c3e091cc34a146bbf5d631f8bfb82, type: 3}
-        m_Scale: {x: 1, y: 14}
-        m_Offset: {x: 0, y: 0}
+        m_Texture: {fileID: 2800000, guid: b70347d5b7cd5a940869f2a35f9cd6f0, type: 3}
+        m_Scale: {x: 7, y: 6}
+        m_Offset: {x: 0.4, y: 0.3}
     - _MetallicGlossMap:
-        m_Texture: {fileID: 2800000, guid: c8a3c211cf00b774ab854c455fb9fb53, type: 3}
+        m_Texture: {fileID: 2800000, guid: a872c62273c7ac54e89fe218f832e27e, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _OcclusionMap:
-        m_Texture: {fileID: 2800000, guid: 69234584579c7154f8c330bc4b722cd0, type: 3}
+        m_Texture: {fileID: 2800000, guid: b90f77de7625b6a4ba0a543143399df2, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _ParallaxMap:
@@ -114,7 +114,7 @@ Material:
     - _Parallax: 0.005
     - _QueueOffset: 0
     - _ReceiveShadows: 1
-    - _Smoothness: 0
+    - _Smoothness: 1
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1

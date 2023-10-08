@@ -1,8 +1,7 @@
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class SlowFollower : MonoBehaviour {
-    [SerializeField] private Transform toFollow;
+    public Transform toFollow;
     // [SerializeField] private float moveSpeed;
     // private Rigidbody rb;
     [SerializeField] private float smoothSpeed = 5f; // Adjust the smoothing speed

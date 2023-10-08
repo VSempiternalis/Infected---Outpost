@@ -1,7 +1,10 @@
-using System.Reflection;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Controller : MonoBehaviour {
+    public static Controller current;
+    private Character character;
+
     [Space(10)]
     [Header("MOVEMENT")]
     [SerializeField] private Rigidbody player;
@@ -15,26 +18,45 @@ public class Controller : MonoBehaviour {
     [Header("POINTER")]
     [SerializeField] private Transform pointer;
     private Camera mainCamera;
-    private Transform head;
-    [SerializeField] private float headSpeed;
-    private Quaternion targetHeadRot;
+
+    [Space(10)]
+    [Header("SELECTION")]
+    private GameObject pointed; //object player cursor is pointing at
+
+    private void Awake() {
+        current = this;
+    }
 
     private void Start() {
         mainCamera = Camera.main;
-        head = player.GetComponent<Character>().head;
     }
 
     private void Update() {
+        if(player == null) return;
+
         GetInput();
         MovePointer();
         MoveHead();
     }
 
     private void FixedUpdate() {
+        if(player == null) return;
+        
         Movement();
     }
 
+    public void SetPlayer(Rigidbody newPlayer) {
+        player = newPlayer;
+        character = newPlayer.GetComponent<Character>();
+        // agent = player.GetComponent<NavMeshAgent>();
+        // head = player.GetComponent<Character>().head;
+        mainCamera.transform.parent.position = player.GetComponent<Character>().campos.position;
+        mainCamera.transform.parent.GetComponent<SlowFollower>().toFollow = player.GetComponent<Character>().campos;
+    }
+
     private void MovePointer() {
+        if(pointed && pointed.GetComponent<Outline>()) pointed.GetComponent<Outline>().OutlineWidth = 0;
+        if(pointed) print("Pointed: " + pointed + " has outline: " + (pointed.GetComponent<Outline>()? "Yes":"No"));
         Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
 
@@ -42,24 +64,24 @@ public class Controller : MonoBehaviour {
         if (Physics.Raycast(ray, out hit)) {
             // Move the object to the point where the ray intersects with the world
             pointer.position = hit.point;
+
+            //Set pointed
+            pointed = hit.collider.gameObject;
+
+            //Outline
+            if(pointed.GetComponent<Outline>()) {
+                pointed.GetComponent<Outline>().OutlineWidth = 3; //3 is standard outline width
+            }
         }
     }
 
     private void MoveHead() {
-        // Calculate the direction from the head to the pointer, disregarding the Y-axis
-        Vector3 lookDirection = pointer.position - head.position;
-        lookDirection.y = 0; // Disregard the Y-axis component
-
-        // Calculate the target rotation
-        targetHeadRot = Quaternion.LookRotation(lookDirection);
-
-        // Rotate the head towards the target rotation with a delay
-        head.rotation = Quaternion.Slerp(head.rotation, targetHeadRot, headSpeed * Time.deltaTime);
+        character.MoveHead(pointer.position);
     }
 
     private void GetInput() {
         input = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
-        
+
         // Check for sprinting input (Left Shift)
         if(Input.GetKey(KeyCode.LeftShift)) {
             input *= sprintMultiplier;
@@ -67,20 +89,6 @@ public class Controller : MonoBehaviour {
     }
 
     private void Movement() {
-        // Calculate the diagonal direction by combining input along both the X and Z axes.
-        Vector3 moveDirection = new Vector3(input.x, 0, input.z);//.normalized;
-
-        // Check if there's any input
-        if (moveDirection != Vector3.zero) {
-            // Rotate the movement direction to match your isometric view (e.g., 45 degrees).
-            moveDirection = Quaternion.Euler(0, 45, 0) * moveDirection;
-
-            // Apply the movement with adjusted speed
-            Vector3 targetVelocity = moveDirection * (moveSpeed * sprintMultiplier);
-            player.velocity = Vector3.SmoothDamp(player.velocity, targetVelocity, ref currentVelocity, 0.1f);
-        } else {
-            // If no input is detected, gradually slow down the character
-            player.velocity = Vector3.SmoothDamp(player.velocity, Vector3.zero, ref currentVelocity, 0.1f);
-        }
+        character.MoveWASD(input);
     }
 }

@@ -9,7 +9,7 @@ public class Gun : MonoBehaviourPunCallbacks, IUsable, IAimable {
     private Vector3 aimPos;
 
     [SerializeField] private ParticleSystem muzzleFlashPS;
-    [SerializeField] private GameObject lightFlash;
+    // [SerializeField] private GameObject lightFlash;
 
     private void Start() {
         bulletCount = bulletCountOnStart;
@@ -18,7 +18,7 @@ public class Gun : MonoBehaviourPunCallbacks, IUsable, IAimable {
     private void Update() {
         // isAiming = false;
         // GetComponent<LineRenderer>().enabled = false;
-        if(lightFlash.activeSelf) lightFlash.SetActive(false);
+        // if(lightFlash.activeSelf) lightFlash.SetActive(false);
     }
 
     private void LateUpdate() {
@@ -65,8 +65,8 @@ public class Gun : MonoBehaviourPunCallbacks, IUsable, IAimable {
         //sfx
 
         print("Using gun rpc. target: " + targetName);
-        muzzleFlashPS.Play();
-        lightFlash.SetActive(true);
+        // muzzleFlashPS.Play();
+        // lightFlash.SetActive(true);
         GameObject target = GameObject.Find(targetName);
         if(target.GetComponent<Character>()) {
             print("trying to kill target: " + target.name);

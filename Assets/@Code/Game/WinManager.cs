@@ -130,7 +130,7 @@ public class WinManager : MonoBehaviour {
     }
 
     private void Endgame(string reason) {
-        print("END GAME");
+        // print("END GAME");
         // // Debug.Log("Infected win!");
         // //Application.Quit();
         // if(EndgameUI.activeSelf) return;

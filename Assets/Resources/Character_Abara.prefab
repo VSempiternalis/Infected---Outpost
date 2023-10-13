@@ -512,7 +512,7 @@ MonoBehaviour:
   campos: {fileID: 771090324900246012}
   isPlayer: 0
   spawnInt: 0
-  type: 0
+  type: 1
   moveSpeed: 1
   sprintMultiplier: 2
   head: {fileID: 2642057242483863292}
@@ -520,6 +520,8 @@ MonoBehaviour:
   body: {fileID: 2642057242483863292}
   onHandItem: {fileID: 0}
   hand: {fileID: 2642266226088422052}
+  infectCooldownOnStart: 0
+  infectCooldown: 0
 --- !u!114 &-3155246000917790985
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -38,21 +38,46 @@ public class Character : MonoBehaviourPunCallbacks {
     public ItemHandler onHandItem;
     public Transform hand;
 
+    [Space(10)]
+    [Header("INFECTED")]
+    [SerializeField] private int infectCooldownOnStart;
+    [SerializeField] private float infectCooldown;
+
     private void Start() {
         // SetPanels();
         rb = GetComponent<Rigidbody>();
+        infectCooldownOnStart = GameMaster.current.infectCooldownTime;
     }
 
-    // private void Update() {
-    //     if(photonView.IsMine) rpcSyncRotation(head.rotation.y);
-    // }
+    private void Update() {
+        if(type != 0 || !isPlayer) return;
+
+        // print(name + "modifying infect cooldown: " + Mathf.CeilToInt(infectCooldown));
+        if(infectCooldown > 0) infectCooldown -= Time.deltaTime; // Use Time.deltaTime to make it decrease by 1 every second
+        else infectCooldown = 0;
+
+        uiManager.current.UpdateInfectCooldown(Mathf.RoundToInt(infectCooldown));
+    }
 
     // [PunRPC] private void rpcSyncRotation(float yRot) {
     //     print(name + "RPC sync rot: " + yRot);
     //     head.rotation = Quaternion.Euler(0, yRot, 0);
     // }
 
-    public void Kill() {
+    public void Infect(string targetName) {
+        print("Attempting to infect");
+        if(type != 0 || infectCooldown > 0) return;
+        infectCooldown = infectCooldownOnStart;
+        photonView.RPC("InfectRPC", RpcTarget.All, targetName);
+    }
+
+    [PunRPC] private void InfectRPC(string targetName) {
+        Character target = GameObject.Find(targetName).GetComponent<Character>();
+        // if(target.type == 0) return;
+        target.Kill();
+    }
+
+    public void Kill() { //Kill this character
         print("Killing: " + name);
 
         if(GetComponent<aiInput>()) GetComponent<aiInput>().enabled = false;
@@ -77,6 +102,7 @@ public class Character : MonoBehaviourPunCallbacks {
 
     [PunRPC] private void DropItemRPC(float xPos, float yPos, float zPos) {;
         onHandItem.SetParent(null, new Vector3(xPos, yPos, zPos));
+        onHandItem.isOwned = false;
         // onHandItem.transform.SetParent(null);
         // onHandItem.transform.position = new Vector3(xPos, yPos, zPos);
         // onHandItem.GetComponent<Rigidbody>().isKinematic = false;
@@ -86,6 +112,7 @@ public class Character : MonoBehaviourPunCallbacks {
 
     public void TakeItem(ItemHandler item) {
         print("Taking item " + item.name);
+        if(item.isOwned) return;
         photonView.RPC("TakeItemRPC", RpcTarget.All, item.name);
     }
 
@@ -94,6 +121,7 @@ public class Character : MonoBehaviourPunCallbacks {
         print("Taking item rpc: " + itemName + ". item: " + item);
         onHandItem = item;
         onHandItem.SetParent(hand, Vector3.zero);
+        onHandItem.isOwned = true;
         // item.transform.SetParent(hand);
         // item.transform.localPosition = Vector3.zero;
         // item.GetComponent<Rigidbody>().isKinematic = true;
@@ -189,11 +217,18 @@ public class Character : MonoBehaviourPunCallbacks {
     }
 
     public void SetPlayerType(int newType) { //0 - Infected, 1 - Human, 2 - Spectator
-        print(name + " Setting Player Type: " + newType);
+        print("Set player type: " + newType);
         type = newType;
-
+        if(type == 0) infectCooldown = infectCooldownOnStart;
         uiManager.current.SetPanels(newType);
+
+        // photonView.RPC("SetPlayerTypeRPC", RpcTarget.All, type);
     }
+
+    // [PunRPC] private void SetPlayerTypeRPC(int newType) {
+    //     print(name + " Setting Player Type: " + newType);
+    //     type = newType;
+    // }
 
     public void RemoveAI() {
         Destroy(GetComponent<aiInput>());

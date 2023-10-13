@@ -30,6 +30,7 @@ public class Storage : MonoBehaviourPunCallbacks, IClickable, ITooltipable {
     }
 
     public void OnClick() { //item on player when clicked
+        print("on click");
         if(isLocked) { // && item.itemName != keyName
             //play lock sfx
             return;

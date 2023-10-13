@@ -5,6 +5,8 @@ public class GameMaster : MonoBehaviour {
     public static GameMaster current;
     [SerializeField] private List<GameObject> activateOnStart;
 
+    public int infectCooldownTime;
+
     private void Awake() {
         current = this;
     }

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 public class Controller : MonoBehaviour {
     public static Controller current;
     public Character character;
+    public int characterType;
 
     [Space(10)]
     [Header("MOVEMENT")]
@@ -26,9 +27,13 @@ public class Controller : MonoBehaviour {
 
     [Space(10)]
     [Header("SPECTATOR")]
-    public bool isSpectator;
+    // public bool isSpectator;
     public List<Character> playerList;
     private int followInt;
+
+    // [Space(10)]
+    // [Header("INFECTED")]
+    // private bool isInfected;
 
     private void Awake() {
         current = this;
@@ -41,7 +46,7 @@ public class Controller : MonoBehaviour {
     private void Update() {
         if(player == null) return;
 
-        else if(isSpectator) GetSpectatorInput();
+        else if(characterType == 2) GetSpectatorInput();
 
         else {
             GetInput();
@@ -71,13 +76,14 @@ public class Controller : MonoBehaviour {
     }
 
     public void SetToSpectator() {
-        isSpectator = true;
+        characterType = 2;
         followInt = 0;
     }
 
     public void SetPlayer(Rigidbody newPlayer) {
         player = newPlayer;
         character = newPlayer.GetComponent<Character>();
+        characterType = character.type;
         // agent = player.GetComponent<NavMeshAgent>();
         // head = player.GetComponent<Character>().head;
         SetCamera(newPlayer);
@@ -119,10 +125,16 @@ public class Controller : MonoBehaviour {
                 } 
             } else if(Input.GetMouseButtonUp(1)) { //Releasing right click
                 if(character.onHandItem && character.onHandItem.GetComponent<IAimable>() != null) character.onHandItem.GetComponent<IAimable>().UnAim();
-            } else if(Vector3.Distance(character.transform.position, pointed.transform.position) <= reachDist) {
+            } 
+            
+            //Pointed is within reach
+            else if(Vector3.Distance(character.transform.position, hit.point) <= reachDist) {
+                // print("within distance " + Time.time);
                 if(Input.GetMouseButtonDown(0)) {
+                    // print("Clicking");
                     //Take item
                     if(pointed.GetComponent<IClickable>() != null) {
+                        // print("clicking on clickable");
                         // print("Character item: " + character.onHandItem + " has usable: " + character.onHandItem.GetComponent<IUsable>() + " pointed: " + pointed);
                         if(Input.GetKey(KeyCode.LeftControl)) {
                             //Ctrl + Click item
@@ -158,11 +170,15 @@ public class Controller : MonoBehaviour {
                         }
                         else pointed.GetComponent<IClickable>().OnClick();
                     }
+                    //Infected kills target
+                    else if(pointed.GetComponent<Character>() && pointed.GetComponent<Character>().type == 1) {
+                        character.Infect(pointed.name);
+                    }
                     //Drop item on floor
                     else if(pointed.GetComponent<IClickable>() == null && pointed.layer != 9) {
-                        print("Dropping on layer: " + hit.collider.gameObject.layer);
+                        // print("Dropping on layer: " + hit.collider.gameObject.layer);
                         if(Input.GetKey(KeyCode.LeftControl) && Vector3.Distance(character.transform.position, hit.point) <= reachDist && character.onHandItem != null) {
-                            print("Dropping item");
+                            // print("Dropping item");
                             character.DropItem(hit.point);
                         }
                     }

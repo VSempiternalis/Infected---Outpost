@@ -6,6 +6,7 @@ public class Character : MonoBehaviourPunCallbacks {
     public GameObject lightView;
     public Transform campos;
     private Rigidbody rb;
+    public bool isPlayer;
 
     public int spawnInt;
     // private string type;
@@ -26,10 +27,16 @@ public class Character : MonoBehaviourPunCallbacks {
     private Vector3 currentVelocity;
 
     [Space(10)]
-    [Header("HEAD")]
+    [Header("HEAD AND BODY")]
     [SerializeField] private Transform head;
     [SerializeField] private float headSpeed;
     private Quaternion targetHeadRot;
+    [SerializeField] private Transform body;
+
+    [Space(10)]
+    [Header("ITEMS")]
+    public ItemHandler onHandItem;
+    public Transform hand;
 
     private void Start() {
         // SetPanels();
@@ -44,6 +51,56 @@ public class Character : MonoBehaviourPunCallbacks {
     //     print(name + "RPC sync rot: " + yRot);
     //     head.rotation = Quaternion.Euler(0, yRot, 0);
     // }
+
+    public void Kill() {
+        print("Killing: " + name);
+
+        if(GetComponent<aiInput>()) GetComponent<aiInput>().enabled = false;
+        else if(Controller.current.character == this) {
+            print("local player is dead");
+            Controller.current.SetToSpectator();
+            SetPlayerType(2);
+
+            Spawner.current.lights.SetActive(true);
+        } 
+
+        body.transform.Rotate(new Vector3(-90, 0, 0));
+        body.transform.localPosition = new Vector3(0, 0.15f, 0);
+        //use dead animation
+        WinManager.current.AddKill(type);
+        //sfx
+    }
+
+    public void DropItem(Vector3 dropPos) {
+        photonView.RPC("DropItemRPC", RpcTarget.All, dropPos.x, dropPos.y, dropPos.z);
+    }
+
+    [PunRPC] private void DropItemRPC(float xPos, float yPos, float zPos) {;
+        onHandItem.SetParent(null, new Vector3(xPos, yPos, zPos));
+        // onHandItem.transform.SetParent(null);
+        // onHandItem.transform.position = new Vector3(xPos, yPos, zPos);
+        // onHandItem.GetComponent<Rigidbody>().isKinematic = false;
+        // onHandItem.GetComponent<BoxCollider>().isTrigger = false;
+        onHandItem = null;
+    }
+
+    public void TakeItem(ItemHandler item) {
+        print("Taking item " + item.name);
+        photonView.RPC("TakeItemRPC", RpcTarget.All, item.name);
+    }
+
+    [PunRPC] private void TakeItemRPC(string itemName) {
+        ItemHandler item = GameObject.Find(itemName).GetComponent<ItemHandler>();
+        print("Taking item rpc: " + itemName + ". item: " + item);
+        onHandItem = item;
+        onHandItem.SetParent(hand, Vector3.zero);
+        // item.transform.SetParent(hand);
+        // item.transform.localPosition = Vector3.zero;
+        // item.GetComponent<Rigidbody>().isKinematic = true;
+        // onHandItem.GetComponent<BoxCollider>().isTrigger = true;
+
+        // item.SetIsOwned(true);
+    }
 
     [PunRPC] private void rpcMoveHead(Vector3 lookPos) {
         // if(photonView.IsMine) {
@@ -123,7 +180,15 @@ public class Character : MonoBehaviourPunCallbacks {
         }
     }
 
-    public void SetPlayerType(int newType) {
+    public void SetIsPlayer() {
+        photonView.RPC("SetIsPlayerRPC", RpcTarget.All);
+    }
+
+    [PunRPC] private void SetIsPlayerRPC() {
+        isPlayer = true;
+    }
+
+    public void SetPlayerType(int newType) { //0 - Infected, 1 - Human, 2 - Spectator
         print(name + " Setting Player Type: " + newType);
         type = newType;
 

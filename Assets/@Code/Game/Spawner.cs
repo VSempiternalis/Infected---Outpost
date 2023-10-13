@@ -17,8 +17,9 @@ public class Spawner : MonoBehaviourPunCallbacks {
 
     //[SerializeField] private Sprite[] characterSprites;
     [SerializeField] public GameObject[] characterPrefabs; //ADDNEWCHARACTER
-    [SerializeField] private Transform items;
-    [SerializeField] private Transform[] itemSpawnPoints;
+    [SerializeField] public GameObject[] itemPrefabs; //ADDNEWITEM
+    // [SerializeField] private Transform items;
+    [SerializeField] private Transform[] storages;
     private bool playersSpawned;
     private List<string> playerSpawnedList = new List<string>();
 
@@ -36,7 +37,7 @@ public class Spawner : MonoBehaviourPunCallbacks {
 
     private bool typesSet = false;
 
-    [SerializeField] private GameObject lights;
+    public GameObject lights;
 
     private void Awake() {
         current = this;
@@ -45,7 +46,7 @@ public class Spawner : MonoBehaviourPunCallbacks {
 
     private void Start() {
         print("[Spawner] Start");
-        GetPrefabs();
+        // GetPrefabs();
         nextSecUpdate = Time.time + 1f;
         gameStartTime = Time.time + gameStartTime;
         //[0] Check if character already has a player
@@ -167,12 +168,13 @@ public class Spawner : MonoBehaviourPunCallbacks {
         Controller.current.SetPlayer(player.GetComponent<Rigidbody>());
         // player.AddComponent<PlayerInput>();
         player.GetComponent<Character>().spawnInt = spawnInt;
+        player.GetComponent<Character>().SetIsPlayer();
 
         //[] Activate vision
         player.GetComponent<Character>().lightView.SetActive(true);
         // player.transform.GetChild(1).gameObject.SetActive(true);
         // player.transform.GetChild(2).gameObject.SetActive(true);
-        player.name = "LocalPlayer";
+        // player.name = "LocalPlayer";
         localPlayer = player;
     }
 
@@ -221,24 +223,61 @@ public class Spawner : MonoBehaviourPunCallbacks {
     //============================================================
 
     private void SpawnItems() {
-        List<int> spawnInts = new List<int>();
-        foreach(GameObject item in GameObject.FindGameObjectsWithTag("Item")) {
+        loadText.text = "Spawning Items";
+        List<int> spawnInts = new List<int>(); //int of items already spawned
+        
+        //List of item ints
+        // List<int> toSpawnInts = new List<int>();
+        // for(int i = 0; i < items.childCount; i++) {
+        //     toSpawnInts.Add(i);
+        // }
+
+        // //
+        // for(int i = 0; i < items.childCount; i++) {
+        //     items.GetChild(i);
+
+        //     if(i >= storages.Length) return;
+
+        //     int randInt = Random.Range(0, toSpawnInts.Count);
+        // }
+        
+        foreach(GameObject item in itemPrefabs) {
             int spawnInt;
 
             //End loop when there are more items than storage
-            if(spawnInts.Count >= itemSpawnPoints.Length) return;
+            if(spawnInts.Count >= storages.Length) return;
 
             while(true) {
-                spawnInt = Random.Range(0, itemSpawnPoints.Length);
+                spawnInt = Random.Range(0, storages.Length);
                 if(!spawnInts.Contains(spawnInt)) {
                     spawnInts.Add(spawnInt);
 
                     break;
                 }
             }
-            this.photonView.RPC("SpawnItem", RpcTarget.All, item.name, spawnInt);
+            PhotonNetwork.Instantiate(item.name, storages[spawnInt].position, Quaternion.identity);
+            storages[spawnInt].GetComponent<Storage>().InsertItem(item.GetComponent<ItemHandler>());
+            // this.photonView.RPC("InsertItemRPC", RpcTarget.All, item.name + "(Clone)", spawnInt);
         }
     }
+
+    // [PunRPC] private void InsertItemRPC(string itemName, int spawnInt) {
+    //     print("Inserting item: " + itemName + " to " + spawnInt);
+    //     Storage storage = storages[spawnInt].GetComponent<Storage>();
+    //     ItemHandler item = GameObject.Find(itemName).GetComponent<ItemHandler>();
+
+    //     storage.InsertItem(item);
+    // }
+
+    // [PunRPC] private void SpawnItem(string itemName, int spawnInt) {
+    //     loadText.text = "Spawning Items";
+    //     Transform spawnPoint = storages[spawnInt].transform;
+    //     GameObject item = GameObject.Find(itemName);
+
+    //     item.transform.parent = spawnPoint;
+    //     item.GetComponent<SpriteRenderer>().spriteSortPoint = item.transform.parent.GetComponent<SpriteRenderer>().spriteSortPoint - 1;
+    //     item.transform.localPosition = new Vector3(0, 0, 0);
+    // }
 
     //============================================================
 
@@ -247,6 +286,7 @@ public class Spawner : MonoBehaviourPunCallbacks {
         lights.SetActive(false);
         uiManager.current.loadingPanel.SetActive(false);
         WinManager.current.StartCountdown();
+        WinManager.current.CountPlayers();
 
         //Destroy all inactive aiInputs
         foreach(aiInput ai in GameObject.FindObjectsOfType<aiInput>()) {

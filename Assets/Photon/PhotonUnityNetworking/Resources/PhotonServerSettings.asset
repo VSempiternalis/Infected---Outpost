@@ -45,6 +45,18 @@ MonoBehaviour:
   - StartGameRPC
   - rpcMoveHead
   - rpcSyncRotation
+  - SpawnItem
+  - ChangeStateRPC
+  - InsertItemRPC
+  - SetIsOwnedRPC
+  - RemoveItemRPC
+  - TakeItemRPC
+  - SetParentRPC
+  - DropItemRPC
+  - UseRPC
+  - AimRPC
+  - UnAimRPC
+  - SetIsPlayerRPC
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

@@ -434,8 +434,8 @@ CapsuleCollider:
   m_GameObject: {fileID: 771090325356218611}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.5
+  m_Enabled: 0
+  m_Radius: 0.35
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
@@ -455,9 +455,10 @@ GameObject:
   - component: {fileID: 153735073583690157}
   - component: {fileID: 6845748579735161678}
   - component: {fileID: 8971666334860037696}
+  - component: {fileID: 6285701213103729943}
   m_Layer: 6
   m_Name: Character_Bukowski
-  m_TagString: Untagged
+  m_TagString: Character
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -509,12 +510,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lightView: {fileID: 771090324663540967}
   campos: {fileID: 771090324900246012}
+  isPlayer: 0
   spawnInt: 0
   type: 0
   moveSpeed: 1
   sprintMultiplier: 2
   head: {fileID: 2580205938686811620}
   headSpeed: 1
+  body: {fileID: 2580205938686811620}
+  onHandItem: {fileID: 0}
+  hand: {fileID: 2580152483829007282}
 --- !u!114 &-3155246000917790985
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -605,6 +610,20 @@ MonoBehaviour:
   m_SynchronizeRotation: 0
   m_SynchronizeScale: 0
   m_UseLocal: 1
+--- !u!136 &6285701213103729943
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 771090325394472475}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.25
+  m_Height: 3
+  m_Direction: 1
+  m_Center: {x: 0, y: 1.5, z: 0}
 --- !u!1 &771090326229200469
 GameObject:
   m_ObjectHideFlags: 0

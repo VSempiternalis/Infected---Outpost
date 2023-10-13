@@ -1,9 +1,9 @@
 using UnityEngine;
-using UnityEngine.AI;
+using System.Collections.Generic;
 
 public class Controller : MonoBehaviour {
     public static Controller current;
-    private Character character;
+    public Character character;
 
     [Space(10)]
     [Header("MOVEMENT")]
@@ -21,7 +21,14 @@ public class Controller : MonoBehaviour {
 
     [Space(10)]
     [Header("SELECTION")]
+    [SerializeField] private float reachDist; //how far the player can reach
     private GameObject pointed; //object player cursor is pointing at
+
+    [Space(10)]
+    [Header("SPECTATOR")]
+    public bool isSpectator;
+    public List<Character> playerList;
+    private int followInt;
 
     private void Awake() {
         current = this;
@@ -34,9 +41,13 @@ public class Controller : MonoBehaviour {
     private void Update() {
         if(player == null) return;
 
-        GetInput();
-        MovePointer();
-        MoveHead();
+        else if(isSpectator) GetSpectatorInput();
+
+        else {
+            GetInput();
+            MovePointer();
+            MoveHead();
+        }
     }
 
     private void FixedUpdate() {
@@ -45,34 +56,180 @@ public class Controller : MonoBehaviour {
         Movement();
     }
 
+    private void GetSpectatorInput() {
+        if(Input.GetKeyDown(KeyCode.A)) {
+            print("SPECTATOR A");
+            if(followInt <= 0) followInt = playerList.Count - 1;
+            else followInt --;
+        } else if(Input.GetKeyDown(KeyCode.D)) {
+            print("SPECTATOR D");
+            if(followInt >= (playerList.Count - 1)) followInt = 0;
+            else followInt ++;
+        }
+        
+        SetCamera(playerList[followInt].GetComponent<Rigidbody>());
+    }
+
+    public void SetToSpectator() {
+        isSpectator = true;
+        followInt = 0;
+    }
+
     public void SetPlayer(Rigidbody newPlayer) {
         player = newPlayer;
         character = newPlayer.GetComponent<Character>();
         // agent = player.GetComponent<NavMeshAgent>();
         // head = player.GetComponent<Character>().head;
-        mainCamera.transform.parent.position = player.GetComponent<Character>().campos.position;
-        mainCamera.transform.parent.GetComponent<SlowFollower>().toFollow = player.GetComponent<Character>().campos;
+        SetCamera(newPlayer);
+    }
+
+    private void SetCamera(Rigidbody parent) {
+        mainCamera.transform.parent.position = parent.GetComponent<Character>().campos.position;
+        mainCamera.transform.parent.GetComponent<SlowFollower>().toFollow = parent.GetComponent<Character>().campos;
     }
 
     private void MovePointer() {
         if(pointed && pointed.GetComponent<Outline>()) pointed.GetComponent<Outline>().OutlineWidth = 0;
-        if(pointed) print("Pointed: " + pointed + " has outline: " + (pointed.GetComponent<Outline>()? "Yes":"No"));
+        TooltipSystem.Hide();
+
+        // if(pointed) print("Pointed: " + pointed + " has outline: " + (pointed.GetComponent<Outline>()? "Yes":"No"));
         Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
 
         // Perform a raycast to see if it hits something in the game world
         if (Physics.Raycast(ray, out hit)) {
-            // Move the object to the point where the ray intersects with the world
+            //Move the pointer
             pointer.position = hit.point;
 
             //Set pointed
             pointed = hit.collider.gameObject;
+            // print(pointed.name);
 
             //Outline
             if(pointed.GetComponent<Outline>()) {
                 pointed.GetComponent<Outline>().OutlineWidth = 3; //3 is standard outline width
             }
+
+            //INTERACTION
+            //Aiming and unaiming
+            if(Input.GetMouseButton(1)) { //Holding right click
+                if(character.onHandItem && character.onHandItem.GetComponent<IAimable>() != null) {
+                    character.onHandItem.GetComponent<IAimable>().Aim(hit.point);
+                    if(Input.GetMouseButtonDown(0)) character.onHandItem.GetComponent<IUsable>().Use(pointed, character.type);
+                } 
+            } else if(Input.GetMouseButtonUp(1)) { //Releasing right click
+                if(character.onHandItem && character.onHandItem.GetComponent<IAimable>() != null) character.onHandItem.GetComponent<IAimable>().UnAim();
+            } else if(Vector3.Distance(character.transform.position, pointed.transform.position) <= reachDist) {
+                if(Input.GetMouseButtonDown(0)) {
+                    //Take item
+                    if(pointed.GetComponent<IClickable>() != null) {
+                        // print("Character item: " + character.onHandItem + " has usable: " + character.onHandItem.GetComponent<IUsable>() + " pointed: " + pointed);
+                        if(Input.GetKey(KeyCode.LeftControl)) {
+                            //Ctrl + Click item
+                            if(pointed.GetComponent<ItemHandler>() != null) {
+                                //Switch items
+                                if(character.onHandItem) {
+                                    character.DropItem(hit.point);
+                                    // character.TakeItem(pointed.GetComponent<ItemHandler>());
+                                } //Take item
+                                // else 
+                                character.TakeItem(pointed.GetComponent<ItemHandler>());
+                            } 
+                            //Ctrl + Click storage
+                            else if(pointed.GetComponent<Storage>() != null) {
+                                //Has door and is open/opening
+                                if(pointed.GetComponent<DoorHandler>() && (pointed.GetComponent<DoorHandler>().state == "Open" || pointed.GetComponent<DoorHandler>().state == "Opening")) {
+                                    // character.TakeItem(pointed.GetComponent<Storage>().item);
+                                    // pointed.GetComponent<Storage>().RemoveItem();
+                                    // StoreItem(pointed.GetComponent<Storage>());
+                                    StorageInteraction(pointed.GetComponent<Storage>());
+                                }
+                                //No door 
+                                else if(pointed.GetComponent<DoorHandler>() == null) {
+                                    StorageInteraction(pointed.GetComponent<Storage>());
+                                }
+                            }
+                        } 
+                        //Click on clickable: interact
+                        // else pointed.GetComponent<IClickable>().OnClick((character.onHandItem? character.onHandItem : null));
+                        else if(character.onHandItem) {
+                            if(pointed.GetComponent<Storage>() && !pointed.GetComponent<Storage>().isLocked) pointed.GetComponent<IClickable>().OnClick();
+                            else character.onHandItem.GetComponent<IUsable>().Use(pointed, character.type);
+                        }
+                        else pointed.GetComponent<IClickable>().OnClick();
+                    }
+                    //Drop item on floor
+                    else if(pointed.GetComponent<IClickable>() == null && pointed.layer != 9) {
+                        print("Dropping on layer: " + hit.collider.gameObject.layer);
+                        if(Input.GetKey(KeyCode.LeftControl) && Vector3.Distance(character.transform.position, hit.point) <= reachDist && character.onHandItem != null) {
+                            print("Dropping item");
+                            character.DropItem(hit.point);
+                        }
+                    }
+
+                    //Switch item from storage      
+                    else if(pointed.GetComponent<Storage>()) {
+                        ItemHandler oldItem = null;
+                        if(pointed.GetComponent<Storage>().item) oldItem = pointed.GetComponent<Storage>().item;
+
+                        character.TakeItem(pointed.GetComponent<Storage>().item);
+                        pointed.GetComponent<Storage>().RemoveItem();
+
+                        pointed.GetComponent<Storage>().InsertItem(oldItem);
+                    }
+                }
+
+                //Tooltip
+                if(pointed.GetComponent<ITooltipable>() != null) {
+                    TooltipSystem.Show(pointed.GetComponent<ITooltipable>().GetHeader(), pointed.GetComponent<ITooltipable>().GetContent());
+                }
+            }
         }
+    }
+
+    private void StorageInteraction(Storage storage) {
+        if(character.onHandItem) {
+            //Player: item, Storage: item
+            if(storage.item) {
+                print("Player: item, Storage: item");
+                ItemHandler oldItem = character.onHandItem;
+                character.TakeItem(pointed.GetComponent<Storage>().item);
+                pointed.GetComponent<Storage>().RemoveItem();
+                oldItem.SetParent(storage.transform, Vector3.zero);
+                storage.InsertItem(oldItem);
+            } 
+
+            //Player: item, Storage: no item
+            else {
+                print("Player: item, Storage: no item");
+                character.onHandItem.SetParent(storage.transform, Vector3.zero);
+                storage.InsertItem(character.onHandItem);
+                character.onHandItem = null;
+            }
+        }
+        
+        
+        else {
+            //Player: no item, Storage: item
+            if(storage.item) {
+                print("Player: no item, Storage: item");
+                character.TakeItem(pointed.GetComponent<Storage>().item);
+                pointed.GetComponent<Storage>().RemoveItem();
+            } 
+
+            //no items
+            else {
+
+            }
+        }
+    }
+
+    private void StoreItem(Storage storage) {
+        ItemHandler oldItem = null;
+        if(pointed.GetComponent<Storage>().item) oldItem = pointed.GetComponent<Storage>().item;
+        character.TakeItem(pointed.GetComponent<Storage>().item);
+        pointed.GetComponent<Storage>().RemoveItem();
+        pointed.GetComponent<Storage>().InsertItem(oldItem);
     }
 
     private void MoveHead() {

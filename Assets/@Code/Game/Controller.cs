@@ -44,7 +44,7 @@ public class Controller : MonoBehaviour {
     }
 
     private void Update() {
-        if(player == null) return;
+        if(player == null || !WinManager.current.gameStart) return;
 
         else if(characterType == 2) GetSpectatorInput();
 
@@ -121,10 +121,18 @@ public class Controller : MonoBehaviour {
             if(Input.GetMouseButton(1)) { //Holding right click
                 if(character.onHandItem && character.onHandItem.GetComponent<IAimable>() != null) {
                     character.onHandItem.GetComponent<IAimable>().Aim(hit.point);
-                    if(Input.GetMouseButtonDown(0)) character.onHandItem.GetComponent<IUsable>().Use(pointed, character.type);
+                    character.isAiming = true;
+
+                    //Shooting
+                    if(Input.GetMouseButtonDown(0)) {
+                        character.onHandItem.GetComponent<IUsable>().Use(pointed, character.type);
+                    }
                 } 
             } else if(Input.GetMouseButtonUp(1)) { //Releasing right click
-                if(character.onHandItem && character.onHandItem.GetComponent<IAimable>() != null) character.onHandItem.GetComponent<IAimable>().UnAim();
+                if(character.onHandItem && character.onHandItem.GetComponent<IAimable>() != null) {
+                    character.onHandItem.GetComponent<IAimable>().UnAim();
+                    character.isAiming = false;
+                }
             } 
             
             //Pointed is within reach
@@ -207,7 +215,7 @@ public class Controller : MonoBehaviour {
         if(character.onHandItem) {
             //Player: item, Storage: item
             if(storage.item) {
-                print("Player: item, Storage: item");
+                print("Player: item, Storage: item " + Time.time);
                 ItemHandler oldItem = character.onHandItem;
                 character.TakeItem(pointed.GetComponent<Storage>().item);
                 pointed.GetComponent<Storage>().RemoveItem();
@@ -217,7 +225,7 @@ public class Controller : MonoBehaviour {
 
             //Player: item, Storage: no item
             else {
-                print("Player: item, Storage: no item");
+                print("Player: item, Storage: no item " + Time.time);
                 character.onHandItem.SetParent(storage.transform, Vector3.zero);
                 storage.InsertItem(character.onHandItem);
                 character.onHandItem = null;
@@ -253,6 +261,12 @@ public class Controller : MonoBehaviour {
     }
 
     private void GetInput() {
+        //No move while aiming
+        if(character.onHandItem && character.onHandItem.GetComponent<Gun>() && Input.GetMouseButton(1)) {
+            input = Vector3.zero;
+            return;
+        }
+
         input = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
 
         // Check for sprinting input (Left Shift)

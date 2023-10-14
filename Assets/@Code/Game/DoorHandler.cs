@@ -41,7 +41,7 @@ public class DoorHandler : MonoBehaviourPunCallbacks {
     }
 
     public void ChangeState() {
-        print("changing door state");
+        // print("changing door state");
         photonView.RPC("ChangeStateRPC", RpcTarget.All, state);
     }
 

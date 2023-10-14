@@ -6,7 +6,7 @@ public class WinManager : MonoBehaviour {
 
     [Space(10)]
     [Header("GENERATOR")]
-    private bool gameStart;
+    public bool gameStart;
     [SerializeField] private int countdownOnStart; //value of countdown on start
     [SerializeField] private int countdown;
     [SerializeField] private int fuelTimeAdd; //num of secs fuel adds to countdown

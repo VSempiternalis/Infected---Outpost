@@ -3,9 +3,6 @@ using System.Collections.Generic;
 using Photon.Pun;
 using Photon.Realtime;
 using TMPro;
-using Unity.VisualScripting;
-using Steamworks;
-using UnityEngine.PlayerLoop;
 
 public class LobbyManager : MonoBehaviourPunCallbacks {
     public static LobbyManager current;
@@ -89,8 +86,8 @@ public class LobbyManager : MonoBehaviourPunCallbacks {
     public override void OnLeftRoom() {
         base.OnLeftRoom();
 
-        panelServerBrowser.SetActive(true);
-        panelRoom.SetActive(false);
+        // panelServerBrowser.SetActive(true);
+        // panelRoom.SetActive(false);
     }
 
     public override void OnConnectedToMaster() {

@@ -1,7 +1,7 @@
 using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
-using Microsoft.Unity.VisualStudio.Editor;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 
 public class uiManager : MonoBehaviour {
     public static uiManager current;
@@ -22,6 +22,13 @@ public class uiManager : MonoBehaviour {
     [SerializeField] private TMP_Text infectCooldown;
     [SerializeField] private Color infectRestColor;
     [SerializeField] private Color infectColor;
+
+    [Space(10)]
+    [Header("VFX")]
+    [SerializeField] private Volume volume;
+    private Vignette vignette;
+    [SerializeField] private VolumeProfile infectedVP;
+    [SerializeField] private VolumeProfile humanVP;
     
     private void Awake() {
         current = this;
@@ -46,15 +53,22 @@ public class uiManager : MonoBehaviour {
             infectCooldown.text = "Resting... (" + newValue + ")";
             infectCooldown.fontSize = 24;
             infectCooldown.color = infectRestColor;
+
+            //vfx
+            vignette.intensity.value = 0.3f;
         } else {
             infectCooldown.text = "KILL!";
             infectCooldown.fontSize = 40;
             infectCooldown.color = infectColor;
+
+            //vfx
+            vignette.intensity.value = 0.5f;
         }
     }
 
     public void SetPanels(int type) {
         print("[CHARACTER] Setting panels. Type: " + type);
+        volume.profile.TryGet(out vignette);
 
         if(type == 0) {
             playerType.text = "Infected";
@@ -64,6 +78,9 @@ public class uiManager : MonoBehaviour {
             infectCooldown.gameObject.SetActive(true);
             //AUDIO
             // GetComponent<AudioHandler>().PlayClip(1);
+
+            //vfx
+            volume.profile = infectedVP;
         } else if(type == 1) {
             playerType.text = "Human";
             Color playerColor = new Color(0.923f, 0.929f, 0.914f, 1f);
@@ -71,31 +88,19 @@ public class uiManager : MonoBehaviour {
             staminaImg.GetComponent<UnityEngine.UI.Image>().color = playerColor;
             //AUDIO
             // GetComponent<AudioHandler>().PlayClip(0);
+
+            //vfx
+            volume.profile = humanVP;
         } else {
             playerType.text = "Spectator";
             Color playerColor = new Color(0.643f, 0.867f, 0.859f, 1f);
             playerType.color = playerColor;
             staminaImg.GetComponent<UnityEngine.UI.Image>().color = playerColor;
             infectCooldown.transform.parent.gameObject.SetActive(false);
+
+            //vfx
+            volume.profile = humanVP;
         }
-
-        // Spawner.current.loadText.text = "Setting panels...";
-        // infectedUI.SetActive(false);
-        // humanUI.SetActive(false);
-        // spectatorUI.SetActive(false);
-
-        // if(type == 0) {
-        //     infectedUI.SetActive(true);
-        //     staminaImg = infectedStaminaImg;
-        // } else if(type == 1) {
-        //     humanUI.SetActive(true);
-        //     staminaImg = humanStaminaImg;
-        // } else if(type == 2) {
-        //     spectatorUI.SetActive(true);
-        //     staminaImg = spectatorStaminaImg;
-        // }
-
-        // loadingPanel.SetActive(false);
     }
 
     public void ActivateTypePopupRPC(int type) {

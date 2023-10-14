@@ -145,7 +145,7 @@ public class Character : MonoBehaviourPunCallbacks {
 
     public void Infect(string targetName) {
         print("Attempting to infect: " + Time.time);
-        if(type != 0 || infectCooldown > 0) return;
+        if(type != 0 || infectCooldown > 0 || targetName == name) return;
         infectCooldown = infectCooldownLength;
         ChangeAnimState("Attack");
         //sfx
@@ -155,8 +155,27 @@ public class Character : MonoBehaviourPunCallbacks {
     [PunRPC] private void InfectRPC(string targetName) {
         Character target = GameObject.Find(targetName).GetComponent<Character>();
         // if(target.type == 0) return;
+
+        //WEAR THEIR SKIN
+        GameObject mimic = Instantiate(target.body.gameObject, transform);
+
+        // Set the position and rotation of the copy to match the current character's body
+        mimic.transform.localPosition = Vector3.zero; //body.transform.localPosition;
+        mimic.transform.rotation = body.transform.rotation;
+
+        // Destroy the current character's body
+        Destroy(body.gameObject);
+
+        // Set the copy as the new body for the current character
+        body = mimic.transform;
+
+        //WEAR THEIR HEAD
+        head = mimic.transform.GetChild(2);
+
+        //USE LIGHT
+        head.GetChild(0).gameObject.SetActive(true);
+
         target.Kill();
-        //wear their skin
     }
 
     public void Kill() { //Kill this character
@@ -304,7 +323,7 @@ public class Character : MonoBehaviourPunCallbacks {
     public void SetPlayerType(int newType) { //0 - Infected, 1 - Human, 2 - Spectator
         print("Set player type: " + newType);
         type = newType;
-        if(type == 0) infectCooldown = infectCooldownLength;
+        if(type == 0) infectCooldown = 0;
         uiManager.current.SetPanels(newType);
 
         // photonView.RPC("SetPlayerTypeRPC", RpcTarget.All, type);

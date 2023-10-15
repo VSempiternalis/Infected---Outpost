@@ -319,7 +319,6 @@ MonoBehaviour:
   itemName: Gun Key
   desc: A key for opening locked containers and doors.
   pivot: {fileID: 0}
-  isOwned: 0
 --- !u!114 &9170972474615250868
 MonoBehaviour:
   m_ObjectHideFlags: 0

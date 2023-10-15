@@ -1,6 +1,5 @@
 using UnityEngine;
 using Photon.Pun;
-using Unity.VisualScripting;
 
 public class Character : MonoBehaviourPunCallbacks {
     public GameObject lightView;
@@ -84,19 +83,7 @@ public class Character : MonoBehaviourPunCallbacks {
     }
 
     private void aiAnimCheck() {
-        // if(isPlayer && Controller.current.character != this) return;
-
-        // print("Anim check: " + Time.time);
-        // if(isPlayer) print("velocity: " + rb.velocity.magnitude);
-
-        // if(anim.GetCurrentAnimatorStateInfo(0).IsName("Attack") && anim.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f) return;
-        // else if(anim.GetCurrentAnimatorStateInfo(0).IsName("Shooting") && anim.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f) return;
-
         if(!isAlive) ChangeAnimState("Dying");
-        // else if(isShooting) ChangeAnimState("Shooting");
-        // else if(isAiming) ChangeAnimState("IdlePistol");
-        // else if(rb.velocity.magnitude > 10f) ChangeAnimState("Run");
-        // else if(rb.velocity.magnitude > 0.1f && onHandItem != null) ChangeAnimState("WalkWithItem");
         else if(rb.velocity.magnitude > 0.1f) ChangeAnimState("Walk");
         else ChangeAnimState("Idle");
     }
@@ -145,35 +132,41 @@ public class Character : MonoBehaviourPunCallbacks {
 
     public void Infect(string targetName) {
         print("Attempting to infect: " + Time.time);
-        if(type != 0 || infectCooldown > 0 || targetName == name) return;
+        if(type != 0 || infectCooldown > 0 || targetName == name || onHandItem != null) return;
         infectCooldown = infectCooldownLength;
+
+        photonView.RPC("InfectRPC", RpcTarget.All, targetName);
+
         ChangeAnimState("Attack");
         //sfx
-        photonView.RPC("InfectRPC", RpcTarget.All, targetName);
     }
 
     [PunRPC] private void InfectRPC(string targetName) {
         Character target = GameObject.Find(targetName).GetComponent<Character>();
-        // if(target.type == 0) return;
 
-        //WEAR THEIR SKIN
-        GameObject mimic = Instantiate(target.body.gameObject, transform);
+        BodyHandler targetBody = target.body.GetComponent<BodyHandler>();
 
-        // Set the position and rotation of the copy to match the current character's body
-        mimic.transform.localPosition = Vector3.zero; //body.transform.localPosition;
-        mimic.transform.rotation = body.transform.rotation;
+        //Turn old face off
+        body.GetComponent<BodyHandler>().face.SetActive(false);
 
-        // Destroy the current character's body
-        Destroy(body.gameObject);
+        //Turn new face on
+        string tgtFaceName = targetBody.face.name;
+        foreach(Transform face in body) {
+            if(face.name == tgtFaceName) face.gameObject.SetActive(true);
+        }
 
-        // Set the copy as the new body for the current character
-        body = mimic.transform;
+        //Turn old hair off
+        body.GetComponent<BodyHandler>().hair.SetActive(false);
 
-        //WEAR THEIR HEAD
-        head = mimic.transform.GetChild(2);
+        //Turn new face on
+        string tgtHairName = targetBody.hair.name;
+        foreach(Transform hair in body.GetComponent<BodyHandler>().actualHead) {
+            if(hair.name == tgtHairName) hair.gameObject.SetActive(true);
+        }
 
         //USE LIGHT
-        head.GetChild(0).gameObject.SetActive(true);
+        // lightView = targetBody.lightView;
+        // lightView.SetActive(true);
 
         target.Kill();
     }
@@ -189,7 +182,10 @@ public class Character : MonoBehaviourPunCallbacks {
             SetPlayerType(2);
 
             Spawner.current.lights.SetActive(true);
-        } 
+        }
+
+        //Drop item
+        if(onHandItem) DropItem(transform.position);
 
         // body.transform.Rotate(new Vector3(-90, 0, 0));
         // body.transform.localPosition = new Vector3(0, -1.25f, 0);
@@ -204,7 +200,7 @@ public class Character : MonoBehaviourPunCallbacks {
 
     [PunRPC] private void DropItemRPC(float xPos, float yPos, float zPos) {;
         onHandItem.SetParent(null, new Vector3(xPos, yPos, zPos));
-        onHandItem.isOwned = false;
+        // onHandItem.isOwned = false;
         // onHandItem.transform.SetParent(null);
         // onHandItem.transform.position = new Vector3(xPos, yPos, zPos);
         // onHandItem.GetComponent<Rigidbody>().isKinematic = false;
@@ -214,7 +210,10 @@ public class Character : MonoBehaviourPunCallbacks {
 
     public void TakeItem(ItemHandler item) {
         print("Taking item " + item.name);
-        if(item.isOwned) return;
+        if(item.transform.parent.GetComponent<Character>()) {
+            print("ITEM IS OWNED BY: " + item.transform.parent.name);
+            return;
+        } 
         photonView.RPC("TakeItemRPC", RpcTarget.All, item.name);
     }
 
@@ -223,7 +222,7 @@ public class Character : MonoBehaviourPunCallbacks {
         print("Taking item rpc: " + itemName + ". item: " + item);
         onHandItem = item;
         onHandItem.SetParent(hand, Vector3.zero);
-        onHandItem.isOwned = true;
+        // onHandItem.isOwned = true;
         // item.transform.SetParent(hand);
         // item.transform.localPosition = Vector3.zero;
         // item.GetComponent<Rigidbody>().isKinematic = true;
@@ -232,41 +231,28 @@ public class Character : MonoBehaviourPunCallbacks {
         // item.SetIsOwned(true);
     }
 
-    [PunRPC] private void rpcMoveHead(Vector3 lookPos) {
-        // if(photonView.IsMine) {
-            // print(name + "RPC movehead: ");
-
-            if(rb == null) return;
-            // Calculate the direction from the head to the pointer, disregarding the Y-axis
-            Vector3 lookDirection = (lookPos - head.position);
-            if(lookDirection == Vector3.zero) return;
-            lookDirection.y = 0; // Disregard the Y-axis component
-
-            // Calculate the target rotation
-            targetHeadRot = Quaternion.LookRotation(lookDirection);
-
-            // Rotate the head towards the target rotation with a delay
-            head.rotation = Quaternion.Slerp(head.rotation, targetHeadRot, headSpeed * Time.deltaTime);
-            // print(name + " rotation: " + head.rotation.eulerAngles);
-        // }
+    public void MoveHead(Vector3 lookPos) {
+        photonView.RPC("rpcMoveHead", RpcTarget.All, lookPos);
     }
 
-    public void MoveHead(Vector3 lookPos) {
-        // print(name + " rpcMoveHead");
-        photonView.RPC("rpcMoveHead", RpcTarget.All, lookPos);
-        // rpcMoveHead(lookPos);
-        // if(rb == null) return;
+    [PunRPC] private void rpcMoveHead(Vector3 lookPos) {
+        // print("Moving head: " + head);
+    // if(photonView.IsMine) {
+        // print(name + "RPC movehead: ");
 
-        // // Calculate the direction from the head to the pointer, disregarding the Y-axis
-        // Vector3 lookDirection = (lookPos - head.position);
-        // lookDirection.y = 0; // Disregard the Y-axis component
-        // if(lookDirection == Vector3.zero) return;
+        if(rb == null) return;
+        // Calculate the direction from the head to the pointer, disregarding the Y-axis
+        Vector3 lookDirection = (lookPos - head.position);
+        if(lookDirection == Vector3.zero) return;
+        lookDirection.y = 0; // Disregard the Y-axis component
 
-        // // Calculate the target rotation
-        // targetHeadRot = Quaternion.LookRotation(lookDirection);
+        // Calculate the target rotation
+        targetHeadRot = Quaternion.LookRotation(lookDirection);
 
-        // // Rotate the head towards the target rotation with a delay
-        // head.rotation = Quaternion.Slerp(head.rotation, targetHeadRot, headSpeed * Time.deltaTime);
+        // Rotate the head towards the target rotation with a delay
+        head.rotation = Quaternion.Slerp(head.rotation, targetHeadRot, headSpeed * Time.deltaTime);
+        // print(name + " rotation: " + head.rotation.eulerAngles);
+    // }
     }
 
     public void MoveTo(Vector3 movePos) {

@@ -7,7 +7,7 @@ public class ItemHandler : MonoBehaviourPunCallbacks, IClickable, ITooltipable {
 
     [SerializeField] private Transform pivot;
 
-    public bool isOwned;
+    // public bool isOwned;
 
     private IUsable usable;
 
@@ -30,6 +30,8 @@ public class ItemHandler : MonoBehaviourPunCallbacks, IClickable, ITooltipable {
             transform.localPosition = Vector3.zero;
             GetComponent<Rigidbody>().isKinematic = true;
             GetComponent<BoxCollider>().isTrigger = true;
+
+            // if(newParent.GetComponent<Character>()) isOwned = false;
         } else {
             transform.SetParent(null);
             // transform.position = pos;

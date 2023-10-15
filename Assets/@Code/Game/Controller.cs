@@ -212,10 +212,11 @@ public class Controller : MonoBehaviour {
     }
 
     private void StorageInteraction(Storage storage) {
+        print("Storage interaction");
         if(character.onHandItem) {
             //Player: item, Storage: item
             if(storage.item) {
-                print("Player: item, Storage: item " + Time.time);
+                print("SWITCHING! Player: item, Storage: item " + Time.time);
                 ItemHandler oldItem = character.onHandItem;
                 character.TakeItem(pointed.GetComponent<Storage>().item);
                 pointed.GetComponent<Storage>().RemoveItem();
@@ -225,7 +226,7 @@ public class Controller : MonoBehaviour {
 
             //Player: item, Storage: no item
             else {
-                print("Player: item, Storage: no item " + Time.time);
+                print("STORING! Player: item, Storage: no item " + Time.time);
                 character.onHandItem.SetParent(storage.transform, Vector3.zero);
                 storage.InsertItem(character.onHandItem);
                 character.onHandItem = null;
@@ -236,7 +237,7 @@ public class Controller : MonoBehaviour {
         else {
             //Player: no item, Storage: item
             if(storage.item) {
-                print("Player: no item, Storage: item");
+                print("TAKING! Player: no item, Storage: item " + Time.time);
                 character.TakeItem(pointed.GetComponent<Storage>().item);
                 pointed.GetComponent<Storage>().RemoveItem();
             } 

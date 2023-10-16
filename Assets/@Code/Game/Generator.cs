@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Generator : MonoBehaviour, IClickable, ITooltipable {
+public class Generator : MonoBehaviour, IClickable, ITooltipable, IFuelable {
     private void Start() {
         
     }

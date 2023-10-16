@@ -13,7 +13,7 @@ public class FuelCan : MonoBehaviourPunCallbacks, IUsable { //
     }
 
     public void Use(GameObject target, int type) {
-        if(!hasFuel) return;
+        if(!hasFuel || target.GetComponent<IFuelable>() == null) return;
         photonView.RPC("UseRPC", RpcTarget.All, target.name);
     }
 

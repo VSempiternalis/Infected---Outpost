@@ -35,6 +35,7 @@ public class Escape : MonoBehaviour, ITooltipable, IClickable {
 
     public void OnClick() {
         print("ESCAPING!");
+        if(!requirementsMet) return;
 
         //list escapees/survivors and check if one escapee is infected
         bool isExtinction = false;

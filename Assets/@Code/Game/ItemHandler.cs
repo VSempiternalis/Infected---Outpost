@@ -5,9 +5,11 @@ public class ItemHandler : MonoBehaviourPunCallbacks, IClickable, ITooltipable {
     public string itemName;
     [SerializeField] private string desc;
 
-    [SerializeField] private Transform pivot;
+    [SerializeField] private Vector3 onhandRotation; //fuel (0, -90, 0). key (0, 0, 90). gun (90, 0, 0)
 
     // public bool isOwned;
+
+    private AudioHandler ah;
 
     private IUsable usable;
 
@@ -28,6 +30,7 @@ public class ItemHandler : MonoBehaviourPunCallbacks, IClickable, ITooltipable {
         if(newParent != null) {
             transform.SetParent(newParent);
             transform.localPosition = Vector3.zero;
+            transform.localRotation = Quaternion.Euler(onhandRotation);
             GetComponent<Rigidbody>().isKinematic = true;
             GetComponent<BoxCollider>().isTrigger = true;
 

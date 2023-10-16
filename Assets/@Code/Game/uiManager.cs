@@ -46,6 +46,13 @@ public class uiManager : MonoBehaviour {
         
     }
 
+    public void UpdateStaminaUI(int value, int maxValue) {
+        float ratio = (float)value / (float)maxValue;
+        // print(ratio);
+        // staminaImg.sizeDelta = new Vector2(1920f*ratio, staminaImg.sizeDelta.y);
+        staminaImg.localScale = new Vector2(ratio, staminaImg.localScale.y);
+    }
+
     public void UpdateInfectCooldown(int newValue) {
         if(!infectCooldown.transform.parent.gameObject.activeSelf) infectCooldown.transform.parent.gameObject.SetActive(true);
 

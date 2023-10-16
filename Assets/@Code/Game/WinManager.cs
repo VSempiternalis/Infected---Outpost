@@ -14,14 +14,23 @@ public class WinManager : MonoBehaviour {
     [SerializeField] private TMP_Text generatorTimer;
     // [SerializeField] private TMP_Text generatorTimer2; //Infected timer
     // [SerializeField] private TMP_Text generatorTimer3; //Spectator timer
-    // [SerializeField] private AudioHandler generator1AH;
-    // [SerializeField] private AudioHandler generator2AH;
+    [SerializeField] private AudioHandler generator1AH;
+    [SerializeField] private AudioHandler generator2AH;
 
     [Space(10)]
     [Header("ENDGAME")]
     private int humanCount;
     private int infectedCount;
     private int spectatorCount;
+
+    [Space(10)]
+    [Header("ENDGAME UI")]
+    [SerializeField] private GameObject endgameUI;
+    [SerializeField] private GameObject infectedWinGeneratorShutdown;
+    [SerializeField] private GameObject infectedWinAssimilation;
+    [SerializeField] private GameObject infectedWinExtinction;
+    [SerializeField] private GameObject humansWinDisinfection;
+    [SerializeField] private GameObject humansWinEscape;
 
     private int nextSecUpdate = 1;
 
@@ -84,22 +93,29 @@ public class WinManager : MonoBehaviour {
             // generatorTimer2.color = Color.red;
             // generatorTimer3.color = Color.red;
 
-            // if(!GetComponent<AudioSource>().isPlaying) GetComponent<AudioHandler>().PlayClip(0);
-            // generator1AH.PlayClip(1); //Shutdown audio
-            // generator2AH.PlayClip(1);
-            // generator1AH.GetComponent<AudioSource>().loop = false;
-            // generator2AH.GetComponent<AudioSource>().loop = false;
+            //Timer sfx
+            if(!GetComponent<AudioSource>().isPlaying) GetComponent<AudioHandler>().Play(0);
+            
+            //Shutdown audio
+            generator1AH.Play(1); 
+            generator2AH.Play(1);
+            generator1AH.GetComponent<AudioSource>().loop = false;
+            generator2AH.GetComponent<AudioSource>().loop = false;
         } else {
             if(generatorTimer.color == Color.green) return;
 
             generatorTimer.color = Color.green;
             // generatorTimer2.color = Color.green;
             // generatorTimer3.color = Color.green;
-            // if(GetComponent<AudioSource>().isPlaying) GetComponent<AudioSource>().Stop();
-            // generator1AH.PlayClip(0); //Loop audio
-            // generator2AH.PlayClip(0);
-            // generator1AH.GetComponent<AudioSource>().loop = true;
-            // generator2AH.GetComponent<AudioSource>().loop = true;
+
+            //Timer sfx
+            if(GetComponent<AudioSource>().isPlaying) GetComponent<AudioSource>().Stop();
+            
+            //Generator Loop audio
+            generator1AH.Play(0); 
+            generator2AH.Play(0);
+            generator1AH.GetComponent<AudioSource>().loop = true;
+            generator2AH.GetComponent<AudioSource>().loop = true;
         }
     }
 
@@ -129,30 +145,33 @@ public class WinManager : MonoBehaviour {
         }
     }
 
-    private void Endgame(string reason) {
-        // print("END GAME");
-        // // Debug.Log("Infected win!");
-        // //Application.Quit();
-        // if(EndgameUI.activeSelf) return;
-        // EndgameUI.SetActive(true);
+    public void Endgame(string reason) {
+        print("END GAME: " + reason);
+        // Debug.Log("Infected win!");
+        //Application.Quit();
+        if(endgameUI.activeSelf) return;
+        endgameUI.SetActive(true);
 
-        // //INFECTED
-        // if(reason == "Generator shutdown") {
-        //     Infected_GeneratorShutdown.SetActive(true);
-        //     GetComponent<AudioHandler>().PlayClip(2);
-        // } else if(reason == "Assimilation") {
-        //     Infected_Assimilation.SetActive(true);
-        //     GetComponent<AudioHandler>().PlayClip(2);
-        // }
+        //INFECTED
+        if(reason == "Generator shutdown") {
+            infectedWinGeneratorShutdown.SetActive(true); //Yes I know it's supposed to be in UIManager but I cant be assed rn
+            GetComponent<AudioHandler>().Play(2);
+        } else if(reason == "Assimilation") {
+            infectedWinAssimilation.SetActive(true);
+            GetComponent<AudioHandler>().Play(2);
+        } else if(reason == "Extinction") {
+            infectedWinExtinction.SetActive(true);
+            GetComponent<AudioHandler>().Play(2);
+        }
 
-        // //HUMAN
-        // if(reason == "Escape") {
-        //     Humans_Escape.SetActive(true);
-        //     GetComponent<AudioHandler>().PlayClip(1);
-        // } if(reason == "Disinfection") {
-        //     Humans_Disinfection.SetActive(true);
-        //     GetComponent<AudioHandler>().PlayClip(1);
-        // }
+        //HUMAN
+        if(reason == "Escape") {
+            humansWinEscape.SetActive(true);
+            GetComponent<AudioHandler>().Play(1);
+        } if(reason == "Disinfection") {
+            humansWinDisinfection.SetActive(true);
+            GetComponent<AudioHandler>().Play(1);
+        }
     }
 
     public void ExitGame() {

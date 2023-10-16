@@ -41,8 +41,13 @@ public class Gun : MonoBehaviourPunCallbacks, IUsable, IAimable {
     }
 
     [PunRPC] private void AimRPC(float xPos, float yPos, float zPos) {
-        // print("Aiming RPC");
-        isAiming = true;
+        if(!isAiming) {
+            isAiming = true;
+
+            //sfx
+            GetComponent<AudioHandler>().PlayOneShot(0);
+        }
+        
         aimPos = new Vector3(xPos, yPos, zPos);
         GetComponent<LineRenderer>().enabled = true;
         GetComponent<LineRenderer>().SetPosition(0, transform.GetChild(0).position); //start laser from muzzle position
@@ -58,6 +63,7 @@ public class Gun : MonoBehaviourPunCallbacks, IUsable, IAimable {
     [PunRPC] private void UseRPC(string targetName) {
         if(bulletCount < 1) {
             //sfx
+            GetComponent<AudioHandler>().PlayOneShot(1);
             return;
         }
         bulletCount --;
@@ -72,9 +78,12 @@ public class Gun : MonoBehaviourPunCallbacks, IUsable, IAimable {
             print("trying to kill target: " + target.name);
             target.GetComponent<Character>().Kill();
         } else {
-            //sfx
-            //particles
+            
         }
+
+        //sfx
+        GetComponent<AudioHandler>().PlayOneShot(2);
+            //particles
     }
 
     public string GetContent() {

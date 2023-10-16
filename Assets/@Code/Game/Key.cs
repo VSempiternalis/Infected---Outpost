@@ -21,6 +21,9 @@ public class Key : MonoBehaviourPunCallbacks, IUsable {
         print("Using key");
         GameObject target = GameObject.Find(targetName);
         if(target.GetComponent<Storage>() && target.GetComponent<Storage>().keyName == GetComponent<ItemHandler>().itemName) target.GetComponent<DoorHandler>().ChangeState();
+
+        //sfx
+        GetComponent<AudioHandler>().PlayOneShot(0);
     }
 
     public string GetContent() {

@@ -21,6 +21,9 @@ public class FuelCan : MonoBehaviourPunCallbacks, IUsable { //
         hasFuel = false;
         GameObject target = GameObject.Find(targetName);
         if(target.GetComponent<Generator>()) WinManager.current.AddFuel();
+
+        //sfx
+        GetComponent<AudioHandler>().PlayOneShot(0);
     }
 
     public string GetContent() {

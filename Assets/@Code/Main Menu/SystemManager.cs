@@ -21,6 +21,9 @@ public class SystemManager : MonoBehaviourPunCallbacks {
     [SerializeField] private List<GameObject> ActivateOnAwake;
     [SerializeField] private List<GameObject> DeactivateOnAwake;
 
+    [SerializeField] private GameObject connectingPanel;
+    [SerializeField] private GameObject vlgPanel;
+
     [SerializeField] private TMP_Text versionText;
 
     private void Awake() {
@@ -32,6 +35,10 @@ public class SystemManager : MonoBehaviourPunCallbacks {
 
         foreach(GameObject thing in ActivateOnAwake) {
             thing.SetActive(true);
+        }
+
+        if(PhotonNetwork.IsConnected) {
+
         }
 
         // ToggleMainMenuOn(false);

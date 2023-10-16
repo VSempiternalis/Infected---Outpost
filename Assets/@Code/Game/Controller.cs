@@ -1,10 +1,19 @@
 using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.PlayerLoop;
 
 public class Controller : MonoBehaviour {
     public static Controller current;
     public Character character;
     public int characterType;
+
+    [Space(10)]
+    [Header("STAMINA")]
+    private bool isRunning = false;
+    private int stamina;
+    private int staminaMax = 360;
+    [SerializeField] private int staminaGain = 1;
+    [SerializeField] private int staminaLoss = 1;
 
     [Space(10)]
     [Header("MOVEMENT")]
@@ -41,6 +50,8 @@ public class Controller : MonoBehaviour {
 
     private void Start() {
         mainCamera = Camera.main;
+
+        stamina = staminaMax;
     }
 
     private void Update() {
@@ -84,6 +95,7 @@ public class Controller : MonoBehaviour {
         player = newPlayer;
         character = newPlayer.GetComponent<Character>();
         characterType = character.type;
+        print("Setting player: " + character.name + ". Type: " + characterType);
         // agent = player.GetComponent<NavMeshAgent>();
         // head = player.GetComponent<Character>().head;
         SetCamera(newPlayer);
@@ -137,20 +149,15 @@ public class Controller : MonoBehaviour {
             
             //Pointed is within reach
             else if(Vector3.Distance(character.transform.position, hit.point) <= reachDist) {
-                // print("within distance " + Time.time);
                 if(Input.GetMouseButtonDown(0)) {
-                    // print("Clicking");
-                    //Take item
+                    
                     if(pointed.GetComponent<IClickable>() != null) {
-                        // print("clicking on clickable");
-                        // print("Character item: " + character.onHandItem + " has usable: " + character.onHandItem.GetComponent<IUsable>() + " pointed: " + pointed);
                         if(Input.GetKey(KeyCode.LeftControl)) {
-                            //Ctrl + Click item
+                            //Ctrl + Click item on ground
                             if(pointed.GetComponent<ItemHandler>() != null) {
                                 //Switch items
                                 if(character.onHandItem) {
                                     character.DropItem(hit.point);
-                                    // character.TakeItem(pointed.GetComponent<ItemHandler>());
                                 } //Take item
                                 // else 
                                 character.TakeItem(pointed.GetComponent<ItemHandler>());
@@ -159,9 +166,6 @@ public class Controller : MonoBehaviour {
                             else if(pointed.GetComponent<Storage>() != null) {
                                 //Has door and is open/opening
                                 if(pointed.GetComponent<DoorHandler>() && (pointed.GetComponent<DoorHandler>().state == "Open" || pointed.GetComponent<DoorHandler>().state == "Opening")) {
-                                    // character.TakeItem(pointed.GetComponent<Storage>().item);
-                                    // pointed.GetComponent<Storage>().RemoveItem();
-                                    // StoreItem(pointed.GetComponent<Storage>());
                                     StorageInteraction(pointed.GetComponent<Storage>());
                                 }
                                 //No door 
@@ -271,12 +275,22 @@ public class Controller : MonoBehaviour {
         input = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
 
         // Check for sprinting input (Left Shift)
-        if(Input.GetKey(KeyCode.LeftShift)) {
+        if(Input.GetKey(KeyCode.LeftShift) && stamina > 0) {
             input *= sprintMultiplier;
         }
     }
 
     private void Movement() {
         character.MoveWASD(input);
+
+        if(stamina <= staminaMax) {
+            if(player.velocity.magnitude > 3.5f && stamina >= 0) stamina -= staminaLoss;
+            else if(player.velocity.magnitude < 0.25f && stamina < staminaMax) stamina += staminaGain;
+
+            if(stamina < 0) stamina = 0;
+            else if(stamina >= staminaMax) stamina = staminaMax;
+
+            uiManager.current.UpdateStaminaUI(stamina, staminaMax);
+        }
     }
 }

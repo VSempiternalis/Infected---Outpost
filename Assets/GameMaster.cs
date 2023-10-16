@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using Photon.Pun;
 
 public class GameMaster : MonoBehaviour {
     public static GameMaster current;
@@ -19,5 +20,9 @@ public class GameMaster : MonoBehaviour {
 
     private void Update() {
         
+    }
+
+    public void OnClickExit() {
+        PhotonNetwork.LoadLevel("SCENE - MainMenu");
     }
 }

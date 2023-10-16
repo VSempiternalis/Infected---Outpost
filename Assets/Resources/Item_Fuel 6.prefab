@@ -17,6 +17,8 @@ GameObject:
   - component: {fileID: 5394976103357031835}
   - component: {fileID: -5977781275499434547}
   - component: {fileID: 6359076136935885959}
+  - component: {fileID: -8321303044052761091}
+  - component: {fileID: -2560678737055241149}
   m_Layer: 7
   m_Name: Item_Fuel 6
   m_TagString: Item
@@ -102,7 +104,7 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 0.41349548, y: 0.1780993, z: 0.57889694}
-  m_Center: {x: -0.009022854, y: -0.0007172264, z: -0.1230846}
+  m_Center: {x: -0.009022854, y: -0.0007172264, z: -0.27}
 --- !u!114 &9029497687731017507
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -117,8 +119,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: Fuel Can
   desc: Used to hold fuel, a versatile resource in the outpost.
-  pivot: {fileID: 0}
-  isOwned: 1
+  onhandRotation: {x: 0, y: -90, z: 0}
 --- !u!114 &6374018097035504640
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -131,7 +132,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98db40c9b3d88ba4cad9c0533affeaf8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hasFuel: 0
+  hasFuel: 1
 --- !u!114 &5394976103357031835
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2980,3 +2981,115 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &-8321303044052761091
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4590342550150177571}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b70fcf64f1769704d9111ff38ae55077, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pitchRange: 0.25
+  audios:
+  - {fileID: 8300000, guid: 7af3098b0ecc64d49abf1a0cce9fffe5, type: 3}
+--- !u!82 &-2560678737055241149
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4590342550150177571}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 24300002, guid: 82ca67b297162844b942b0bacfb1b274,
+    type: 2}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 0
+  m_Volume: 0.5
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 10
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4

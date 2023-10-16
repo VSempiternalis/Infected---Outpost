@@ -50,12 +50,18 @@ public class Character : MonoBehaviourPunCallbacks {
     public bool isAiming;
     public bool isShooting;
 
+    [Space(10)]
+    [Header("AUDIO")]
+    private AudioHandler ah; //0 - Infect, 1 - Run, 2 - Drop, 3 - Take
+    [SerializeField] private MoveAudioHandler moveAH; //0 - Infect, 1 - Run, 2 - Drop, 3 - Take
+
     private void Start() {
         // SetPanels();
         rb = GetComponent<Rigidbody>();
         anim = GetComponent<Animator>();
         infectCooldownLength = GameMaster.current.infectCooldownTime;
         infectCooldown = 0;
+        ah = GetComponent<AudioHandler>();
     }
 
     private void Update() {
@@ -75,7 +81,7 @@ public class Character : MonoBehaviourPunCallbacks {
     private void FixedUpdate() {
         if(!isAlive) {
             if(body.transform.localPosition.y > -1.25f) {
-                print("ooh: " + body.transform.localPosition.y);
+                // print("ooh: " + body.transform.localPosition.y);
                 body.transform.localPosition = new Vector3(0, body.transform.localPosition.y - 0.025f, 0);
             } 
             else body.transform.localPosition = new Vector3(0, -1.25f, 0);
@@ -106,7 +112,7 @@ public class Character : MonoBehaviourPunCallbacks {
         if(!isAlive) ChangeAnimState("Dying");
         else if(isShooting) ChangeAnimState("Shooting");
         else if(isAiming) ChangeAnimState("IdlePistol");
-        else if(rb.velocity.magnitude > 3f) ChangeAnimState("Run");
+        else if(rb.velocity.magnitude > 3.5f) ChangeAnimState("Run");
         else if(rb.velocity.magnitude > 0.1f && onHandItem != null) ChangeAnimState("WalkWithItem");
         else if(rb.velocity.magnitude > 0.1f) ChangeAnimState("Walk");
         else ChangeAnimState("Idle");
@@ -123,6 +129,16 @@ public class Character : MonoBehaviourPunCallbacks {
         if(anim.GetCurrentAnimatorStateInfo(0).IsName(newState)) return;
         anim.Play(newState);
         // currentState = newState;
+
+        //sfx
+        if(newState == "Run") {
+            moveAH.isPlaying = "Tiles";
+            GetComponent<AudioSource>().loop = true;
+        } else {
+            moveAH.isPlaying = "Null";
+            GetComponent<AudioSource>().Stop();
+            GetComponent<AudioSource>().loop = false;
+        }
     }
 
     // [PunRPC] private void rpcSyncRotation(float yRot) {
@@ -138,10 +154,13 @@ public class Character : MonoBehaviourPunCallbacks {
         photonView.RPC("InfectRPC", RpcTarget.All, targetName);
 
         ChangeAnimState("Attack");
+
         //sfx
+        ah.PlayOneShot(0);
     }
 
     [PunRPC] private void InfectRPC(string targetName) {
+        print("Infect RPC");
         Character target = GameObject.Find(targetName).GetComponent<Character>();
 
         BodyHandler targetBody = target.body.GetComponent<BodyHandler>();
@@ -152,7 +171,10 @@ public class Character : MonoBehaviourPunCallbacks {
         //Turn new face on
         string tgtFaceName = targetBody.face.name;
         foreach(Transform face in body) {
-            if(face.name == tgtFaceName) face.gameObject.SetActive(true);
+            if(face.name == tgtFaceName) {
+                face.gameObject.SetActive(true);
+                body.GetComponent<BodyHandler>().face = face.gameObject;
+            }
         }
 
         //Turn old hair off
@@ -175,6 +197,8 @@ public class Character : MonoBehaviourPunCallbacks {
         print("Killing: " + name);
         isAlive = false;
 
+        WinManager.current.AddKill(type);
+
         if(GetComponent<aiInput>()) GetComponent<aiInput>().enabled = false;
         else if(Controller.current.character == this) {
             print("local player is dead");
@@ -190,7 +214,7 @@ public class Character : MonoBehaviourPunCallbacks {
         // body.transform.Rotate(new Vector3(-90, 0, 0));
         // body.transform.localPosition = new Vector3(0, -1.25f, 0);
         //use dead animation
-        WinManager.current.AddKill(type);
+
         //sfx
     }
 
@@ -206,11 +230,14 @@ public class Character : MonoBehaviourPunCallbacks {
         // onHandItem.GetComponent<Rigidbody>().isKinematic = false;
         // onHandItem.GetComponent<BoxCollider>().isTrigger = false;
         onHandItem = null;
+
+        //sfx
+        ah.PlayOneShot(2);
     }
 
     public void TakeItem(ItemHandler item) {
         print("Taking item " + item.name);
-        if(item.transform.parent.GetComponent<Character>()) {
+        if(item.transform.parent && item.transform.parent.GetComponent<Character>()) {
             print("ITEM IS OWNED BY: " + item.transform.parent.name);
             return;
         } 
@@ -229,6 +256,9 @@ public class Character : MonoBehaviourPunCallbacks {
         // onHandItem.GetComponent<BoxCollider>().isTrigger = true;
 
         // item.SetIsOwned(true);
+
+        //sfx
+        ah.PlayOneShot(3);
     }
 
     public void MoveHead(Vector3 lookPos) {
@@ -308,17 +338,24 @@ public class Character : MonoBehaviourPunCallbacks {
 
     public void SetPlayerType(int newType) { //0 - Infected, 1 - Human, 2 - Spectator
         print("Set player type: " + newType);
-        type = newType;
-        if(type == 0) infectCooldown = 0;
-        uiManager.current.SetPanels(newType);
-
-        // photonView.RPC("SetPlayerTypeRPC", RpcTarget.All, type);
+        photonView.RPC("SetPlayerTypeRPC", RpcTarget.All, newType);
     }
 
-    // [PunRPC] private void SetPlayerTypeRPC(int newType) {
-    //     print(name + " Setting Player Type: " + newType);
-    //     type = newType;
-    // }
+    [PunRPC] private void SetPlayerTypeRPC(int newType) {
+        print(name + " Setting Player Type rpc: " + newType);
+        type = newType;
+
+        if(!photonView.IsMine) return;
+
+        if(type == 0) {
+            infectCooldown = 0;
+            AudioManager.current.PlayAmb(0);
+        } else {
+            AudioManager.current.PlayAmb(1);
+        }
+
+        uiManager.current.SetPanels(newType);
+    }
 
     public void RemoveAI() {
         Destroy(GetComponent<aiInput>());

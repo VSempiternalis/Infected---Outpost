@@ -20,6 +20,11 @@ public class AudioManager : MonoBehaviour {
     public void PlayUI(int i) {
         uiHandler.Play(i);
     }
+
+    public void PlayAmb(int i) {
+        print("Playing ambience: " + i);
+        ambienceHandler.Play(i);
+    }
 }
 
 // [System.Serializable]

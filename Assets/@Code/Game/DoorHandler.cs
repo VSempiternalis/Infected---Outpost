@@ -15,11 +15,14 @@ public class DoorHandler : MonoBehaviourPunCallbacks {
 
     private float limit = 1f;
 
-    // private AudioHandler audioHandler;
+
+    [Space(10)]
+    [Header("AUDIO")]
+    private AudioHandler ah;
     
     private void Start() {
         // initialXRot = pivot.transform.localRotation.eulerAngles.x;
-        // audioHandler = GetComponent<AudioHandler>();
+        ah = GetComponent<AudioHandler>();
     }
 
     private void Update() {
@@ -57,10 +60,10 @@ public class DoorHandler : MonoBehaviourPunCallbacks {
     [PunRPC] public void ChangeStateRPC(string currentState) {
         if(currentState == "Open") {
             state = "Closing";
-            // audioHandler.Play(0);
+            ah.Play(0);
         } else if(currentState == "Closed") {
             state = "Opening";
-            // audioHandler.Play(1);
+            ah.Play(1);
         } 
         // else if(state == "Opening" && pivot.transform.localRotation.eulerAngles.y > openYRot) {
         //     state = "Closing";

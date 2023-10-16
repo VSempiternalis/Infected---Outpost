@@ -18,6 +18,8 @@ GameObject:
   - component: {fileID: 4693493722238950518}
   - component: {fileID: 6823127830540109759}
   - component: {fileID: 7857770902443600561}
+  - component: {fileID: 7114571050182528287}
+  - component: {fileID: 8727126724143637233}
   m_Layer: 7
   m_Name: Item_Revolver 1
   m_TagString: Untagged
@@ -48,7 +50,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3390099492824475673}
-  m_Mesh: {fileID: 2941274158721294118, guid: 83907bf0849bfa340b9973465df5dfbd, type: 3}
+  m_Mesh: {fileID: 2941274158721294118, guid: c49400198484b6642a901e71346307ef, type: 3}
 --- !u!23 &3750638631805995468
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -104,7 +106,7 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 0.4749371, y: 0.08121774, z: 0.21595377}
-  m_Center: {x: 0.024054604, y: 0.0052291425, z: -0.04682291}
+  m_Center: {x: 0.22, y: -0.02, z: 0.06}
 --- !u!114 &2241126138687777692
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -119,7 +121,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: Revolver
   desc: '"You better run, better run, outrun my gun"'
-  pivot: {fileID: 0}
+  onhandRotation: {x: -295, y: 0, z: 0}
 --- !u!114 &417087444820352267
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -298,6 +300,120 @@ LineRenderer:
     generateLightingData: 0
   m_UseWorldSpace: 1
   m_Loop: 0
+--- !u!114 &7114571050182528287
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3390099492824475673}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b70fcf64f1769704d9111ff38ae55077, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pitchRange: 0.25
+  audios:
+  - {fileID: 8300000, guid: cd116119793075c40a33bb3098e6a633, type: 3}
+  - {fileID: 8300000, guid: 1500c4cf8f5497a4d9310f43ba41cc9c, type: 3}
+  - {fileID: 8300000, guid: ba3a447985611a54aa291a6b8df8b242, type: 3}
+--- !u!82 &8727126724143637233
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3390099492824475673}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 24300002, guid: 82ca67b297162844b942b0bacfb1b274,
+    type: 2}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 100
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0.9
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &6593480894442389174
 GameObject:
   m_ObjectHideFlags: 0
@@ -322,7 +438,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6593480894442389174}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.262, y: -0.0071, z: 0.0357}
+  m_LocalPosition: {x: 0.45, y: -0.026, z: 0.135}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

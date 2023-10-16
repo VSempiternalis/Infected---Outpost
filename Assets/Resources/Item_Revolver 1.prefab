@@ -120,7 +120,6 @@ MonoBehaviour:
   itemName: Revolver
   desc: '"You better run, better run, outrun my gun"'
   pivot: {fileID: 0}
-  isOwned: 0
 --- !u!114 &417087444820352267
 MonoBehaviour:
   m_ObjectHideFlags: 0

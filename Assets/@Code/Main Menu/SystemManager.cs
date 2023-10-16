@@ -21,6 +21,8 @@ public class SystemManager : MonoBehaviourPunCallbacks {
     [SerializeField] private List<GameObject> ActivateOnAwake;
     [SerializeField] private List<GameObject> DeactivateOnAwake;
 
+    [SerializeField] private TMP_Text versionText;
+
     private void Awake() {
         current = this;
 
@@ -33,6 +35,9 @@ public class SystemManager : MonoBehaviourPunCallbacks {
         }
 
         // ToggleMainMenuOn(false);
+
+        //Set version text
+        versionText.text = "v" + Application.version;
     }
 
     private void Update() {
@@ -58,6 +63,8 @@ public class SystemManager : MonoBehaviourPunCallbacks {
     public override void OnConnectedToMaster() {
         base.OnConnectedToMaster();
 
+        AudioManager.current.PlayUI(0);
+
         PhotonNetwork.JoinLobby();
     }
 
@@ -78,7 +85,7 @@ public class SystemManager : MonoBehaviourPunCallbacks {
 
     private void ToggleMainMenuOn(bool isOn) {
         panelMainMenu.SetActive(isOn);
-        panelDebug.SetActive(isOn);
+        // panelDebug.SetActive(isOn);
         panelConnecting.SetActive(!isOn);
     }
 

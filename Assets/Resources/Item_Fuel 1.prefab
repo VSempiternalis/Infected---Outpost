@@ -118,7 +118,6 @@ MonoBehaviour:
   itemName: Fuel Can
   desc: Used to hold fuel, a versatile resource in the outpost.
   pivot: {fileID: 0}
-  isOwned: 0
 --- !u!114 &-7932353125766819200
 MonoBehaviour:
   m_ObjectHideFlags: 0

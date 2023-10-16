@@ -112,6 +112,9 @@ public class LobbyManager : MonoBehaviourPunCallbacks {
             playerItems.Add(newPlayerItem);
         }
         playerItemParent.gameObject.SetActive(true);
+
+        //sfx
+        AudioManager.current.PlayUI(3);
     }
 
     public override void OnPlayerEnteredRoom(Player newPlayer) {

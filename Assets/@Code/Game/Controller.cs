@@ -178,8 +178,12 @@ public class Controller : MonoBehaviour {
                         // else pointed.GetComponent<IClickable>().OnClick((character.onHandItem? character.onHandItem : null));
                         else if(character.onHandItem) {
                             if(pointed.GetComponent<Storage>() && !pointed.GetComponent<Storage>().isLocked) pointed.GetComponent<IClickable>().OnClick();
+                            // else if(pointed.GetComponent<Storage>() && pointed.GetComponent<Storage>().isLocked) {
+                            //     if(character.onHandItem.GetComponent<IUsable>() != null) character.onHandItem.GetComponent<IUsable>().Use(pointed, character.type);
+                            // }
                             else character.onHandItem.GetComponent<IUsable>().Use(pointed, character.type);
                         }
+                        else if(pointed.GetComponent<Storage>() && pointed.GetComponent<Storage>().isLocked) AudioManager.current.PlayUI(0);
                         else pointed.GetComponent<IClickable>().OnClick();
                     }
                     //Infected kills target

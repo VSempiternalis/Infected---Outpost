@@ -27,11 +27,12 @@ public class LobbyManager : MonoBehaviourPunCallbacks {
 
     private void Awake() {
         current = this;
+        print("LOBBY MAN AWAKE");
     }
 
     private void Update() {
-        if(PhotonNetwork.IsMasterClient) buttonStart.SetActive(true);
-        else buttonStart.SetActive(false);
+        if(PhotonNetwork.IsMasterClient && !buttonStart.activeSelf) buttonStart.SetActive(true);
+        else if(!PhotonNetwork.IsMasterClient && buttonStart) buttonStart.SetActive(false);
     }
 
     public void OnClickHost() {
@@ -96,10 +97,11 @@ public class LobbyManager : MonoBehaviourPunCallbacks {
         PhotonNetwork.JoinLobby();
     }
 
-    private void UpdatePlayerList() {
+    public void UpdatePlayerList() {
+        print("Updating player list");
         if(PhotonNetwork.CurrentRoom == null) return;
 
-        playerItemParent.gameObject.SetActive(false);
+        playerItemParent.gameObject.SetActive(false); //Dont remove
 
         foreach(PlayerItem item in playerItems) {
             Destroy(item.gameObject);
@@ -107,14 +109,17 @@ public class LobbyManager : MonoBehaviourPunCallbacks {
         playerItems.Clear();
 
         foreach(KeyValuePair<int, Player> player in PhotonNetwork.CurrentRoom.Players) {
+            print("Adding player: " + player.Value.NickName);
             PlayerItem newPlayerItem = Instantiate(playerItemPF, playerItemParent);
             newPlayerItem.SetPlayerInfo(player.Value);
             playerItems.Add(newPlayerItem);
         }
-        playerItemParent.gameObject.SetActive(true);
+
+        playerItemParent.gameObject.SetActive(true); //Dont remove
 
         //sfx
         AudioManager.current.PlayUI(3);
+        print("Finished updating player list");
     }
 
     public override void OnPlayerEnteredRoom(Player newPlayer) {

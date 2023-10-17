@@ -23,28 +23,57 @@ public class SystemManager : MonoBehaviourPunCallbacks {
 
     [SerializeField] private GameObject connectingPanel;
     [SerializeField] private GameObject vlgPanel;
+    [SerializeField] private GameObject mainPanel;
+    [SerializeField] private GameObject serverBrowserPanel;
+    [SerializeField] private GameObject roomPanel;
 
     [SerializeField] private TMP_Text versionText;
 
     private void Awake() {
         current = this;
 
-        foreach(GameObject thing in DeactivateOnAwake) {
-            thing.SetActive(false);
-        }
-
-        foreach(GameObject thing in ActivateOnAwake) {
-            thing.SetActive(true);
-        }
-
-        if(PhotonNetwork.IsConnected) {
-
-        }
-
-        // ToggleMainMenuOn(false);
-
         //Set version text
         versionText.text = "v" + Application.version;
+    }
+
+    private void Start() {
+        connectingPanel.SetActive(false);
+        mainPanel.SetActive(true);
+
+        //if player in room
+        if(PhotonNetwork.InRoom) {
+            print("IS IN ROOM");
+            vlgPanel.SetActive(false);
+            serverBrowserPanel.SetActive(false);
+            roomPanel.SetActive(true);
+            LobbyManager.current.UpdatePlayerList();
+        }
+
+        //if player in lobby
+        else if(PhotonNetwork.InLobby) {
+            print("IS IN LOBBY");
+            vlgPanel.SetActive(false);
+            serverBrowserPanel.SetActive(true);
+            roomPanel.SetActive(false);
+        }
+
+        //if player connected
+        else if(PhotonNetwork.IsConnected) {
+            print("IS CONNECTED");
+            vlgPanel.SetActive(true);
+            serverBrowserPanel.SetActive(false);
+            roomPanel.SetActive(false);
+        }
+        
+        else {
+            foreach(GameObject thing in DeactivateOnAwake) {
+                thing.SetActive(false);
+            }
+
+            foreach(GameObject thing in ActivateOnAwake) {
+                thing.SetActive(true);
+            }
+        }
     }
 
     private void Update() {
@@ -57,6 +86,7 @@ public class SystemManager : MonoBehaviourPunCallbacks {
 
     //Offline to server connect
     public void OnClickConnect() {
+        print("CONNECTING TO SERVER");
         if(inputUsername.text.Length >= 1) {
             PhotonNetwork.NickName = inputUsername.text;
             connectingText.text = "CONNECTING";
@@ -68,6 +98,7 @@ public class SystemManager : MonoBehaviourPunCallbacks {
 
     //Server connect to lobby connect
     public override void OnConnectedToMaster() {
+        print("SERVER TO LOBBY / OnConnectedToMaster");
         base.OnConnectedToMaster();
 
         AudioManager.current.PlayUI(0);
@@ -77,6 +108,7 @@ public class SystemManager : MonoBehaviourPunCallbacks {
 
     //lobby connect
     public override void OnJoinedLobby() {
+        print("JOINED LOBBY");
         base.OnJoinedLobby();
 
         ToggleMainMenuOn(true);

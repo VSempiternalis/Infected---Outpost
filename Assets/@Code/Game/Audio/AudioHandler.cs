@@ -16,7 +16,7 @@ public class AudioHandler : MonoBehaviour {
     }
 
     public void Play(int i) {
-        print("AH Playing: " + 0);
+        // print("AH Playing: " + 0);
         if(i < audios.Count) {
             source.pitch = Random.Range(1f - pitchRange, 1f + pitchRange);
             source.clip = audios[i];

@@ -36,10 +36,12 @@ public class LobbyManager : MonoBehaviourPunCallbacks {
     }
 
     public void OnClickHost() {
+        print("ON CLICK HOST");
         if(inputRoomName.text.Length >= 1) PhotonNetwork.CreateRoom(inputRoomName.text, new RoomOptions(){MaxPlayers = 12});
     }
 
     public override void OnJoinedRoom() {
+        print("ONJOINEDROOM");
         base.OnJoinedRoom();
 
         panelServerBrowser.SetActive(false);
@@ -50,6 +52,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks {
     }
 
     public override void OnRoomListUpdate(List<RoomInfo> roomParent) {
+        print("ON ROOM LIST UPDATE");
         base.OnRoomListUpdate(roomParent);
 
         if(Time.time >= nextUpdateTime) {
@@ -59,6 +62,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks {
     }
 
     private void UpdateRoomList(List<RoomInfo> list) {
+        print("UPDATING ROOM LIST");
         //Destroy old room items
         foreach(RoomItem item in roomItemsList) {
             Destroy(item.gameObject);
@@ -77,6 +81,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks {
     }
 
     public void JoinRoom(string roomName) {
+        print("JOIN ROOM");
         PhotonNetwork.JoinRoom(roomName);
     }
 
@@ -123,6 +128,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks {
     }
 
     public override void OnPlayerEnteredRoom(Player newPlayer) {
+        print("ON PLAYER ENTERED ROOM");
         base.OnPlayerEnteredRoom(newPlayer);
 
         UpdatePlayerList();
@@ -135,6 +141,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks {
     }
 
     public void OnClickPlayButton() {
+        print("CLICK PLAY BUTTON");
         PhotonNetwork.LoadLevel("SCENE - Outpost");
     }
 }

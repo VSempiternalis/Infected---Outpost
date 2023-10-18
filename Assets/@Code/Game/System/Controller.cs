@@ -1,6 +1,5 @@
 using UnityEngine;
 using System.Collections.Generic;
-using UnityEngine.PlayerLoop;
 
 public class Controller : MonoBehaviour {
     public static Controller current;
@@ -94,8 +93,8 @@ public class Controller : MonoBehaviour {
     public void SetPlayer(Rigidbody newPlayer) {
         player = newPlayer;
         character = newPlayer.GetComponent<Character>();
-        characterType = character.type;
-        print("Setting player: " + character.name + ". Type: " + characterType);
+        // characterType = character.type;
+        // print("Setting player: " + character.name + ". Type: " + characterType);
         // agent = player.GetComponent<NavMeshAgent>();
         // head = player.GetComponent<Character>().head;
         SetCamera(newPlayer);

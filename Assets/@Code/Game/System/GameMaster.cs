@@ -21,6 +21,13 @@ public class GameMaster : MonoBehaviour {
     private void Update() {
         
     }
+    
+    public void OnClickLeaveAndExit() {
+        print("LEAVE AND EXIT");
+        PhotonNetwork.LeaveRoom();
+        PhotonNetwork.LoadLevel("SCENE - MainMenu");
+        // PhotonNetwor
+    }
 
     public void OnClickExit() {
         print("EXITING TO MAIN MENU");

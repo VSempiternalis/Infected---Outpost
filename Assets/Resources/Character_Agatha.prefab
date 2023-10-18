@@ -187,6 +187,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4996670654814603496}
   - component: {fileID: 2927842139693230529}
+  - component: {fileID: 4672070951686156659}
+  - component: {fileID: 346324478440435422}
   m_Layer: 6
   m_Name: Body
   m_TagString: Untagged
@@ -242,6 +244,45 @@ MonoBehaviour:
   hair: {fileID: 6636240323116556277}
   actualHead: {fileID: 3094983472320410668}
   root: {fileID: 8279958086435249131}
+--- !u!114 &4672070951686156659
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 136043948871794027}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 1
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents:
+  - {fileID: 346324478440435422}
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
+--- !u!114 &346324478440435422
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 136043948871794027}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizePosition: 0
+  m_SynchronizeRotation: 1
+  m_SynchronizeScale: 0
+  m_UseLocal: 1
 --- !u!1 &171760075022365591
 GameObject:
   m_ObjectHideFlags: 0
@@ -6207,8 +6248,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e7e23b44ec3b7545954f4f27d239040, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  characterName: Agatha
+  characterDesc: 
   lightView: {fileID: 7092969544222749150}
   campos: {fileID: 8489111234820255509}
+  isAlive: 1
   isPlayer: 0
   spawnInt: 0
   type: 1
@@ -6262,7 +6306,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_SynchronizeVelocity: 1
   m_SynchronizeAngularVelocity: 1
-  m_TeleportEnabled: 1
+  m_TeleportEnabled: 0
   m_TeleportIfDistanceGreaterThan: 3
 --- !u!114 &3723844727135354977
 MonoBehaviour:

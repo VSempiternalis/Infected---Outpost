@@ -1,11 +1,13 @@
 using UnityEngine;
 using Photon.Pun;
 
-public class Character : MonoBehaviourPunCallbacks {
+public class Character : MonoBehaviourPunCallbacks, ITooltipable {
+    [SerializeField] private string characterName;
+    [SerializeField] private string characterDesc;
     public GameObject lightView;
     public Transform campos;
     private Rigidbody rb;
-    private bool isAlive = true;
+    public bool isAlive = true;
     public bool isPlayer;
 
     public int spawnInt;
@@ -70,9 +72,8 @@ public class Character : MonoBehaviourPunCallbacks {
         if(!isPlayer && PhotonNetwork.IsMasterClient) aiAnimCheck();
         else if(isPlayer) AnimCheck();
 
-        if(type != 0 || !isPlayer) return;
+        if(type != 0 || !isPlayer || !photonView.AmOwner) return;
 
-        // print(name + "modifying infect cooldown: " + Mathf.CeilToInt(infectCooldown));
         if(infectCooldown > 0) infectCooldown -= Time.deltaTime; // Use Time.deltaTime to make it decrease by 1 every second
         else infectCooldown = 0;
 
@@ -226,6 +227,9 @@ public class Character : MonoBehaviourPunCallbacks {
         // body.transform.localPosition = new Vector3(0, -1.25f, 0);
         //use dead animation
 
+        //deactivate collider
+        GetComponent<CapsuleCollider>().enabled = false;
+
         //sfx
         screamAH.PlayOneShot(0);
     }
@@ -274,12 +278,16 @@ public class Character : MonoBehaviourPunCallbacks {
     }
 
     public void MoveHead(Vector3 lookPos) {
-        photonView.RPC("rpcMoveHead", RpcTarget.All, lookPos);
+        MovingTheHead(lookPos);
+        // photonView.RPC("rpcMoveHead", RpcTarget.All, lookPos);
     }
 
     [PunRPC] private void rpcMoveHead(Vector3 lookPos) {
+        MovingTheHead(lookPos);
+    }
+
+    private void MovingTheHead(Vector3 lookPos) {
         // print("Moving head: " + head);
-    // if(photonView.IsMine) {
         // print(name + "RPC movehead: ");
 
         if(rb == null) return;
@@ -293,8 +301,6 @@ public class Character : MonoBehaviourPunCallbacks {
 
         // Rotate the head towards the target rotation with a delay
         head.rotation = Quaternion.Slerp(head.rotation, targetHeadRot, headSpeed * Time.deltaTime);
-        // print(name + " rotation: " + head.rotation.eulerAngles);
-    // }
     }
 
     public void MoveTo(Vector3 movePos) {
@@ -341,10 +347,12 @@ public class Character : MonoBehaviourPunCallbacks {
     }
 
     public void SetIsPlayer() {
+        print(name + "SetIsPlayer (Local)");
         photonView.RPC("SetIsPlayerRPC", RpcTarget.All);
     }
 
     [PunRPC] private void SetIsPlayerRPC() {
+        print(name + "SetIsPlayerRPC");
         isPlayer = true;
     }
 
@@ -356,6 +364,8 @@ public class Character : MonoBehaviourPunCallbacks {
     [PunRPC] private void SetPlayerTypeRPC(int newType) {
         print(name + " Setting Player Type rpc: " + newType);
         type = newType;
+
+        Spawner.current.AddTypeSet();
 
         if(!photonView.IsMine) return;
 
@@ -371,5 +381,15 @@ public class Character : MonoBehaviourPunCallbacks {
 
     public void RemoveAI() {
         Destroy(GetComponent<aiInput>());
+    }
+
+    //
+
+    public string GetHeader() {
+        return characterName;
+    }
+
+    public string GetContent() {
+        return characterDesc;
     }
 }

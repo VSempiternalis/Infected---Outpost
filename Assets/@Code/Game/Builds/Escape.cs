@@ -1,8 +1,8 @@
 using UnityEngine;
 using System.Collections.Generic;
-using UnityEngine.Scripting;
+using Photon.Pun;
 
-public class Escape : MonoBehaviour, ITooltipable, IClickable {
+public class Escape : MonoBehaviourPunCallbacks, ITooltipable, IClickable {
     [SerializeField] private string escapeName;
     [SerializeField] private string description;
     [SerializeField] private string requirementsMetText;
@@ -20,27 +20,35 @@ public class Escape : MonoBehaviour, ITooltipable, IClickable {
     private float lastUpdate;
 
     private void Start() {
-        lastUpdate = 0f;
-        CheckForRequirements();
+        if(PhotonNetwork.IsMasterClient) {
+            lastUpdate = 0f;
+            CheckForRequirements();
+        }
     }
 
     private void Update() {
-        lastUpdate += Time.deltaTime;
-        
-        if(lastUpdate >= 1.0f) {
-            CheckForRequirements();
-            lastUpdate = 0f;
+        if(PhotonNetwork.IsMasterClient) {
+            lastUpdate += Time.deltaTime;
+            
+            if(lastUpdate >= 1.0f) {
+                CheckForRequirements();
+                lastUpdate = 0f;
+            }
         }
     }
 
     public void OnClick() {
+        photonView.RPC("OnClickRPC", RpcTarget.MasterClient);
+    }
+
+    [PunRPC] private void OnClickRPC() {
         print("ESCAPING!");
         if(!requirementsMet) return;
 
         //list escapees/survivors and check if one escapee is infected
         bool isExtinction = false;
         foreach(GameObject character in trigger.charactersInTrigger) {
-            if(character.GetComponent<Character>() && character.GetComponent<Character>().type == 0) isExtinction = true;
+            if(character.GetComponent<Character>() && character.GetComponent<Character>().type == 0 && character.GetComponent<Character>().isAlive) isExtinction = true;
         }
 
         if(isExtinction) WinManager.current.Endgame("Extinction");
@@ -57,7 +65,7 @@ public class Escape : MonoBehaviour, ITooltipable, IClickable {
             foreach(Requirement req in requirements) {
                 // print("Checking: " + item.itemName + " / " + req.itemName);
                 if(item.itemName == req.itemName) {
-                    if(item.GetComponent<FuelCan>() && !item.GetComponent<FuelCan>().hasFuel) req.providedAmount ++;
+                    if(item.GetComponent<FuelCan>() && item.GetComponent<FuelCan>().hasFuel) req.providedAmount ++;
                     else if(!item.GetComponent<FuelCan>()) req.providedAmount ++;
 
                     //Remove item

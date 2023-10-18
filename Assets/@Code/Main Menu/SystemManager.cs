@@ -2,6 +2,7 @@ using UnityEngine;
 using TMPro;
 using Photon.Pun;
 using System.Collections.Generic;
+using System.Linq;
 
 public class SystemManager : MonoBehaviourPunCallbacks {
     public static SystemManager current;
@@ -28,6 +29,9 @@ public class SystemManager : MonoBehaviourPunCallbacks {
     [SerializeField] private GameObject roomPanel;
 
     [SerializeField] private TMP_Text versionText;
+
+    [SerializeField] private ServerSettings serverSettings;
+    [SerializeField] private TMP_Text serverRegion;
 
     private void Awake() {
         current = this;
@@ -100,6 +104,8 @@ public class SystemManager : MonoBehaviourPunCallbacks {
     public override void OnConnectedToMaster() {
         print("SERVER TO LOBBY / OnConnectedToMaster");
         base.OnConnectedToMaster();
+
+        serverRegion.text = "REGION: " + serverSettings.DevRegion;
 
         AudioManager.current.PlayUI(0);
 

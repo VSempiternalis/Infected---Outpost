@@ -65,6 +65,9 @@ public class WinManager : MonoBehaviour {
     }
 
     public void AddFuel() {
+        print("ADDFUEL PLAYER COUNT");
+        print("humans left: " + humanCount);
+        print("infected left: " + infectedCount);
         countdown += fuelTimeAdd;
     }
 
@@ -127,6 +130,8 @@ public class WinManager : MonoBehaviour {
         print("Adding kill. Type: " + type);
         if(type == 0) infectedCount --;
         else humanCount --;
+        print("humans left: " + humanCount);
+        print("infected left: " + infectedCount);
 
         //Check for endgame stuff
         if(infectedCount <= 0) Endgame("Disinfection");
@@ -135,6 +140,7 @@ public class WinManager : MonoBehaviour {
 
     public void CountPlayers() {
         foreach(GameObject character in GameObject.FindGameObjectsWithTag("Character")) {
+            print("Counting characters: " + character.name + " Type: " + character.GetComponent<Character>().type);
             if(character.GetComponent<Character>().isPlayer) {
                 print("Counting players: " + character.name);
                 if(character.GetComponent<Character>().type == 0) infectedCount ++;
@@ -173,9 +179,5 @@ public class WinManager : MonoBehaviour {
             humansWinDisinfection.SetActive(true);
             GetComponent<AudioHandler>().Play(1);
         }
-    }
-
-    public void ExitGame() {
-
     }
 }

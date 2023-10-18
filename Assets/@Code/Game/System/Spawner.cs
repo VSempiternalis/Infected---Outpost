@@ -1,24 +1,17 @@
 using UnityEngine;
-using UnityEngine.AI;
 using Photon.Pun;
 using Photon.Realtime;
 using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
-using System.Linq;
 
 public class Spawner : MonoBehaviourPunCallbacks {
     public static Spawner current;
 
-    //private GameObject[] playerPrefabs;
     [SerializeField] private Transform[] spawnPoints;
-    //[SerializeField] private GameObject characterList;
     private List<int> spawnedList = new List<int>(); //list of ints for characters that have spawned
 
-    //[SerializeField] private Sprite[] characterSprites;
     [SerializeField] public GameObject[] characterPrefabs; //ADDNEWCHARACTER
     [SerializeField] public GameObject[] itemPrefabs; //ADDNEWITEM
-    // [SerializeField] private Transform items;
     [SerializeField] private Transform[] storages;
     private bool playersSpawned;
     private List<string> playerSpawnedList = new List<string>();
@@ -29,15 +22,17 @@ public class Spawner : MonoBehaviourPunCallbacks {
 
     private GameObject localPlayer;
 
-    // [SerializeField] private GameObject loadingCanvas;
-    // [SerializeField] private TMP_Text playerType;
-    
-    // [SerializeField] private AudioHandler loopAH;
     public TMP_Text loadText;
 
-    private bool typesSet = false;
-
     public GameObject lights;
+
+    [SerializeField] private TMP_Text ping;
+
+    private int playersInGame;
+    private bool isAllPlayersInGame;
+    private int typesSet;
+    // private int typesSet;
+    private bool allTypesSet;
 
     private void Awake() {
         current = this;
@@ -55,13 +50,24 @@ public class Spawner : MonoBehaviourPunCallbacks {
 
         //Ambience audio
         // loopAH.PlayClip(1);
+        photonView.RPC("InGameRPC", RpcTarget.MasterClient);
+    }
+
+    private void Update() {
+        //PING
+        int pingNum = PhotonNetwork.GetPing();
+        Color color = Color.white;
+        if(pingNum > 99) color = Color.red;
+
+        ping.text = "PING: " + pingNum;
+        ping.color = color;
     }
 
     private void FixedUpdate() {
         if(Time.time >= nextSecUpdate) {
             nextSecUpdate = Mathf.FloorToInt(Time.time) + 1;
 
-            if(PhotonNetwork.IsMasterClient && !gameStart) {
+            if(PhotonNetwork.IsMasterClient && !gameStart && isAllPlayersInGame && !allTypesSet && !playersSpawned) {
 
                 //Check if players greater than prefabs (Results in endless loop)
                 if(PhotonNetwork.PlayerList.Length > characterPrefabs.Length) {
@@ -70,64 +76,51 @@ public class Spawner : MonoBehaviourPunCallbacks {
                     gameStart = true;
                     return;
                 }
-
-                if(Time.time < gameStartTime) {
                     SpawnPlayers();
-                } else if(Time.time > gameStartTime + 2) {
                     SetTypes();
                     SpawnAI();
                     SpawnItems();
-                    
-                    // Enabling AI
-                    // foreach(aiInput ai in GameObject.FindObjectsOfType<aiInput>()) {
-                    //     // if(ai.GetComponent<PhotonView>().Owner == PhotonNetwork.LocalPlayer) ai.AddComponent<aiInput>();
-                    //     // else { 
-                    //     //     GameObject player = ai.gameObject;
-                    //     //     Destroy(player.GetComponent<aiInput>());
-                    //     //     player.GetComponent<PlayerInput>().enabled = true;
-                    //     // }
-                    // }
 
-                    photonView.RPC("StartGameRPC", RpcTarget.All);
-                    photonView.RPC("ActivateTypePopupRPC", RpcTarget.All);
-                }
+                    // photonView.RPC("StartGameRPC", RpcTarget.All);
+                    // photonView.RPC("ActivateTypePopupRPC", RpcTarget.All);
+
+                // if(Time.time < gameStartTime) {
+                //     SpawnPlayers();
+                // } else if(Time.time > gameStartTime + 2) {
+                //     SetTypes();
+                //     SpawnAI();
+                //     SpawnItems();
+
+                //     photonView.RPC("StartGameRPC", RpcTarget.All);
+                //     photonView.RPC("ActivateTypePopupRPC", RpcTarget.All);
+                // }
+            } else if(!gameStart && allTypesSet) {
+                photonView.RPC("StartGameRPC", RpcTarget.All);
+                photonView.RPC("ActivateTypePopupRPC", RpcTarget.All);
             }
         }
     }
 
     //============================================================
 
-    private void GetPrefabs() {
-        print("Getting Prefabs");
-        // GameObject Abara = Resources.Load("Abara") as GameObject;
-        // GameObject Adams = Resources.Load("Adams") as GameObject;
-        // GameObject Agatha = Resources.Load("Agatha") as GameObject;
-        // GameObject Bukowski = Resources.Load("Bukowski") as GameObject;
-        // GameObject Corey = Resources.Load("Corey") as GameObject;
-        // GameObject Haldeman = Resources.Load("Haldeman") as GameObject;
-        // GameObject Isaac = Resources.Load("Isaac") as GameObject;
-        // GameObject Jennica = Resources.Load("Jennica") as GameObject;
-        // GameObject Macdaddy = Resources.Load("Macdaddy") as GameObject;
-        // GameObject Miku = Resources.Load("Miku") as GameObject;
-        // GameObject Orwell = Resources.Load("Orwell") as GameObject;
-        // GameObject Young = Resources.Load("Young") as GameObject;
+    [PunRPC] private void InGameRPC() {
+        playersInGame ++;
+        print("Players in game: " + playersInGame + " / Players in room: " + PhotonNetwork.CurrentRoom.PlayerCount);
 
-        // characterPrefabs = new GameObject[]{Abara, Adams, Agatha, Bukowski, Corey, Haldeman, Isaac, Jennica, Macdaddy, Miku, Orwell, Young};
-        
-        //ADDNEWCHARACTER
-        // GameObject abara = Resources.Load("Character_Abara") as GameObject;
-        // GameObject adams = Resources.Load("Character_Adams") as GameObject;
-        // GameObject bukowski = Resources.Load("Character_Bukowski") as GameObject;
-
-        // characterPrefabs = new GameObject[]{abara, adams, bukowski}; //ADDNEWCHARACTER
-
-        print("Character prefab count: " + characterPrefabs.Length);
+        if(playersInGame == PhotonNetwork.CurrentRoom.PlayerCount) {
+            isAllPlayersInGame = true;
+        }
     }
+
+    // private void GetPrefabs() {
+    //     print("Getting Prefabs");
+    //     print("Character prefab count: " + characterPrefabs.Length);
+    // }
 
     //============================================================
 
     private void SpawnPlayers() {
-        // print("[SPAWNER] SpawnPlayers");
+        print("[SPAWNER] SpawnPlayers");
         loadText.text = "Spawning Players...";
 
         foreach(Player player in PhotonNetwork.PlayerList) {
@@ -138,14 +131,16 @@ public class Spawner : MonoBehaviourPunCallbacks {
                 int randInt = Random.Range(0, characterPrefabs.Length); //12 ADDNEWCHARACTER
                 if(!spawnedList.Contains(randInt)) {
                     spawnedList.Add(randInt);
-                    photonView.RPC("GiveSpawn", RpcTarget.All, playerName, randInt);
+                    photonView.RPC("GiveSpawnRPC", RpcTarget.All, playerName, randInt);
                     break;
                 }
             }
         }
+
+        playersSpawned = true;
     }
 
-    [PunRPC] private void GiveSpawn(string playerName, int spawnInt) {
+    [PunRPC] private void GiveSpawnRPC(string playerName, int spawnInt) {
         print("[SPAWNER] Spawning Player: " + playerName);
         loadText.text = "Spawning Player: " + playerName;
         //[!] Return if player running RPC isn't supposed to get this spawnInt
@@ -184,11 +179,11 @@ public class Spawner : MonoBehaviourPunCallbacks {
         print("Setting types");
         loadText.text = "Setting player types...";
 
-        if(typesSet) return;
+        if(allTypesSet) return;
         int randomHostIndex = Random.Range(0, spawnedList.Count);
         int hostInt = spawnedList[randomHostIndex];
         photonView.RPC("SetTypesRPC", RpcTarget.All, hostInt);
-        typesSet = true;
+        // allTypesSet = true;
     }
 
     [PunRPC] private void SetTypesRPC(int hostInt) {
@@ -199,6 +194,13 @@ public class Spawner : MonoBehaviourPunCallbacks {
         } else {
             localPlayer.GetComponent<Character>().SetPlayerType(1); //1 - Human
         }
+    }
+
+    public void AddTypeSet() {
+        print("Add Types Set");
+        typesSet ++;
+        print("Types Set: " + typesSet);
+        if(typesSet == playersInGame) allTypesSet = true;
     }
 
     //============================================================

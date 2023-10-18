@@ -2610,8 +2610,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e7e23b44ec3b7545954f4f27d239040, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  characterName: Haldeman
+  characterDesc: 
   lightView: {fileID: 5648817732800472064}
   campos: {fileID: 2072127037823380737}
+  isAlive: 1
   isPlayer: 0
   spawnInt: 0
   type: 1
@@ -2665,7 +2668,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_SynchronizeVelocity: 1
   m_SynchronizeAngularVelocity: 1
-  m_TeleportEnabled: 1
+  m_TeleportEnabled: 0
   m_TeleportIfDistanceGreaterThan: 3
 --- !u!114 &418646449300694374
 MonoBehaviour:
@@ -3282,6 +3285,8 @@ GameObject:
   m_Component:
   - component: {fileID: 277343756560986845}
   - component: {fileID: 655082321196851338}
+  - component: {fileID: 8078656850710770305}
+  - component: {fileID: 2884473568695328332}
   m_Layer: 6
   m_Name: Body
   m_TagString: Untagged
@@ -3337,6 +3342,45 @@ MonoBehaviour:
   hair: {fileID: 4581866815890749993}
   actualHead: {fileID: 6777997068276132738}
   root: {fileID: 2628452777227713756}
+--- !u!114 &8078656850710770305
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4569328279849525185}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 1
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents:
+  - {fileID: 2884473568695328332}
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
+--- !u!114 &2884473568695328332
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4569328279849525185}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizePosition: 0
+  m_SynchronizeRotation: 1
+  m_SynchronizeScale: 0
+  m_UseLocal: 1
 --- !u!1 &4581866815890749993
 GameObject:
   m_ObjectHideFlags: 0

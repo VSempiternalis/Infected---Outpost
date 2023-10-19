@@ -292,7 +292,6 @@ GameObject:
   - component: {fileID: 6898486963864898905}
   - component: {fileID: 7403899096904788038}
   - component: {fileID: 4006174191549291078}
-  - component: {fileID: 7377761387754785592}
   m_Layer: 6
   m_Name: Character_Isaac
   m_TagString: Character
@@ -386,7 +385,7 @@ MonoBehaviour:
   observableSearch: 2
   ObservedComponents:
   - {fileID: 3987447058815979844}
-  - {fileID: 7377761387754785592}
+  - {fileID: 0}
   - {fileID: 7857580028350314923}
   sceneViewId: 0
   InstantiationId: 0
@@ -569,22 +568,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &7377761387754785592
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 800467756818777795}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SynchronizePosition: 1
-  m_SynchronizeRotation: 0
-  m_SynchronizeScale: 0
-  m_UseLocal: 0
 --- !u!1 &846991189450226316
 GameObject:
   m_ObjectHideFlags: 0

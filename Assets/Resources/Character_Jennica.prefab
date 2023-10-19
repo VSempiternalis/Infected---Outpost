@@ -6131,7 +6131,6 @@ GameObject:
   - component: {fileID: 7057239543692761280}
   - component: {fileID: 8220100592099113209}
   - component: {fileID: 4785749407381959051}
-  - component: {fileID: 7328868744132259461}
   m_Layer: 6
   m_Name: Character_Jennica
   m_TagString: Character
@@ -6225,7 +6224,7 @@ MonoBehaviour:
   observableSearch: 2
   ObservedComponents:
   - {fileID: 2912700880533581166}
-  - {fileID: 7328868744132259461}
+  - {fileID: 0}
   - {fileID: 3665308997784690841}
   sceneViewId: 0
   InstantiationId: 0
@@ -6408,22 +6407,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &7328868744132259461
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8996648583164996297}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SynchronizePosition: 1
-  m_SynchronizeRotation: 0
-  m_SynchronizeScale: 0
-  m_UseLocal: 0
 --- !u!1 &9049222199159984834
 GameObject:
   m_ObjectHideFlags: 0

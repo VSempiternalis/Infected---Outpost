@@ -1684,7 +1684,6 @@ GameObject:
   - component: {fileID: 6141345226415591654}
   - component: {fileID: 5142552553074289537}
   - component: {fileID: 685972536686457593}
-  - component: {fileID: 3759703290099942654}
   m_Layer: 6
   m_Name: Character_Corey
   m_TagString: Character
@@ -1778,7 +1777,7 @@ MonoBehaviour:
   observableSearch: 2
   ObservedComponents:
   - {fileID: 6090101266678699222}
-  - {fileID: 3759703290099942654}
+  - {fileID: 0}
   - {fileID: 426126860825933623}
   sceneViewId: 0
   InstantiationId: 0
@@ -1961,22 +1960,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &3759703290099942654
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3676930756038729245}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SynchronizePosition: 1
-  m_SynchronizeRotation: 0
-  m_SynchronizeScale: 0
-  m_UseLocal: 0
 --- !u!1 &4080920691584615210
 GameObject:
   m_ObjectHideFlags: 0

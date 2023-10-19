@@ -315,6 +315,7 @@ GameObject:
   - component: {fileID: 5502937366182071030}
   - component: {fileID: 3159993997850205780}
   - component: {fileID: 2473444029184994317}
+  - component: {fileID: 2180411428900370871}
   m_Layer: 6
   m_Name: Character_Adams
   m_TagString: Character
@@ -408,6 +409,8 @@ MonoBehaviour:
   observableSearch: 2
   ObservedComponents:
   - {fileID: 6734446690361307169}
+  - {fileID: 2180411428900370871}
+  - {fileID: 6775416434095315257}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -589,6 +592,22 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &2180411428900370871
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 623157376200487686}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizePosition: 1
+  m_SynchronizeRotation: 0
+  m_SynchronizeScale: 0
+  m_UseLocal: 0
 --- !u!1 &702102210384419177
 GameObject:
   m_ObjectHideFlags: 0
@@ -5081,8 +5100,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1236582461837312519}
   - component: {fileID: 7827138825999095512}
-  - component: {fileID: 976731246293965128}
-  - component: {fileID: 8963669122142753179}
+  - component: {fileID: 6775416434095315257}
+  - component: {fileID: 6301593697927374530}
   m_Layer: 6
   m_Name: Body
   m_TagString: Untagged
@@ -5138,7 +5157,7 @@ MonoBehaviour:
   hair: {fileID: 3083277221852344332}
   actualHead: {fileID: 7435512380137469580}
   root: {fileID: 7980590110550714224}
---- !u!114 &976731246293965128
+--- !u!114 &6775416434095315257
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -5154,7 +5173,7 @@ MonoBehaviour:
   m_SynchronizeRotation: 1
   m_SynchronizeScale: 0
   m_UseLocal: 1
---- !u!114 &8963669122142753179
+--- !u!114 &6301593697927374530
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -5169,11 +5188,11 @@ MonoBehaviour:
   ObservedComponentsFoldoutOpen: 1
   Group: 0
   prefixField: -1
-  Synchronization: 1
+  Synchronization: 3
   OwnershipTransfer: 0
   observableSearch: 2
   ObservedComponents:
-  - {fileID: 976731246293965128}
+  - {fileID: 6775416434095315257}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0

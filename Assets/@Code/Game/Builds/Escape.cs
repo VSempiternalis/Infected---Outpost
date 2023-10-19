@@ -56,37 +56,42 @@ public class Escape : MonoBehaviourPunCallbacks, ITooltipable, IClickable {
     }
 
     private void CheckForRequirements() {
-        // print("Checking for requirements...");
-        requirementsMet = true;
-
         if(requirementsStorage.item) {
-            // print("Storage has item!");
             ItemHandler item = requirementsStorage.item;
             foreach(Requirement req in requirements) {
-                // print("Checking: " + item.itemName + " / " + req.itemName);
                 if(item.itemName == req.itemName) {
-                    if(item.GetComponent<FuelCan>() && item.GetComponent<FuelCan>().hasFuel) req.providedAmount ++;
-                    else if(!item.GetComponent<FuelCan>()) req.providedAmount ++;
+                    bool isFuel = item.GetComponent<FuelCan>();
+                    bool hasFuel = false;
+                    if(isFuel) hasFuel = item.GetComponent<FuelCan>().hasFuel;
 
-                    //Remove item
-                    requirementsStorage.RemoveItem();
-                    Destroy(item.gameObject);
+                    photonView.RPC("UpdateRequirementsRPC", RpcTarget.All, item.itemName, isFuel, hasFuel);
+                    if((isFuel && hasFuel) || (!isFuel)) photonView.RPC("RemoveRequirementFromStorageRPC", RpcTarget.All);
                 } 
             }
         }
+    }
 
-        //Check if all requirements met
+    //Called when adding a new req from storage
+    [PunRPC] private void UpdateRequirementsRPC(string reqName, bool isFuel, bool hasFuel) {
+        requirementsMet = true;
+
         foreach(Requirement req in requirements) {
+            if(req.itemName == reqName) {
+                if(isFuel && hasFuel) req.providedAmount ++;
+                else if(!isFuel) req.providedAmount ++;
+            }
+
+            //Check if all requirements met
             if(req.providedAmount < req.requiredAmount) requirementsMet = false;
         }
-        // print("Requirements met: " + requirementsMet);
 
-        if(requirementsMet) {
-            //play sfx
+        if(requirementsMet) GetComponent<IEscapable>().Ready();
+    }
 
-            //do stuff
-            GetComponent<IEscapable>().Ready();
-        }
+    [PunRPC] private void RemoveRequirementFromStorageRPC() {
+        ItemHandler item = requirementsStorage.item;
+        requirementsStorage.RemoveItem();
+        Destroy(item.gameObject);
     }
 
     public string GetHeader() {

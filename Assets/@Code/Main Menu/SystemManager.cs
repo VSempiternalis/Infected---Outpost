@@ -10,6 +10,9 @@ public class SystemManager : MonoBehaviourPunCallbacks {
     [SerializeField] private GameObject panelConnecting;
     [SerializeField] private GameObject panelMainMenu;
     [SerializeField] private GameObject panelDebug;
+    [SerializeField] private GameObject vlgPanel;
+    [SerializeField] private GameObject serverBrowserPanel;
+    [SerializeField] private GameObject roomPanel;
 
     [SerializeField] private TMP_Text connectingText;
     private bool isConnecting;
@@ -21,12 +24,6 @@ public class SystemManager : MonoBehaviourPunCallbacks {
 
     [SerializeField] private List<GameObject> ActivateOnAwake;
     [SerializeField] private List<GameObject> DeactivateOnAwake;
-
-    [SerializeField] private GameObject connectingPanel;
-    [SerializeField] private GameObject vlgPanel;
-    [SerializeField] private GameObject mainPanel;
-    [SerializeField] private GameObject serverBrowserPanel;
-    [SerializeField] private GameObject roomPanel;
 
     [SerializeField] private TMP_Text versionText;
 
@@ -41,8 +38,8 @@ public class SystemManager : MonoBehaviourPunCallbacks {
     }
 
     private void Start() {
-        connectingPanel.SetActive(false);
-        mainPanel.SetActive(true);
+        panelConnecting.SetActive(false);
+        panelMainMenu.SetActive(true);
 
         //if player in room
         if(PhotonNetwork.InRoom) {

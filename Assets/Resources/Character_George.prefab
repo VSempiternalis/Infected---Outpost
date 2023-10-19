@@ -468,7 +468,7 @@ GameObject:
   - component: {fileID: 295565694298586951}
   - component: {fileID: 1675889684755724119}
   - component: {fileID: 6830444127547069524}
-  - component: {fileID: 3805320445061242767}
+  - component: {fileID: 3652452853931410574}
   m_Layer: 6
   m_Name: Body
   m_TagString: Untagged
@@ -540,7 +540,7 @@ MonoBehaviour:
   m_SynchronizeRotation: 1
   m_SynchronizeScale: 0
   m_UseLocal: 1
---- !u!114 &3805320445061242767
+--- !u!114 &3652452853931410574
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -555,7 +555,7 @@ MonoBehaviour:
   ObservedComponentsFoldoutOpen: 1
   Group: 0
   prefixField: -1
-  Synchronization: 1
+  Synchronization: 3
   OwnershipTransfer: 0
   observableSearch: 2
   ObservedComponents:
@@ -5674,6 +5674,7 @@ GameObject:
   - component: {fileID: 2096824140418829879}
   - component: {fileID: 4109213172259566938}
   - component: {fileID: 7874606398510635321}
+  - component: {fileID: 3693767960637831483}
   m_Layer: 6
   m_Name: Character_George
   m_TagString: Character
@@ -5767,6 +5768,8 @@ MonoBehaviour:
   observableSearch: 2
   ObservedComponents:
   - {fileID: 5103888389180802369}
+  - {fileID: 3693767960637831483}
+  - {fileID: 6830444127547069524}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -5948,6 +5951,22 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &3693767960637831483
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7569992242758140621}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizePosition: 1
+  m_SynchronizeRotation: 0
+  m_SynchronizeScale: 0
+  m_UseLocal: 0
 --- !u!1 &7981326552597666621
 GameObject:
   m_ObjectHideFlags: 0

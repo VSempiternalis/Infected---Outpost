@@ -1,8 +1,10 @@
 using UnityEngine;
 using TMPro;
+using Photon.Pun;
 
-public class WinManager : MonoBehaviour {
+public class WinManager : MonoBehaviourPunCallbacks {
     public static WinManager current;
+    private bool isGameOver;
 
     [Space(10)]
     [Header("GENERATOR")]
@@ -43,14 +45,15 @@ public class WinManager : MonoBehaviour {
     }
 
     private void FixedUpdate() {
-        if(Time.time >= nextSecUpdate) {
+        if(PhotonNetwork.IsMasterClient && Time.time >= nextSecUpdate) {
             nextSecUpdate = Mathf.FloorToInt(Time.time) + 1;
 
             if(gameStart) {
                 if(countdown < 1) Endgame("Generator shutdown");
 
                 countdown --;
-                UpdateGeneratorTimerUI();
+                photonView.RPC("UpdateGeneratorTimerUIRPC", RpcTarget.All, countdown);
+                // UpdateGeneratorTimerUI();
             }
         }
     }
@@ -71,6 +74,11 @@ public class WinManager : MonoBehaviour {
         countdown += fuelTimeAdd;
     }
 
+    [PunRPC] private void UpdateGeneratorTimerUIRPC(int newCountdown) {
+        countdown = newCountdown;
+        UpdateGeneratorTimerUI();
+    }
+
     private void UpdateGeneratorTimerUI() {
         int mins = countdown / 60;
         int secs = countdown % 60;
@@ -85,16 +93,12 @@ public class WinManager : MonoBehaviour {
         else secsString = secs + "";
 
         generatorTimer.text = minsString + ":" + secsString;
-        // generatorTimer2.text = minsString + ":" + secsString;
-        // generatorTimer3.text = minsString + ":" + secsString;
 
         //Update text color
         if(countdown < 60) {
             if(generatorTimer.color == Color.red) return;
             
             generatorTimer.color = Color.red;
-            // generatorTimer2.color = Color.red;
-            // generatorTimer3.color = Color.red;
 
             //Timer sfx
             if(!GetComponent<AudioSource>().isPlaying) GetComponent<AudioHandler>().Play(0);
@@ -108,8 +112,6 @@ public class WinManager : MonoBehaviour {
             if(generatorTimer.color == Color.green) return;
 
             generatorTimer.color = Color.green;
-            // generatorTimer2.color = Color.green;
-            // generatorTimer3.color = Color.green;
 
             //Timer sfx
             if(GetComponent<AudioSource>().isPlaying) GetComponent<AudioSource>().Stop();
@@ -134,8 +136,10 @@ public class WinManager : MonoBehaviour {
         print("infected left: " + infectedCount);
 
         //Check for endgame stuff
-        if(infectedCount <= 0) Endgame("Disinfection");
-        else if(humanCount <= 0) Endgame("Assimilation");
+        if(PhotonNetwork.IsMasterClient) {
+            if(infectedCount <= 0) Endgame("Disinfection");
+            else if(humanCount <= 0) Endgame("Assimilation");
+        }
     }
 
     public void CountPlayers() {
@@ -154,10 +158,15 @@ public class WinManager : MonoBehaviour {
 
     public void Endgame(string reason) {
         print("END GAME: " + reason);
-        // Debug.Log("Infected win!");
-        //Application.Quit();
+        photonView.RPC("EndgameRPC", RpcTarget.All, reason);
+    }
+
+    [PunRPC] private void EndgameRPC(string reason) {
+        if(isGameOver) return;
         if(endgameUI.activeSelf) return;
         endgameUI.SetActive(true);
+
+        isGameOver = true;
 
         //INFECTED
         if(reason == "Generator shutdown") {

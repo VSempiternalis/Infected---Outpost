@@ -1933,6 +1933,7 @@ GameObject:
   - component: {fileID: 3997451537564366099}
   - component: {fileID: 526516310744482869}
   - component: {fileID: 7366384887635115226}
+  - component: {fileID: 274247190947766846}
   m_Layer: 6
   m_Name: Character_Young
   m_TagString: Character
@@ -2026,6 +2027,8 @@ MonoBehaviour:
   observableSearch: 2
   ObservedComponents:
   - {fileID: 5013687191331922793}
+  - {fileID: 274247190947766846}
+  - {fileID: 3550425967832966968}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -2207,6 +2210,22 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &274247190947766846
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3438537617149439525}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizePosition: 1
+  m_SynchronizeRotation: 0
+  m_SynchronizeScale: 0
+  m_UseLocal: 0
 --- !u!1 &3473021639307540477
 GameObject:
   m_ObjectHideFlags: 0
@@ -3357,7 +3376,7 @@ GameObject:
   - component: {fileID: 3190792979825255450}
   - component: {fileID: 8575347872468298091}
   - component: {fileID: 3550425967832966968}
-  - component: {fileID: 8892327958551757485}
+  - component: {fileID: 7738806337569469622}
   m_Layer: 6
   m_Name: Body
   m_TagString: Untagged
@@ -3429,7 +3448,7 @@ MonoBehaviour:
   m_SynchronizeRotation: 1
   m_SynchronizeScale: 0
   m_UseLocal: 1
---- !u!114 &8892327958551757485
+--- !u!114 &7738806337569469622
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3444,7 +3463,7 @@ MonoBehaviour:
   ObservedComponentsFoldoutOpen: 1
   Group: 0
   prefixField: -1
-  Synchronization: 1
+  Synchronization: 3
   OwnershipTransfer: 0
   observableSearch: 2
   ObservedComponents:

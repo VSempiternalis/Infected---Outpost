@@ -1940,6 +1940,9 @@ MonoBehaviour:
   panelConnecting: {fileID: 1657336144}
   panelMainMenu: {fileID: 118166448}
   panelDebug: {fileID: 388392768}
+  vlgPanel: {fileID: 1543041325}
+  serverBrowserPanel: {fileID: 1575051228}
+  roomPanel: {fileID: 15153129}
   connectingText: {fileID: 1365091095}
   inputUsername: {fileID: 292688135}
   ActivateOnAwake:
@@ -1951,11 +1954,6 @@ MonoBehaviour:
   - {fileID: 1575051228}
   - {fileID: 15153129}
   - {fileID: 638249397}
-  connectingPanel: {fileID: 1657336144}
-  vlgPanel: {fileID: 1543041325}
-  mainPanel: {fileID: 118166448}
-  serverBrowserPanel: {fileID: 1575051228}
-  roomPanel: {fileID: 15153129}
   versionText: {fileID: 128793551}
   serverSettings: {fileID: 11400000, guid: 63fbc6483087b594b9126a2aec5fd5a5, type: 2}
   serverRegion: {fileID: 635252168}

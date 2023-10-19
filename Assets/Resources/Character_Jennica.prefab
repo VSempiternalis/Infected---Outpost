@@ -3403,8 +3403,8 @@ GameObject:
   m_Component:
   - component: {fileID: 5716807286479169891}
   - component: {fileID: 3137663957371914810}
-  - component: {fileID: 1055847987210001562}
   - component: {fileID: 3665308997784690841}
+  - component: {fileID: 1371867911152023849}
   m_Layer: 6
   m_Name: Body
   m_TagString: Untagged
@@ -3460,29 +3460,6 @@ MonoBehaviour:
   hair: {fileID: 956991844306393062}
   actualHead: {fileID: 4140264314184549491}
   root: {fileID: 8391883172123456129}
---- !u!114 &1055847987210001562
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4878949922818023856}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ObservedComponentsFoldoutOpen: 1
-  Group: 0
-  prefixField: -1
-  Synchronization: 1
-  OwnershipTransfer: 0
-  observableSearch: 2
-  ObservedComponents:
-  - {fileID: 3665308997784690841}
-  sceneViewId: 0
-  InstantiationId: 0
-  isRuntimeInstantiated: 0
 --- !u!114 &3665308997784690841
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3499,6 +3476,29 @@ MonoBehaviour:
   m_SynchronizeRotation: 1
   m_SynchronizeScale: 0
   m_UseLocal: 1
+--- !u!114 &1371867911152023849
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4878949922818023856}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents:
+  - {fileID: 3665308997784690841}
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &5004598246268201238
 GameObject:
   m_ObjectHideFlags: 0
@@ -6131,6 +6131,7 @@ GameObject:
   - component: {fileID: 7057239543692761280}
   - component: {fileID: 8220100592099113209}
   - component: {fileID: 4785749407381959051}
+  - component: {fileID: 7328868744132259461}
   m_Layer: 6
   m_Name: Character_Jennica
   m_TagString: Character
@@ -6224,6 +6225,8 @@ MonoBehaviour:
   observableSearch: 2
   ObservedComponents:
   - {fileID: 2912700880533581166}
+  - {fileID: 7328868744132259461}
+  - {fileID: 3665308997784690841}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -6405,6 +6408,22 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &7328868744132259461
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8996648583164996297}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizePosition: 1
+  m_SynchronizeRotation: 0
+  m_SynchronizeScale: 0
+  m_UseLocal: 0
 --- !u!1 &9049222199159984834
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,7 +1,7 @@
 using UnityEngine;
 using Photon.Pun;
 
-public class Character : MonoBehaviourPunCallbacks, ITooltipable {
+public class Character : MonoBehaviourPunCallbacks { //, ITooltipable
     [SerializeField] private string characterName;
     [SerializeField] private string characterDesc;
     public GameObject lightView;
@@ -121,14 +121,15 @@ public class Character : MonoBehaviourPunCallbacks, ITooltipable {
     }
 
     private void ChangeAnimState(string newState) {
-        photonView.RPC("ChangeAnimStateRPC", RpcTarget.All, newState);
+        if(anim.GetCurrentAnimatorStateInfo(0).IsName(newState)) return;
+        
+        // photonView.RPC("ChangeAnimStateRPC", RpcTarget.All, newState);
     }
 
     [PunRPC] private void ChangeAnimStateRPC(string newState) {
         if(!anim) return;
 
         // if(newState == "Dying") print(name + " is dying");
-        if(anim.GetCurrentAnimatorStateInfo(0).IsName(newState)) return;
         anim.Play(newState);
         // currentState = newState;
 
@@ -385,11 +386,11 @@ public class Character : MonoBehaviourPunCallbacks, ITooltipable {
 
     //
 
-    public string GetHeader() {
-        return characterName;
-    }
+    // public string GetHeader() {
+    //     return characterName;
+    // }
 
-    public string GetContent() {
-        return characterDesc;
-    }
+    // public string GetContent() {
+    //     return characterDesc;
+    // }
 }

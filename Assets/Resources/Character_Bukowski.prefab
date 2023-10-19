@@ -789,7 +789,7 @@ GameObject:
   - component: {fileID: 2391335006445310828}
   - component: {fileID: 947816718598123204}
   - component: {fileID: 706487469332361500}
-  - component: {fileID: 3985186689126443114}
+  - component: {fileID: 4671949278358246863}
   m_Layer: 6
   m_Name: Body
   m_TagString: Untagged
@@ -861,7 +861,7 @@ MonoBehaviour:
   m_SynchronizeRotation: 1
   m_SynchronizeScale: 0
   m_UseLocal: 1
---- !u!114 &3985186689126443114
+--- !u!114 &4671949278358246863
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -876,7 +876,7 @@ MonoBehaviour:
   ObservedComponentsFoldoutOpen: 1
   Group: 0
   prefixField: -1
-  Synchronization: 1
+  Synchronization: 3
   OwnershipTransfer: 0
   observableSearch: 2
   ObservedComponents:
@@ -2698,6 +2698,7 @@ GameObject:
   - component: {fileID: 6349407225624344309}
   - component: {fileID: 285789139466352810}
   - component: {fileID: 2495529872862515547}
+  - component: {fileID: 2490178167162447564}
   m_Layer: 6
   m_Name: Character_Bukowski
   m_TagString: Character
@@ -2791,6 +2792,8 @@ MonoBehaviour:
   observableSearch: 2
   ObservedComponents:
   - {fileID: 3357346766811355859}
+  - {fileID: 2490178167162447564}
+  - {fileID: 706487469332361500}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -2972,6 +2975,22 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &2490178167162447564
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4636794578565623995}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizePosition: 1
+  m_SynchronizeRotation: 0
+  m_SynchronizeScale: 0
+  m_UseLocal: 0
 --- !u!1 &4637241826923874321
 GameObject:
   m_ObjectHideFlags: 0

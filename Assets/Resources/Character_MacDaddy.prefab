@@ -2029,12 +2029,12 @@ GameObject:
   - component: {fileID: 1307408236373829716}
   - component: {fileID: 3571310379826136256}
   - component: {fileID: 4042142021370517134}
-  - component: {fileID: 4358247985036869417}
   - component: {fileID: 1414336943961694648}
   - component: {fileID: 85932959250679867}
   - component: {fileID: 4627003737488372140}
   - component: {fileID: 647677092901667399}
   - component: {fileID: 8713427636000819061}
+  - component: {fileID: -417515477374917481}
   m_Layer: 6
   m_Name: Character_MacDaddy
   m_TagString: Character
@@ -2127,27 +2127,10 @@ MonoBehaviour:
   OwnershipTransfer: 0
   observableSearch: 2
   ObservedComponents:
-  - {fileID: 4358247985036869417}
   - {fileID: 0}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
---- !u!114 &4358247985036869417
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2655550321102478930}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 64179f3720bbfe947b7724caa67b7c1d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SynchronizeVelocity: 1
-  m_SynchronizeAngularVelocity: 0
-  m_TeleportEnabled: 1
-  m_TeleportIfDistanceGreaterThan: 3
 --- !u!114 &1414336943961694648
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2310,6 +2293,22 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &-417515477374917481
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2655550321102478930}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizePosition: 1
+  m_SynchronizeRotation: 0
+  m_SynchronizeScale: 0
+  m_UseLocal: 0
 --- !u!1 &2702619218592801648
 GameObject:
   m_ObjectHideFlags: 0

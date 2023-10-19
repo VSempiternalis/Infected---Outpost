@@ -1927,12 +1927,12 @@ GameObject:
   - component: {fileID: 4943438824182690622}
   - component: {fileID: 6881021918587932199}
   - component: {fileID: 4967398999941375127}
-  - component: {fileID: 5013687191331922793}
   - component: {fileID: 8570244154118511317}
   - component: {fileID: 5901690074288044865}
   - component: {fileID: 3997451537564366099}
   - component: {fileID: 526516310744482869}
   - component: {fileID: 7366384887635115226}
+  - component: {fileID: -1997727479499409900}
   m_Layer: 6
   m_Name: Character_Young
   m_TagString: Character
@@ -2025,27 +2025,11 @@ MonoBehaviour:
   OwnershipTransfer: 0
   observableSearch: 2
   ObservedComponents:
-  - {fileID: 5013687191331922793}
   - {fileID: 0}
+  - {fileID: -1997727479499409900}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
---- !u!114 &5013687191331922793
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3438537617149439525}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 64179f3720bbfe947b7724caa67b7c1d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SynchronizeVelocity: 1
-  m_SynchronizeAngularVelocity: 0
-  m_TeleportEnabled: 1
-  m_TeleportIfDistanceGreaterThan: 3
 --- !u!114 &8570244154118511317
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2208,6 +2192,22 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &-1997727479499409900
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3438537617149439525}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizePosition: 1
+  m_SynchronizeRotation: 0
+  m_SynchronizeScale: 0
+  m_UseLocal: 0
 --- !u!1 &3473021639307540477
 GameObject:
   m_ObjectHideFlags: 0

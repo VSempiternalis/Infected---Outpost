@@ -115,6 +115,8 @@ public class Controller : MonoBehaviour {
 
         // Perform a raycast to see if it hits something in the game world
         if (Physics.Raycast(ray, out hit)) {
+            bool isWithinReach = Vector3.Distance(character.transform.position, hit.point) <= reachDist;
+
             //Move the pointer
             pointer.position = hit.point;
 
@@ -123,7 +125,7 @@ public class Controller : MonoBehaviour {
             // print(pointed.name);
 
             //Outline
-            if(pointed.GetComponent<Outline>()) {
+            if(pointed.GetComponent<Outline>() && isWithinReach) {
                 pointed.GetComponent<Outline>().OutlineWidth = 3; //3 is standard outline width
             }
 
@@ -290,7 +292,7 @@ public class Controller : MonoBehaviour {
 
         if(stamina <= staminaMax) {
             if(player.velocity.magnitude > 3.5f && stamina >= 0) stamina -= staminaLoss;
-            else if(player.velocity.magnitude < 0.25f && stamina < staminaMax) stamina += staminaGain;
+            else if(player.velocity.magnitude < 0.5f && stamina < staminaMax) stamina += staminaGain;
 
             if(stamina < 0) stamina = 0;
             else if(stamina >= staminaMax) stamina = staminaMax;

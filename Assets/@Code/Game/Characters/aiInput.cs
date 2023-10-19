@@ -65,13 +65,12 @@ public class aiInput : MonoBehaviour {
     private void Update() {
         if(!PhotonNetwork.IsMasterClient) return;
 
-        if(state == "Waiting") {
-            Wait();
-        } else if(state == "GettingNextNode") {
-            GetNextNode();
-        } else if(state == "Moving") {
-            Movement();
-        }
+        if(state == "Waiting") Wait();
+        else if(state == "GettingNextNode") GetNextNode();
+    }
+
+    private void FixedUpdate() {
+        if(state == "Moving") Movement();
     }
 
     private void Wait() {

@@ -123,7 +123,7 @@ public class Character : MonoBehaviourPunCallbacks { //, ITooltipable
     private void ChangeAnimState(string newState) {
         if(anim.GetCurrentAnimatorStateInfo(0).IsName(newState)) return;
         
-        // photonView.RPC("ChangeAnimStateRPC", RpcTarget.All, newState);
+        photonView.RPC("ChangeAnimStateRPC", RpcTarget.All, newState);
     }
 
     [PunRPC] private void ChangeAnimStateRPC(string newState) {
@@ -335,6 +335,7 @@ public class Character : MonoBehaviourPunCallbacks { //, ITooltipable
 
         // Check if there's any input
         if (moveDirection != Vector3.zero) {
+            // if(input.x < 1 || input.z < 1) moveDirection.Normalize();
             // Rotate the movement direction to match your isometric view (e.g., 45 degrees).
             moveDirection = Quaternion.Euler(0, 45, 0) * moveDirection;
 

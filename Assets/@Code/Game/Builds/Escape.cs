@@ -38,6 +38,8 @@ public class Escape : MonoBehaviourPunCallbacks, ITooltipable, IClickable {
     }
 
     public void OnClick() {
+        // if(Controller.current.characterType == 0) return;
+
         photonView.RPC("OnClickRPC", RpcTarget.MasterClient);
     }
 
@@ -99,7 +101,7 @@ public class Escape : MonoBehaviourPunCallbacks, ITooltipable, IClickable {
     }
 
     public string GetContent() {
-        if(requirementsMet) return description + "\n\nALL REQUIREMENTS MET!\n" + requirementsMetText;
+        if(requirementsMet) return description + "\n\nALL REQUIREMENTS MET. CLICK TO ESCAPE!\n(Everyone not standing on the blanket will be left behind)" + requirementsMetText;
         else {
             string reqString = "";
             foreach(Requirement req in requirements) {

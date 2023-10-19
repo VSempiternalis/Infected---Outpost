@@ -10,6 +10,7 @@ public class Helicopter : MonoBehaviour, IEscapable {
     private void Start() {
         ah = GetComponent<AudioHandler>();
         isRotating = false;
+        // isRotating = true;
     }
 
     private void Update() {

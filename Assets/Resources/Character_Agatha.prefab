@@ -6196,6 +6196,7 @@ GameObject:
   - component: {fileID: 2722967263151686680}
   - component: {fileID: 4073400351801848008}
   - component: {fileID: 2014697378270327146}
+  - component: {fileID: -7014229351829376722}
   m_Layer: 6
   m_Name: Character_Agatha
   m_TagString: Character
@@ -6288,7 +6289,7 @@ MonoBehaviour:
   OwnershipTransfer: 0
   observableSearch: 2
   ObservedComponents:
-  - {fileID: 0}
+  - {fileID: 2014697378270327146}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -6470,6 +6471,22 @@ MonoBehaviour:
   m_SynchronizeRotation: 0
   m_SynchronizeScale: 0
   m_UseLocal: 0
+--- !u!114 &-7014229351829376722
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9093086339573251937}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64179f3720bbfe947b7724caa67b7c1d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizeVelocity: 1
+  m_SynchronizeAngularVelocity: 1
+  m_TeleportEnabled: 1
+  m_TeleportIfDistanceGreaterThan: 3
 --- !u!1 &9186588729423597018
 GameObject:
   m_ObjectHideFlags: 0

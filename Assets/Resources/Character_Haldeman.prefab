@@ -2558,6 +2558,7 @@ GameObject:
   - component: {fileID: 3498871241603646160}
   - component: {fileID: 946644202551067459}
   - component: {fileID: 8482472393202620755}
+  - component: {fileID: -5727002019794354642}
   m_Layer: 6
   m_Name: Character_Haldeman
   m_TagString: Character
@@ -2650,7 +2651,7 @@ MonoBehaviour:
   OwnershipTransfer: 0
   observableSearch: 2
   ObservedComponents:
-  - {fileID: 0}
+  - {fileID: 8482472393202620755}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -2832,6 +2833,22 @@ MonoBehaviour:
   m_SynchronizeRotation: 0
   m_SynchronizeScale: 0
   m_UseLocal: 0
+--- !u!114 &-5727002019794354642
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4366258727766957509}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64179f3720bbfe947b7724caa67b7c1d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizeVelocity: 1
+  m_SynchronizeAngularVelocity: 1
+  m_TeleportEnabled: 1
+  m_TeleportIfDistanceGreaterThan: 3
 --- !u!1 &4410460731723241528
 GameObject:
   m_ObjectHideFlags: 0

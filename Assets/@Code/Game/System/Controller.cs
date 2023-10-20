@@ -42,6 +42,7 @@ public class Controller : MonoBehaviour {
     // [Space(10)]
     // [Header("INFECTED")]
     // private bool isInfected;
+    [SerializeField] private Follower playerDot; //Dot that follows player pos in map
 
     private void Awake() {
         current = this;
@@ -93,6 +94,8 @@ public class Controller : MonoBehaviour {
     public void SetPlayer(Rigidbody newPlayer) {
         player = newPlayer;
         character = newPlayer.GetComponent<Character>();
+        playerDot.toFollow = player.transform;
+
         // characterType = character.type;
         // print("Setting player: " + character.name + ". Type: " + characterType);
         // agent = player.GetComponent<NavMeshAgent>();

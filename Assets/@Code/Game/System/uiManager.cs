@@ -24,6 +24,8 @@ public class uiManager : MonoBehaviour {
     [SerializeField] private Color infectColor;
     public GameObject escPanel;
 
+    public GameObject mapPanel;
+
     [Space(10)]
     [Header("VFX")]
     [SerializeField] private Volume volume;
@@ -45,6 +47,10 @@ public class uiManager : MonoBehaviour {
 
     private void Update() {
         
+    }
+
+    public void ToggleMap() {
+        mapPanel.SetActive(!mapPanel.activeSelf);
     }
 
     public void ToggleEsc() {

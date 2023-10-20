@@ -10,7 +10,7 @@ public class Escape : MonoBehaviourPunCallbacks, ITooltipable, IClickable {
     // [SerializeField] private List<string> requirementsText;
     // [SerializeField] private List<int> requirementsActive;
     // [SerializeField] private List<int> requirementsCount;
-    private bool requirementsMet = true;
+    private bool requirementsMet;
     [SerializeField] private List<Requirement> requirements;
     // [SerializeField] private List<ItemHandler> requirementsProvided;
     [SerializeField] private Storage requirementsStorage;
@@ -22,8 +22,9 @@ public class Escape : MonoBehaviourPunCallbacks, ITooltipable, IClickable {
     private void Start() {
         if(PhotonNetwork.IsMasterClient) {
             lastUpdate = 0f;
-            CheckForRequirements();
         }
+        
+        CheckForRequirements();
     }
 
     private void Update() {

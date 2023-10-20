@@ -2036,6 +2036,7 @@ GameObject:
   - component: {fileID: 8713427636000819061}
   - component: {fileID: -417515477374917481}
   - component: {fileID: 7557825300047662756}
+  - component: {fileID: 5868758688104715118}
   m_Layer: 6
   m_Name: Character_MacDaddy
   m_TagString: Character
@@ -2068,7 +2069,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2655550321102478930}
   serializedVersion: 2
-  m_Mass: 1
+  m_Mass: 60
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 1
@@ -2096,8 +2097,8 @@ MonoBehaviour:
   isPlayer: 0
   spawnInt: 0
   type: 1
-  moveSpeed: 1.25
-  sprintMultiplier: 2
+  moveSpeed: 75
+  sprintMultiplier: 1.5
   head: {fileID: 6000826406960997356}
   headSpeed: 1.5
   body: {fileID: 6000826406960997356}
@@ -2327,6 +2328,19 @@ MonoBehaviour:
   m_SynchronizeAngularVelocity: 0
   m_TeleportEnabled: 1
   m_TeleportIfDistanceGreaterThan: 3
+--- !u!65 &5868758688104715118
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2655550321102478930}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 0
+  serializedVersion: 2
+  m_Size: {x: 0.5, y: 0.25, z: 0.25}
+  m_Center: {x: 0, y: 0.125, z: 0}
 --- !u!1 &2702619218592801648
 GameObject:
   m_ObjectHideFlags: 0

@@ -230,6 +230,7 @@ public class Character : MonoBehaviourPunCallbacks { //, ITooltipable
 
         //deactivate collider
         GetComponent<CapsuleCollider>().enabled = false;
+        GetComponent<BoxCollider>().enabled = true;
 
         //sfx
         screamAH.PlayOneShot(0);
@@ -239,7 +240,8 @@ public class Character : MonoBehaviourPunCallbacks { //, ITooltipable
         photonView.RPC("DropItemRPC", RpcTarget.All, dropPos.x, dropPos.y, dropPos.z);
     }
 
-    [PunRPC] private void DropItemRPC(float xPos, float yPos, float zPos) {;
+    [PunRPC] private void DropItemRPC(float xPos, float yPos, float zPos) {
+        onHandItem.GetComponent<Outline>().OutlineWidth = 3;
         onHandItem.SetParent(null, new Vector3(xPos, yPos, zPos));
         // onHandItem.isOwned = false;
         // onHandItem.transform.SetParent(null);
@@ -265,6 +267,7 @@ public class Character : MonoBehaviourPunCallbacks { //, ITooltipable
         ItemHandler item = GameObject.Find(itemName).GetComponent<ItemHandler>();
         print("Taking item rpc: " + itemName + ". item: " + item);
         onHandItem = item;
+        onHandItem.GetComponent<Outline>().OutlineWidth = 0;
         onHandItem.SetParent(hand, Vector3.zero);
         // onHandItem.isOwned = true;
         // item.transform.SetParent(hand);
@@ -317,7 +320,7 @@ public class Character : MonoBehaviourPunCallbacks { //, ITooltipable
             // moveDirection = Quaternion.Euler(0, 45, 0) * moveDirection;
 
             // Apply the movement with adjusted speed
-            Vector3 targetVelocity = moveDirection * (moveSpeed * sprintMultiplier);
+            Vector3 targetVelocity = moveDirection * (moveSpeed * sprintMultiplier) * Time.deltaTime;
             rb.velocity = Vector3.SmoothDamp(rb.velocity, targetVelocity, ref currentVelocity, 0.1f);
         } else {
             // If no input is detected, gradually slow down the character
@@ -335,12 +338,14 @@ public class Character : MonoBehaviourPunCallbacks { //, ITooltipable
 
         // Check if there's any input
         if (moveDirection != Vector3.zero) {
-            // if(input.x < 1 || input.z < 1) moveDirection.Normalize();
+            //Normalize direction when not running
+            if (Mathf.Abs(input.x) <= 1 && Mathf.Abs(input.z) <= 1) moveDirection.Normalize();
+            
             // Rotate the movement direction to match your isometric view (e.g., 45 degrees).
             moveDirection = Quaternion.Euler(0, 45, 0) * moveDirection;
 
             // Apply the movement with adjusted speed
-            Vector3 targetVelocity = moveDirection * (moveSpeed * sprintMultiplier);
+            Vector3 targetVelocity = moveDirection * (moveSpeed * sprintMultiplier)  * Time.deltaTime;
             rb.velocity = Vector3.SmoothDamp(rb.velocity, targetVelocity, ref currentVelocity, 0.1f);
         } else {
             // If no input is detected, gradually slow down the character

@@ -106,7 +106,7 @@ public class Controller : MonoBehaviour {
     }
 
     private void MovePointer() {
-        if(pointed && pointed.GetComponent<Outline>()) pointed.GetComponent<Outline>().OutlineWidth = 0;
+        if(pointed && !pointed.GetComponent<ItemHandler>() && pointed.GetComponent<Outline>()) pointed.GetComponent<Outline>().OutlineWidth = 0;
         TooltipSystem.Hide();
 
         // if(pointed) print("Pointed: " + pointed + " has outline: " + (pointed.GetComponent<Outline>()? "Yes":"No"));
@@ -125,7 +125,7 @@ public class Controller : MonoBehaviour {
             // print(pointed.name);
 
             //Outline
-            if(pointed.GetComponent<Outline>() && isWithinReach) {
+            if(!pointed.GetComponent<ItemHandler>() && pointed.GetComponent<Outline>() && isWithinReach) {
                 pointed.GetComponent<Outline>().OutlineWidth = 3; //3 is standard outline width
             }
 
@@ -238,6 +238,7 @@ public class Controller : MonoBehaviour {
                 print("STORING! Player: item, Storage: no item " + Time.time);
                 character.onHandItem.SetParent(storage.transform, Vector3.zero);
                 storage.InsertItem(character.onHandItem);
+                character.onHandItem.GetComponent<Outline>().OutlineWidth = 3;
                 character.onHandItem = null;
             }
         }
@@ -285,6 +286,8 @@ public class Controller : MonoBehaviour {
         }
 
         if(Input.GetKeyDown(KeyCode.Escape)) uiManager.current.ToggleEsc();
+
+        if(Input.GetKeyDown(KeyCode.Tab)) uiManager.current.ToggleMap();
     }
 
     private void Movement() {

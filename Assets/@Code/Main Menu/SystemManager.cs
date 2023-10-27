@@ -92,6 +92,7 @@ public class SystemManager : MonoBehaviourPunCallbacks {
 
     public void SetUserCount() {
         int ccu = PhotonNetwork.CountOfPlayers;
+        print("CCU: " + ccu);
         Color color = Color.white;
 
         userCount.text = "USERS: " + ccu + "/" + maxCCU;

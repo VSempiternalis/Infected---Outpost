@@ -1,5 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
+using Unity.VisualScripting;
+using Photon.Voice.Unity;
 
 public class Controller : MonoBehaviour {
     public static Controller current;
@@ -8,9 +10,9 @@ public class Controller : MonoBehaviour {
 
     [Space(10)]
     [Header("STAMINA")]
-    private bool isRunning = false;
+    // private bool isRunning = false;
     private int stamina;
-    private int staminaMax = 360;
+    private int staminaMax = 180;
     [SerializeField] private int staminaGain = 1;
     [SerializeField] private int staminaLoss = 1;
 
@@ -39,7 +41,11 @@ public class Controller : MonoBehaviour {
     public List<Character> playerList;
     private int followInt;
 
-    // [Space(10)]
+    [Space(10)]
+    [Header("VOICE CHAT")]
+    [SerializeField] private Recorder recorder;
+
+    [Space(10)]
     // [Header("INFECTED")]
     // private bool isInfected;
     [SerializeField] private Follower playerDot; //Dot that follows player pos in map
@@ -64,6 +70,8 @@ public class Controller : MonoBehaviour {
             MovePointer();
             MoveHead();
         }
+
+        if(Input.GetKeyDown(KeyCode.P)) WinManager.current.Endgame("Escape");
     }
 
     private void FixedUpdate() {
@@ -95,6 +103,7 @@ public class Controller : MonoBehaviour {
         player = newPlayer;
         character = newPlayer.GetComponent<Character>();
         playerDot.toFollow = player.transform;
+        player.AddComponent<AudioListener>();
 
         // characterType = character.type;
         // print("Setting player: " + character.name + ". Type: " + characterType);
@@ -291,14 +300,25 @@ public class Controller : MonoBehaviour {
         if(Input.GetKeyDown(KeyCode.Escape)) uiManager.current.ToggleEsc();
 
         if(Input.GetKeyDown(KeyCode.Tab)) uiManager.current.ToggleMap();
+
+        //Proximity chat
+        bool isTransmitting = false;
+        if(Input.GetKey(KeyCode.Space)) isTransmitting = true;
+        recorder.TransmitEnabled = isTransmitting;
     }
 
     private void Movement() {
         character.MoveWASD(input);
 
         if(stamina <= staminaMax) {
-            if(player.velocity.magnitude > 3.5f && stamina >= 0) stamina -= staminaLoss;
-            else if(player.velocity.magnitude < 0.5f && stamina < staminaMax) stamina += staminaGain;
+            //player running and no stamina
+            if(Input.GetKey(KeyCode.LeftShift) && stamina == 0) stamina -= staminaLoss;
+            //player running and has stamina
+            else if(player.velocity.magnitude >= 3.5f && stamina > 0) stamina -= staminaLoss;
+            //player stationary and stamina less than max
+            // else if(player.velocity.magnitude < 0.5f && stamina < staminaMax) stamina += staminaGain;
+            //player walking and stamina less than max
+            else if(player.velocity.magnitude < 3.5f && stamina < staminaMax) stamina += staminaGain;
 
             if(stamina < 0) stamina = 0;
             else if(stamina >= staminaMax) stamina = staminaMax;

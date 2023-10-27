@@ -47,15 +47,17 @@ public class Escape : MonoBehaviourPunCallbacks, ITooltipable, IClickable {
     [PunRPC] private void OnClickRPC() {
         print("ESCAPING!");
         if(!requirementsMet) return;
+        WinManager.current.Endgame("Escape");
 
-        //list escapees/survivors and check if one escapee is infected
-        bool isExtinction = false;
-        foreach(GameObject character in trigger.charactersInTrigger) {
-            if(character.GetComponent<Character>() && character.GetComponent<Character>().type == 0 && character.GetComponent<Character>().isAlive) isExtinction = true;
-        }
+        // GAME ENDS IF INFECTED ESCAPES
+        // //list escapees/survivors and check if one escapee is infected
+        // bool isExtinction = false;
+        // foreach(GameObject character in trigger.charactersInTrigger) {
+        //     if(character.GetComponent<Character>() && character.GetComponent<Character>().type == 0 && character.GetComponent<Character>().isAlive) isExtinction = true;
+        // }
 
-        if(isExtinction) WinManager.current.Endgame("Extinction");
-        else WinManager.current.Endgame("Escape");
+        // if(isExtinction) WinManager.current.Endgame("Extinction");
+        // else WinManager.current.Endgame("Escape");
     }
 
     private void CheckForRequirements() {

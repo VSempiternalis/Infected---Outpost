@@ -17,6 +17,16 @@ public class RoomItem : MonoBehaviour {
         roomName.text = newName;
     }
 
+    public void SetPlayerCount(string newCount) {
+        playerCount.text = newCount;
+    }
+
+    // public void SetPing(string newPing) {
+    //     string pingText = "";
+ 
+    //     ping.text = pingText;
+    // }
+
     public void OnClickJoin() {
         lm.JoinRoom(roomName.text);
     }

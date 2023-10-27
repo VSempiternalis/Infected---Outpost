@@ -16,7 +16,7 @@ MonoBehaviour:
     AppIdRealtime: a5877021-61e5-4944-8e4b-c23a1bfd90fb
     AppIdFusion: 
     AppIdChat: 
-    AppIdVoice: 
+    AppIdVoice: 9cc5ae1d-5450-4159-8760-91ac66029c96
     AppVersion: 
     UseNameServer: 1
     FixedRegion: 
@@ -28,45 +28,43 @@ MonoBehaviour:
     AuthMode: 0
     EnableLobbyStatistics: 0
     NetworkLogging: 1
-  DevRegion: asia
+  DevRegion: 
   PunLogging: 0
   EnableSupportLogger: 0
   RunInBackground: 1
   StartInOfflineMode: 0
   RpcList:
+  - CantHearYou
+  - ChangeColour
   - ClickRpc
   - DestroyRpc
-  - DestroySpaceship
-  - Fire
-  - RespawnSpaceship
-  - GiveSpawn
+  - HeresWhy
   - ActivateTypePopupRPC
+  - AimRPC
+  - ChangeAnimStateRPC
+  - ChangeStateRPC
+  - DestroySpaceship
+  - DropItemRPC
+  - EndgameRPC
+  - Fire
+  - GiveSpawnRPC
+  - InfectRPC
+  - InGameRPC
+  - InsertItemRPC
+  - OnClickRPC
+  - RemoveItemRPC
+  - RemoveRequirementFromStorageRPC
+  - RespawnSpaceship
+  - rpcMoveHead
+  - SetIsPlayerRPC
+  - SetPlayerTypeRPC
   - SetTypesRPC
   - StartGameRPC
-  - rpcMoveHead
-  - rpcSyncRotation
-  - SpawnItem
-  - ChangeStateRPC
-  - InsertItemRPC
-  - SetIsOwnedRPC
-  - RemoveItemRPC
   - TakeItemRPC
-  - SetParentRPC
-  - DropItemRPC
-  - UseRPC
-  - AimRPC
   - UnAimRPC
-  - SetIsPlayerRPC
-  - InfectRPC
-  - SetPlayerTypeRPC
-  - ChangeAnimStateRPC
-  - InGameRPC
-  - OnClickRPC
-  - GiveSpawnRPC
-  - EndgameRPC
-  - RemoveRequirementFromStorageRPC
   - UpdateGeneratorTimerUIRPC
   - UpdateRequirementsRPC
+  - UseRPC
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

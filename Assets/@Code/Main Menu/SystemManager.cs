@@ -30,11 +30,16 @@ public class SystemManager : MonoBehaviourPunCallbacks {
     [SerializeField] private ServerSettings serverSettings;
     [SerializeField] private TMP_Text serverRegion;
 
+    [SerializeField] private int maxCCU;
+    [SerializeField] private TMP_Text userCount;
+
     private void Awake() {
+        SetUserCount();
+
         current = this;
 
         //Set version text
-        versionText.text = "v" + Application.version;
+        versionText.text = "VERSION: v" + Application.version;
     }
 
     private void Start() {
@@ -85,6 +90,18 @@ public class SystemManager : MonoBehaviourPunCallbacks {
         }
     }
 
+    public void SetUserCount() {
+        int ccu = PhotonNetwork.CountOfPlayers;
+        Color color = Color.white;
+
+        userCount.text = "USERS: " + ccu + "/" + maxCCU;
+        if(ccu >= maxCCU) color = Color.red;
+        else color = Color.green;
+        color.a = 0.392f;
+    
+        userCount.color = color;
+    }
+
     //Offline to server connect
     public void OnClickConnect() {
         print("CONNECTING TO SERVER");
@@ -102,7 +119,14 @@ public class SystemManager : MonoBehaviourPunCallbacks {
         print("SERVER TO LOBBY / OnConnectedToMaster");
         base.OnConnectedToMaster();
 
-        serverRegion.text = "REGION: " + serverSettings.DevRegion;
+        string appID = serverSettings.AppSettings.AppIdRealtime;
+        string appText = "";
+        //Display only first five letters of appID
+        for(int i = 0; i < 5; i++) {
+            appText += appID[i];
+        }
+
+        serverRegion.text = "REGION: " + serverSettings.DevRegion + "\nSERVER: " + appText;
 
         AudioManager.current.PlayUI(0);
 

@@ -127,7 +127,8 @@ public class SystemManager : MonoBehaviourPunCallbacks {
             appText += appID[i];
         }
 
-        serverRegion.text = "REGION: " + serverSettings.DevRegion + "\nSERVER: " + appText;
+        serverRegion.text = "REGION: " + PhotonNetwork.CloudRegion + "\nSERVER: " + appText;
+        // serverSettings.DevRegion
 
         AudioManager.current.PlayUI(0);
 

@@ -129,18 +129,18 @@ public class Character : MonoBehaviourPunCallbacks { //, ITooltipable
     [PunRPC] private void ChangeAnimStateRPC(string newState) {
         if(!anim) return;
 
-        // if(newState == "Dying") print(name + " is dying");
         anim.Play(newState);
-        // currentState = newState;
 
         //sfx
         if(newState == "Run") {
-            moveAH.isPlaying = "Tiles";
-            GetComponent<AudioSource>().loop = true;
+            moveAH.On();
+            // moveAH.SetIsPlaying();
+            // GetComponent<AudioSource>().loop = true;
         } else {
-            moveAH.isPlaying = "Null";
-            GetComponent<AudioSource>().Stop();
-            GetComponent<AudioSource>().loop = false;
+            moveAH.Off();
+            // moveAH.isPlaying = "Null";
+            // GetComponent<AudioSource>().Stop();
+            // GetComponent<AudioSource>().loop = false;
         }
     }
 

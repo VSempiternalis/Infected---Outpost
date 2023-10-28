@@ -625,6 +625,7 @@ Transform:
   - {fileID: 1007324124604039825}
   - {fileID: 3149805478504910587}
   - {fileID: 9161924950243225911}
+  - {fileID: 5893230186376739929}
   m_Father: {fileID: 2973762538919133158}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -749,7 +750,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 943930693962741083}
   m_LocalRotation: {x: 0.35355338, y: 0.35355338, z: -0.1464466, w: 0.8535535}
-  m_LocalPosition: {x: 4, y: 7, z: -4}
+  m_LocalPosition: {x: 6.5, y: 8, z: -7}
   m_LocalScale: {x: 0.75, y: 0.7500001, z: 0.7500001}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1504,6 +1505,37 @@ Transform:
   - {fileID: 8093977803334017290}
   m_Father: {fileID: 2742802000553210385}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2016075124070457250
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5893230186376739929}
+  m_Layer: 6
+  m_Name: ItemPos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5893230186376739929
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2016075124070457250}
+  m_LocalRotation: {x: -0.000000031086877, y: -0, z: 0.000000025363889, w: 1}
+  m_LocalPosition: {x: 0.1, y: 0.03, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 9146232635547502927}
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2037984187681666022
 GameObject:
@@ -6393,10 +6425,10 @@ MonoBehaviour:
   moveSpeed: 85
   sprintMultiplier: 1.5
   head: {fileID: 5716807286479169891}
-  headSpeed: 1.5
+  headSpeed: 2
   body: {fileID: 5716807286479169891}
   onHandItem: {fileID: 0}
-  hand: {fileID: 9146232635547502927}
+  hand: {fileID: 5893230186376739929}
   infectCooldownLength: 0
   infectCooldown: 0
   isAiming: 0

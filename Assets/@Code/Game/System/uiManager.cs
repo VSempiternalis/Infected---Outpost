@@ -11,6 +11,7 @@ public class uiManager : MonoBehaviour {
     public GameObject loadingPanel;
     [SerializeField] private TMP_Text playerType;
     [SerializeField] private GameObject typePopup;
+    [SerializeField] private TMP_Text following; //name of player camera is following when spectating
 
     // [SerializeField] private GameObject infectedUI;
     // [SerializeField] private GameObject humanUI;
@@ -115,10 +116,15 @@ public class uiManager : MonoBehaviour {
             playerType.color = playerColor;
             staminaImg.GetComponent<UnityEngine.UI.Image>().color = playerColor;
             infectCooldown.transform.parent.gameObject.SetActive(false);
+            following.gameObject.SetActive(true);
 
             //vfx
             volume.profile = humanVP;
         }
+    }
+
+    public void SetFollowing(string newFollowing) {
+        following.text = "SPECTATING:\n" + newFollowing;
     }
 
     public void ActivateTypePopupRPC(int type) {

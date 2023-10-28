@@ -7,6 +7,8 @@ public class GameMaster : MonoBehaviour {
     [SerializeField] private List<GameObject> activateOnStart;
 
     public int infectCooldownTime;
+    public int revolverBulletCountOnStart;
+    public int flareTimeLeftOnStart;
 
     private void Awake() {
         current = this;

@@ -1167,6 +1167,37 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!1 &1000827572476605257
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7726018187266083789}
+  m_Layer: 6
+  m_Name: ItemPos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7726018187266083789
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1000827572476605257}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.1, y: 0.03, z: -0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1898369778349243350}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1011452765458168341
 GameObject:
   m_ObjectHideFlags: 0
@@ -2986,6 +3017,7 @@ Transform:
   - {fileID: 3941241210063211683}
   - {fileID: 4834039238552879858}
   - {fileID: 3528064029079136550}
+  - {fileID: 7726018187266083789}
   m_Father: {fileID: 2675999950475196252}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -5429,7 +5461,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6253986652147789400}
   m_LocalRotation: {x: 0.35355338, y: 0.35355338, z: -0.1464466, w: 0.8535535}
-  m_LocalPosition: {x: 4, y: 7, z: -4}
+  m_LocalPosition: {x: 6.5, y: 8, z: -7}
   m_LocalScale: {x: 0.75, y: 0.7500001, z: 0.7500001}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5681,10 +5713,10 @@ MonoBehaviour:
   moveSpeed: 85
   sprintMultiplier: 1.5
   head: {fileID: 1601414415535791984}
-  headSpeed: 1.5
+  headSpeed: 2
   body: {fileID: 1601414415535791984}
   onHandItem: {fileID: 0}
-  hand: {fileID: 1898369778349243350}
+  hand: {fileID: 7726018187266083789}
   infectCooldownLength: 0
   infectCooldown: 0
   isAiming: 0

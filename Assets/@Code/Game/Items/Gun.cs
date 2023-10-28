@@ -1,18 +1,19 @@
 using UnityEngine;
 using Photon.Pun;
+using System.Collections;
 
 public class Gun : MonoBehaviourPunCallbacks, IUsable, IAimable {
     private int bulletCount;
-    [SerializeField] private int bulletCountOnStart;
+    // [SerializeField] private int bulletCountOnStart;
 
     private bool isAiming;
     private Vector3 aimPos;
 
     [SerializeField] private ParticleSystem muzzleFlashPS;
-    // [SerializeField] private GameObject lightFlash;
+    [SerializeField] private GameObject lightFlash;
 
     private void Start() {
-        bulletCount = bulletCountOnStart;
+        bulletCount = GameMaster.current.revolverBulletCountOnStart;
     }
 
     private void Update() {
@@ -73,8 +74,12 @@ public class Gun : MonoBehaviourPunCallbacks, IUsable, IAimable {
         //sfx
 
         print("Using gun rpc. target: " + targetName);
-        // muzzleFlashPS.Play();
-        // lightFlash.SetActive(true);
+        muzzleFlashPS.Play();
+        lightFlash.SetActive(true);
+        
+        // Start a Coroutine to deactivate lightFlash after a short delay
+        StartCoroutine(DeactivateLightFlash());
+
         GameObject target = GameObject.Find(targetName);
         if(target.GetComponent<Character>()) {
             print("trying to kill target: " + target.name);
@@ -86,6 +91,14 @@ public class Gun : MonoBehaviourPunCallbacks, IUsable, IAimable {
         //sfx
         GetComponent<AudioHandler>().PlayOneShot(2);
             //particles
+    }
+
+    private IEnumerator DeactivateLightFlash() {
+        // Wait for the desired duration (e.g., half a second)
+        yield return new WaitForSeconds(0.1f);
+
+        // Deactivate lightFlash after the delay
+        lightFlash.SetActive(false);
     }
 
     public string GetContent() {

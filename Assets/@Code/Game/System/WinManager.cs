@@ -165,6 +165,7 @@ public class WinManager : MonoBehaviourPunCallbacks {
         if(isGameOver) return;
         if(endgameUI.activeSelf) return;
         endgameUI.SetActive(true);
+        // endgameUI.GetComponent<Animator>().enabled = false;
 
         isGameOver = true;
 

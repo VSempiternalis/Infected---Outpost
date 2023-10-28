@@ -241,7 +241,7 @@ public class Character : MonoBehaviourPunCallbacks { //, ITooltipable
     }
 
     [PunRPC] private void DropItemRPC(float xPos, float yPos, float zPos) {
-        onHandItem.GetComponent<Outline>().OutlineWidth = 3;
+        if(onHandItem.GetComponent<Outline>()) onHandItem.GetComponent<Outline>().OutlineWidth = 3;
         onHandItem.SetParent(null, new Vector3(xPos, yPos, zPos));
         // onHandItem.isOwned = false;
         // onHandItem.transform.SetParent(null);
@@ -267,7 +267,7 @@ public class Character : MonoBehaviourPunCallbacks { //, ITooltipable
         ItemHandler item = GameObject.Find(itemName).GetComponent<ItemHandler>();
         print("Taking item rpc: " + itemName + ". item: " + item);
         onHandItem = item;
-        onHandItem.GetComponent<Outline>().OutlineWidth = 0;
+        if(onHandItem.GetComponent<Outline>()) onHandItem.GetComponent<Outline>().OutlineWidth = 0;
         onHandItem.SetParent(hand, Vector3.zero);
         // onHandItem.isOwned = true;
         // item.transform.SetParent(hand);

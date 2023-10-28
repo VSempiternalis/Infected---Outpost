@@ -358,10 +358,10 @@ MonoBehaviour:
   moveSpeed: 85
   sprintMultiplier: 1.5
   head: {fileID: 2895285428764089461}
-  headSpeed: 1.5
+  headSpeed: 2
   body: {fileID: 2895285428764089461}
   onHandItem: {fileID: 0}
-  hand: {fileID: 1897330914324916105}
+  hand: {fileID: 8563699199940935326}
   infectCooldownLength: 0
   infectCooldown: 0
   isAiming: 0
@@ -4690,6 +4690,7 @@ Transform:
   - {fileID: 8765067526437798705}
   - {fileID: 6443044234634412615}
   - {fileID: 5749415457008446286}
+  - {fileID: 8563699199940935326}
   m_Father: {fileID: 538950718525361877}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4949,7 +4950,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6104764468702736094}
   m_LocalRotation: {x: 0.35355338, y: 0.35355338, z: -0.1464466, w: 0.8535535}
-  m_LocalPosition: {x: 4, y: 7, z: -4}
+  m_LocalPosition: {x: 6.5, y: 8, z: -7}
   m_LocalScale: {x: 0.75, y: 0.7500001, z: 0.7500001}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6429,6 +6430,37 @@ Transform:
   - {fileID: 5318042879812657723}
   m_Father: {fileID: 8330696549061702287}
   m_RootOrder: 11
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &8557074530777276028
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8563699199940935326}
+  m_Layer: 6
+  m_Name: ItemPos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8563699199940935326
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8557074530777276028}
+  m_LocalRotation: {x: -0.000000031086877, y: -0, z: 0.000000025363889, w: 1}
+  m_LocalPosition: {x: 0.1, y: 0.03, z: -0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1897330914324916105}
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8588892004985836901
 GameObject:

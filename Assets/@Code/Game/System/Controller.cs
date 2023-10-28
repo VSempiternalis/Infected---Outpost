@@ -12,7 +12,7 @@ public class Controller : MonoBehaviour {
     [Header("STAMINA")]
     // private bool isRunning = false;
     private int stamina;
-    private int staminaMax = 180;
+    private int staminaMax = 360;
     [SerializeField] private int staminaGain = 1;
     [SerializeField] private int staminaLoss = 1;
 
@@ -92,6 +92,7 @@ public class Controller : MonoBehaviour {
         }
         
         SetCamera(playerList[followInt].GetComponent<Rigidbody>());
+        uiManager.current.SetFollowing(playerList[followInt].photonView.Owner.NickName);
     }
 
     public void SetToSpectator() {
@@ -158,12 +159,14 @@ public class Controller : MonoBehaviour {
                     character.onHandItem.GetComponent<IAimable>().UnAim();
                     character.isAiming = false;
                 }
-            } 
+            } //FLARE
+            else if(Input.GetMouseButtonDown(0) && character.onHandItem && character.onHandItem.GetComponent<Flare>() && !character.onHandItem.GetComponent<Flare>().isOn && !Input.GetKey(KeyCode.LeftControl)) {
+                character.onHandItem.GetComponent<IUsable>().Use(pointed, character.type);
+            }
             
             //Pointed is within reach
             else if(Vector3.Distance(character.transform.position, hit.point) <= reachDist) {
                 if(Input.GetMouseButtonDown(0)) {
-                    
                     if(pointed.GetComponent<IClickable>() != null) {
                         if(Input.GetKey(KeyCode.LeftControl)) {
                             //Ctrl + Click item on ground
@@ -172,7 +175,6 @@ public class Controller : MonoBehaviour {
                                 if(character.onHandItem) {
                                     character.DropItem(hit.point);
                                 } //Take item
-                                // else 
                                 character.TakeItem(pointed.GetComponent<ItemHandler>());
                             } 
                             //Ctrl + Click storage
@@ -188,12 +190,8 @@ public class Controller : MonoBehaviour {
                             }
                         } 
                         //Click on clickable: interact
-                        // else pointed.GetComponent<IClickable>().OnClick((character.onHandItem? character.onHandItem : null));
                         else if(character.onHandItem) {
                             if(pointed.GetComponent<Storage>() && !pointed.GetComponent<Storage>().isLocked) pointed.GetComponent<IClickable>().OnClick();
-                            // else if(pointed.GetComponent<Storage>() && pointed.GetComponent<Storage>().isLocked) {
-                            //     if(character.onHandItem.GetComponent<IUsable>() != null) character.onHandItem.GetComponent<IUsable>().Use(pointed, character.type);
-                            // }
                             else character.onHandItem.GetComponent<IUsable>().Use(pointed, character.type);
                         }
                         else if(pointed.GetComponent<Storage>() && pointed.GetComponent<Storage>().isLocked) AudioManager.current.PlayUI(0);
@@ -205,9 +203,7 @@ public class Controller : MonoBehaviour {
                     }
                     //Drop item on floor
                     else if(pointed.GetComponent<IClickable>() == null && pointed.layer != 9) {
-                        // print("Dropping on layer: " + hit.collider.gameObject.layer);
                         if(Input.GetKey(KeyCode.LeftControl) && Vector3.Distance(character.transform.position, hit.point) <= reachDist && character.onHandItem != null) {
-                            // print("Dropping item");
                             character.DropItem(hit.point);
                         }
                     }

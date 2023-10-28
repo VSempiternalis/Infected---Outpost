@@ -2192,7 +2192,7 @@ MonoBehaviour:
   isPlayer: 0
   spawnInt: 0
   type: 1
-  moveSpeed: 75
+  moveSpeed: 85
   sprintMultiplier: 1.5
   head: {fileID: 3190792979825255450}
   headSpeed: 1.5

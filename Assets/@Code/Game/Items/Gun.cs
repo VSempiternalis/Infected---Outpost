@@ -13,7 +13,7 @@ public class Gun : MonoBehaviourPunCallbacks, IUsable, IAimable {
     [SerializeField] private GameObject lightFlash;
 
     private void Start() {
-        bulletCount = GameMaster.current.revolverBulletCountOnStart;
+        bulletCount = GameMaster.revolverBulletCountOnStart;
     }
 
     private void Update() {
@@ -35,6 +35,7 @@ public class Gun : MonoBehaviourPunCallbacks, IUsable, IAimable {
         // print("UnAimRPC");
         isAiming = false;
         GetComponent<LineRenderer>().enabled = false;
+        // GetComponent<Outline>().enabled = true;
     }
 
     public void Aim(Vector3 newAimPos) {
@@ -46,6 +47,7 @@ public class Gun : MonoBehaviourPunCallbacks, IUsable, IAimable {
         if(!isAiming) {
             print("Setting isAiming to true and playing sfx");
             isAiming = true;
+            // GetComponent<Outline>().enabled = false;
 
             //sfx
             GetComponent<AudioHandler>().PlayOneShot(0);

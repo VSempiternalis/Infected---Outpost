@@ -19,7 +19,7 @@ MonoBehaviour:
     AppIdVoice: 9cc5ae1d-5450-4159-8760-91ac66029c96
     AppVersion: 
     UseNameServer: 1
-    FixedRegion: 
+    FixedRegion: asia
     Server: 
     Port: 0
     ProxyServer: 
@@ -28,7 +28,7 @@ MonoBehaviour:
     AuthMode: 0
     EnableLobbyStatistics: 0
     NetworkLogging: 1
-  DevRegion: 
+  DevRegion: asia
   PunLogging: 0
   EnableSupportLogger: 0
   RunInBackground: 1
@@ -65,6 +65,12 @@ MonoBehaviour:
   - UpdateGeneratorTimerUIRPC
   - UpdateRequirementsRPC
   - UseRPC
+  - SetGeneratorTimeRPC
+  - SetInfectCooldownRPC
+  - SetFuelAddTimeRPC
+  - GetSettingsFromMasterRPC
+  - SetSettingsRPC
+  - SetClientSettingsRPC
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

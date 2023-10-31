@@ -24,6 +24,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks {
     [SerializeField] private Transform playerItemParent;
 
     [SerializeField] private GameObject buttonStart;
+    [SerializeField] private MapSettings mapSettings;
 
     private void Awake() {
         current = this;
@@ -31,8 +32,13 @@ public class LobbyManager : MonoBehaviourPunCallbacks {
     }
 
     private void Update() {
-        if(PhotonNetwork.IsMasterClient && !buttonStart.activeSelf) buttonStart.SetActive(true);
-        else if(!PhotonNetwork.IsMasterClient && buttonStart) buttonStart.SetActive(false);
+        if(PhotonNetwork.IsMasterClient) { //HOST
+            if(!buttonStart.activeSelf) buttonStart.SetActive(true);
+            if(!mapSettings.isInteractable) mapSettings.SetSettingsInteractable(true);
+        } else if(!PhotonNetwork.IsMasterClient) { //CLIENT
+            if(buttonStart.activeSelf) buttonStart.SetActive(false);
+            if(mapSettings.isInteractable) mapSettings.SetSettingsInteractable(false);
+        } 
     }
 
     public void OnClickHost() {
@@ -47,6 +53,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks {
         panelServerBrowser.SetActive(false);
         panelRoom.SetActive(true);
         roomName.text = PhotonNetwork.CurrentRoom.Name;
+        mapSettings.GetSettingsFromMaster();
 
         UpdatePlayerList();
     }
@@ -54,11 +61,12 @@ public class LobbyManager : MonoBehaviourPunCallbacks {
     public override void OnRoomListUpdate(List<RoomInfo> roomParent) {
         print("ON ROOM LIST UPDATE");
         base.OnRoomListUpdate(roomParent);
+        UpdateRoomList(roomParent);
 
-        if(Time.time >= nextUpdateTime) {
-            UpdateRoomList(roomParent);
-            nextUpdateTime = Time.time + updateInterval;
-        }
+        // if(Time.time >= nextUpdateTime) {
+        //     UpdateRoomList(roomParent);
+        //     nextUpdateTime = Time.time + updateInterval;
+        // }
     }
 
     private void UpdateRoomList(List<RoomInfo> list) {

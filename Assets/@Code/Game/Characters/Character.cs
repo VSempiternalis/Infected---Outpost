@@ -62,7 +62,7 @@ public class Character : MonoBehaviourPunCallbacks { //, ITooltipable
         // SetPanels();
         rb = GetComponent<Rigidbody>();
         anim = GetComponent<Animator>();
-        infectCooldownLength = GameMaster.current.infectCooldownTime;
+        infectCooldownLength = GameMaster.infectCooldownTime;
         infectCooldown = 0;
         ah = GetComponent<AudioHandler>();
     }
@@ -242,6 +242,10 @@ public class Character : MonoBehaviourPunCallbacks { //, ITooltipable
 
     [PunRPC] private void DropItemRPC(float xPos, float yPos, float zPos) {
         if(onHandItem.GetComponent<Outline>()) onHandItem.GetComponent<Outline>().OutlineWidth = 3;
+
+        //Outline on if gun
+        if(onHandItem.GetComponent<Gun>()) onHandItem.GetComponent<Outline>().enabled = true;
+
         onHandItem.SetParent(null, new Vector3(xPos, yPos, zPos));
         // onHandItem.isOwned = false;
         // onHandItem.transform.SetParent(null);
@@ -268,6 +272,8 @@ public class Character : MonoBehaviourPunCallbacks { //, ITooltipable
         print("Taking item rpc: " + itemName + ". item: " + item);
         onHandItem = item;
         if(onHandItem.GetComponent<Outline>()) onHandItem.GetComponent<Outline>().OutlineWidth = 0;
+        //Outline off if gun
+        if(onHandItem.GetComponent<Gun>()) onHandItem.GetComponent<Outline>().enabled = false;
         onHandItem.SetParent(hand, Vector3.zero);
         // onHandItem.isOwned = true;
         // item.transform.SetParent(hand);

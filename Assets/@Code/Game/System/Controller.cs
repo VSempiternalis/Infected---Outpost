@@ -92,7 +92,7 @@ public class Controller : MonoBehaviour {
         }
         
         SetCamera(playerList[followInt].GetComponent<Rigidbody>());
-        uiManager.current.SetFollowing(playerList[followInt].photonView.Owner.NickName);
+        uiManager.current.SetFollowing(playerList[followInt].photonView.Owner.NickName, playerList[followInt].GetComponent<Character>().type);
     }
 
     public void SetToSpectator() {
@@ -114,7 +114,8 @@ public class Controller : MonoBehaviour {
     }
 
     private void SetCamera(Rigidbody parent) {
-        mainCamera.transform.parent.position = parent.GetComponent<Character>().campos.position;
+        print("Setting camera to " + name);
+        // mainCamera.transform.parent.position = parent.GetComponent<Character>().campos.position;
         mainCamera.transform.parent.GetComponent<SlowFollower>().toFollow = parent.GetComponent<Character>().campos;
     }
 
@@ -160,7 +161,7 @@ public class Controller : MonoBehaviour {
                     character.isAiming = false;
                 }
             } //FLARE
-            else if(Input.GetMouseButtonDown(0) && character.onHandItem && character.onHandItem.GetComponent<Flare>() && !character.onHandItem.GetComponent<Flare>().isOn && !Input.GetKey(KeyCode.LeftControl)) {
+            else if(Input.GetMouseButtonDown(0) && character.onHandItem && character.onHandItem.GetComponent<Flare>() && !character.onHandItem.GetComponent<Flare>().isOn && !Input.GetKey(KeyCode.LeftControl) && !pointed.GetComponent<Storage>()) {
                 character.onHandItem.GetComponent<IUsable>().Use(pointed, character.type);
             }
             
@@ -237,6 +238,7 @@ public class Controller : MonoBehaviour {
                 ItemHandler oldItem = character.onHandItem;
                 character.TakeItem(pointed.GetComponent<Storage>().item);
                 pointed.GetComponent<Storage>().RemoveItem();
+
                 oldItem.SetParent(storage.transform, Vector3.zero);
                 storage.InsertItem(oldItem);
             } 
@@ -247,6 +249,10 @@ public class Controller : MonoBehaviour {
                 character.onHandItem.SetParent(storage.transform, Vector3.zero);
                 storage.InsertItem(character.onHandItem);
                 character.onHandItem.GetComponent<Outline>().OutlineWidth = 3;
+
+                //Outline on if gun
+                if(character.onHandItem.GetComponent<Gun>()) character.onHandItem.GetComponent<Outline>().enabled = true;
+
                 character.onHandItem = null;
             }
         }

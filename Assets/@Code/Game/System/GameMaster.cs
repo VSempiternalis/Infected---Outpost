@@ -6,9 +6,11 @@ public class GameMaster : MonoBehaviour {
     public static GameMaster current;
     [SerializeField] private List<GameObject> activateOnStart;
 
-    public int infectCooldownTime;
-    public int revolverBulletCountOnStart;
-    public int flareTimeLeftOnStart;
+    public static int infectCooldownTime;
+    public static int revolverBulletCountOnStart;
+    public static int flareTimeLeftOnStart;
+    public static int countdownOnStart; //value of countdown on start
+    public static int fuelTimeAdd; //num of secs fuel adds to countdown
 
     private void Awake() {
         current = this;
@@ -23,6 +25,14 @@ public class GameMaster : MonoBehaviour {
     private void Update() {
         
     }
+
+    // public void SetGeneratorTime(int newVal) {
+    //     photonView.RPC("SetGeneratorTimeRPC", RpcTarget.All, newVal);
+    // }
+
+    // public void SetInfectCooldownTime(int newVal) {
+    //     photonView.RPC("SetInfectCooldownRPC", RpcTarget.All, newVal);
+    // }
     
     public void OnClickLeaveAndExit() {
         print("LEAVE AND EXIT");

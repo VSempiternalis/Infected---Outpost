@@ -49,7 +49,7 @@ public class Flare : MonoBehaviourPunCallbacks, IUsable {
 
     private IEnumerator DeactivateLightFlash() {
         // Wait for the desired duration (e.g., half a second)
-        yield return new WaitForSeconds(GameMaster.current.flareTimeLeftOnStart);
+        yield return new WaitForSeconds(GameMaster.flareTimeLeftOnStart);
 
         // Deactivate lightFlash after the delay
         lightFlash.SetActive(false);

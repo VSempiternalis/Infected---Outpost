@@ -9,9 +9,9 @@ public class WinManager : MonoBehaviourPunCallbacks {
     [Space(10)]
     [Header("GENERATOR")]
     public bool gameStart;
-    [SerializeField] private int countdownOnStart; //value of countdown on start
+    // [SerializeField] private int countdownOnStart; //value of countdown on start
     [SerializeField] private int countdown;
-    [SerializeField] private int fuelTimeAdd; //num of secs fuel adds to countdown
+    // [SerializeField] private int fuelTimeAdd; //num of secs fuel adds to countdown
     [Header("UI")]
     [SerializeField] private TMP_Text generatorTimer;
     // [SerializeField] private TMP_Text generatorTimer2; //Infected timer
@@ -64,14 +64,14 @@ public class WinManager : MonoBehaviourPunCallbacks {
         print("Starting countdown!");
         generatorTimer.transform.parent.gameObject.SetActive(true);
         gameStart = true;
-        countdown = countdownOnStart;
+        countdown = GameMaster.countdownOnStart;
     }
 
     public void AddFuel() {
         print("ADDFUEL PLAYER COUNT");
         print("humans left: " + humanCount);
         print("infected left: " + infectedCount);
-        countdown += fuelTimeAdd;
+        countdown += GameMaster.fuelTimeAdd;
     }
 
     [PunRPC] private void UpdateGeneratorTimerUIRPC(int newCountdown) {

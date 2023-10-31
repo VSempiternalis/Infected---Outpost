@@ -123,8 +123,10 @@ public class uiManager : MonoBehaviour {
         }
     }
 
-    public void SetFollowing(string newFollowing) {
+    public void SetFollowing(string newFollowing, int type) {
         following.text = "SPECTATING:\n" + newFollowing;
+        if(type == 0) following.text += "\n(Infected)";
+        else following.text += "\n(Human)";
     }
 
     public void ActivateTypePopupRPC(int type) {

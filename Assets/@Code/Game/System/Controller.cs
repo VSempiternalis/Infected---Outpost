@@ -71,7 +71,7 @@ public class Controller : MonoBehaviour {
             MoveHead();
         }
 
-        if(Input.GetKeyDown(KeyCode.P)) WinManager.current.Endgame("Escape");
+        // if(Input.GetKeyDown(KeyCode.P)) WinManager.current.Endgame("Escape");
     }
 
     private void FixedUpdate() {

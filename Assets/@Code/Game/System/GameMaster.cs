@@ -6,11 +6,11 @@ public class GameMaster : MonoBehaviour {
     public static GameMaster current;
     [SerializeField] private List<GameObject> activateOnStart;
 
-    public static int infectCooldownTime;
-    public static int revolverBulletCountOnStart;
-    public static int flareTimeLeftOnStart;
-    public static int countdownOnStart; //value of countdown on start
-    public static int fuelTimeAdd; //num of secs fuel adds to countdown
+    public static int infectCooldownTime = 60;
+    public static int revolverBulletCountOnStart = 3;
+    public static int flareTimeLeftOnStart = 60;
+    public static int countdownOnStart = 180; //value of countdown on start
+    public static int fuelTimeAdd = 60; //num of secs fuel adds to countdown
 
     private void Awake() {
         current = this;

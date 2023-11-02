@@ -49,7 +49,7 @@ public class WinManager : MonoBehaviourPunCallbacks {
             nextSecUpdate = Mathf.FloorToInt(Time.time) + 1;
 
             if(gameStart) {
-                if(countdown < 1) Endgame("Generator shutdown");
+                if(!isGameOver && countdown < 1) Endgame("Generator shutdown");
 
                 countdown --;
                 photonView.RPC("UpdateGeneratorTimerUIRPC", RpcTarget.All, countdown);
@@ -144,9 +144,9 @@ public class WinManager : MonoBehaviourPunCallbacks {
 
     public void CountPlayers() {
         foreach(GameObject character in GameObject.FindGameObjectsWithTag("Character")) {
-            print("Counting characters: " + character.name + " Type: " + character.GetComponent<Character>().type);
+            // print("Counting characters: " + character.name + " Type: " + character.GetComponent<Character>().type);
             if(character.GetComponent<Character>().isPlayer) {
-                print("Counting players: " + character.name);
+                // print("Counting players: " + character.name);
                 if(character.GetComponent<Character>().type == 0) infectedCount ++;
                 else if(character.GetComponent<Character>().type == 1) humanCount ++;
                 else if(character.GetComponent<Character>().type == 2) spectatorCount ++;
@@ -157,7 +157,7 @@ public class WinManager : MonoBehaviourPunCallbacks {
     }
 
     public void Endgame(string reason) {
-        print("END GAME: " + reason);
+        // print("END GAME: " + reason);
         photonView.RPC("EndgameRPC", RpcTarget.All, reason);
     }
 

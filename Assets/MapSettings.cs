@@ -19,8 +19,10 @@ public class MapSettings : MonoBehaviourPunCallbacks {
 
     public void SetGeneratorTime() {
         generatorTimeOnStart = int.Parse(generatorTimeInput.text);
+        print("SetGenTime: " + generatorTimeOnStart);
         UpdateUI();
         SetClientSettings();
+        print("GM GenTime: " + GameMaster.countdownOnStart);
         // photonView.RPC("SetGeneratorTimeRPC", RpcTarget.All, newVal);
     }
 
@@ -101,6 +103,7 @@ public class MapSettings : MonoBehaviourPunCallbacks {
     }
 
     private void UpdateUI() {
+        print("Updating UI");
         generatorTimeInput.text = generatorTimeOnStart.ToString();
         fuelAddInput.text = fuelTimeAdd.ToString();
         revolverBulletsInput.text = revolverBulletCountOnStart.ToString();
@@ -111,6 +114,7 @@ public class MapSettings : MonoBehaviourPunCallbacks {
     }
 
     private void UpdateGameMaster() {
+        print("Updating game master");
         GameMaster.countdownOnStart = generatorTimeOnStart;
         GameMaster.fuelTimeAdd = fuelTimeAdd;
         GameMaster.revolverBulletCountOnStart = revolverBulletCountOnStart;

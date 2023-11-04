@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 using TMPro;
 using Photon.Pun;
 
@@ -9,13 +10,9 @@ public class WinManager : MonoBehaviourPunCallbacks {
     [Space(10)]
     [Header("GENERATOR")]
     public bool gameStart;
-    // [SerializeField] private int countdownOnStart; //value of countdown on start
     [SerializeField] private int countdown;
-    // [SerializeField] private int fuelTimeAdd; //num of secs fuel adds to countdown
     [Header("UI")]
     [SerializeField] private TMP_Text generatorTimer;
-    // [SerializeField] private TMP_Text generatorTimer2; //Infected timer
-    // [SerializeField] private TMP_Text generatorTimer3; //Spectator timer
     [SerializeField] private AudioHandler generator1AH;
     [SerializeField] private AudioHandler generator2AH;
 
@@ -33,6 +30,10 @@ public class WinManager : MonoBehaviourPunCallbacks {
     [SerializeField] private GameObject infectedWinExtinction;
     [SerializeField] private GameObject humansWinDisinfection;
     [SerializeField] private GameObject humansWinEscape;
+
+    [Space(10)]
+    [Header("CHARACTERS AND SCORE")]
+    private List<Character> players = new List<Character>();
 
     private int nextSecUpdate = 1;
 
@@ -142,6 +143,7 @@ public class WinManager : MonoBehaviourPunCallbacks {
         }
     }
 
+    //Master Client/Host
     public void CountPlayers() {
         foreach(GameObject character in GameObject.FindGameObjectsWithTag("Character")) {
             // print("Counting characters: " + character.name + " Type: " + character.GetComponent<Character>().type);
@@ -152,12 +154,18 @@ public class WinManager : MonoBehaviourPunCallbacks {
                 else if(character.GetComponent<Character>().type == 2) spectatorCount ++;
 
                 Controller.current.playerList.Add(character.GetComponent<Character>());
+                
+                players.Add(character.GetComponent<Character>());
             }
         }
     }
 
+    //Only on master
     public void Endgame(string reason) {
+        print("Endgame: IsMaster: " + photonView.Owner.IsMasterClient);
         // print("END GAME: " + reason);
+        photonView.RPC("AddScoreRPC", RpcTarget.MasterClient, reason);
+        // AddScoreRPC(reason);
         photonView.RPC("EndgameRPC", RpcTarget.All, reason);
     }
 
@@ -185,9 +193,41 @@ public class WinManager : MonoBehaviourPunCallbacks {
         if(reason == "Escape") {
             humansWinEscape.SetActive(true);
             GetComponent<AudioHandler>().Play(1);
-        } if(reason == "Disinfection") {
+        } else if(reason == "Disinfection") {
             humansWinDisinfection.SetActive(true);
             GetComponent<AudioHandler>().Play(1);
         }
+    }
+
+    //Only on Master Client/Host
+    [PunRPC] private void AddScoreRPC(string reason) {
+        print("AddScoreRPC");
+        //INFECTED
+        if(reason == "Generator shutdown" || reason == "Assimilation") {
+            foreach(Character player in players) {
+                if(player.type == 0) AddScore(player);
+            }
+        }
+
+        //HUMAN
+        // if(reason == "Escape" || reason == "Disinfection") {
+        //     foreach(Character player in players) {
+        //         if(player.type == 1) AddScore(player);
+        //     }
+        // }
+        if(reason == "Disinfection") {
+            foreach(Character player in players) {
+                if(player.type == 1 || player.isAlive) AddScore(player);
+            }
+        }  else if(reason == "Escape") {
+
+        }
+    }
+
+    private void AddScore(Character player) {
+        ExitGames.Client.Photon.Hashtable hash = player.photonView.Owner.CustomProperties;
+        hash["Score"] = (int)hash["Score"] + 1;
+        print("AddScore: " + player.name + ". Score is now: " + (int)hash["Score"]);
+        player.photonView.Owner.SetCustomProperties(hash);
     }
 }

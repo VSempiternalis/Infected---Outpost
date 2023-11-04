@@ -75,6 +75,8 @@ public class Spawner : MonoBehaviourPunCallbacks {
                     loadText.text = "ERROR: NOT ENOUGH CHARACTER PREFABS!";
                     gameStart = true;
                     return;
+
+                    // PhotonNetwork.PlayerList[0].SetCustomProperties
                 }
                     SpawnPlayers();
                     SetTypes();
@@ -285,7 +287,7 @@ public class Spawner : MonoBehaviourPunCallbacks {
 
     [PunRPC] private void StartGameRPC() {
         gameStart = true;
-        lights.SetActive(false);
+        // lights.SetActive(false);
         uiManager.current.loadingPanel.SetActive(false);
         WinManager.current.StartCountdown();
         WinManager.current.CountPlayers();

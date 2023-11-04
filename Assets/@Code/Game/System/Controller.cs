@@ -85,14 +85,17 @@ public class Controller : MonoBehaviour {
             print("SPECTATOR A");
             if(followInt <= 0) followInt = playerList.Count - 1;
             else followInt --;
+        
+            SetCamera(playerList[followInt].GetComponent<Rigidbody>());
+            uiManager.current.SetFollowing(playerList[followInt].photonView.Owner.NickName, playerList[followInt].GetComponent<Character>().type);
         } else if(Input.GetKeyDown(KeyCode.D)) {
             print("SPECTATOR D");
             if(followInt >= (playerList.Count - 1)) followInt = 0;
             else followInt ++;
-        }
         
-        SetCamera(playerList[followInt].GetComponent<Rigidbody>());
-        uiManager.current.SetFollowing(playerList[followInt].photonView.Owner.NickName, playerList[followInt].GetComponent<Character>().type);
+            SetCamera(playerList[followInt].GetComponent<Rigidbody>());
+            uiManager.current.SetFollowing(playerList[followInt].photonView.Owner.NickName, playerList[followInt].GetComponent<Character>().type);
+        }
     }
 
     public void SetToSpectator() {

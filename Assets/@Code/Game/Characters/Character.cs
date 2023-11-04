@@ -1,5 +1,6 @@
 using UnityEngine;
 using Photon.Pun;
+using TMPro;
 
 public class Character : MonoBehaviourPunCallbacks { //, ITooltipable
     [SerializeField] private string characterName;
@@ -58,6 +59,12 @@ public class Character : MonoBehaviourPunCallbacks { //, ITooltipable
     [SerializeField] private MoveAudioHandler moveAH; //0 - Infect, 1 - Run, 2 - Drop, 3 - Take
     [SerializeField] private AudioHandler screamAH; //0 - Scream
 
+    [Space(10)]
+    [Header("DEBUG")]
+    [SerializeField] private TMP_Text updating;
+    [SerializeField] private TMP_Text lightOn;
+    [SerializeField] private TMP_Text isPlayerUI;
+
     private void Start() {
         // SetPanels();
         rb = GetComponent<Rigidbody>();
@@ -65,19 +72,35 @@ public class Character : MonoBehaviourPunCallbacks { //, ITooltipable
         infectCooldownLength = GameMaster.infectCooldownTime;
         infectCooldown = 0;
         ah = GetComponent<AudioHandler>();
+
+        updating = GameObject.Find("TEXT - updating").GetComponent<TMP_Text>();
+        lightOn = GameObject.Find("TEXT - lightOn").GetComponent<TMP_Text>();
+        isPlayerUI = GameObject.Find("TEXT - isPlayerUI").GetComponent<TMP_Text>();
     }
 
     private void Update() {
+        // if(updating == null) updating = GameObject.Find("TEXT - updating").GetComponent<TMP_Text>();
+        // if(lightOn == null) lightOn = GameObject.Find("TEXT - lightOn").GetComponent<TMP_Text>();
+        // if(isPlayerUI == null) isPlayerUI = GameObject.Find("TEXT - isPlayerUI").GetComponent<TMP_Text>();
+        // LightOn();
+
         //ANIMATION
         if(!isPlayer && PhotonNetwork.IsMasterClient) aiAnimCheck();
         else if(isPlayer) AnimCheck();
 
         if(type != 0 || !isPlayer || !photonView.AmOwner) return;
 
+        if(updating) updating.text = "UPDATING: " + Time.time;
+        if(lightOn) lightOn.text = Time.time + " LIGHT ON: " + lightView.activeSelf;
+        print("LIGHT ON: " + lightView.activeSelf);
+        if(isPlayerUI) isPlayerUI.text = Time.time + "IS PLAYER: true";
+
         if(infectCooldown > 0) infectCooldown -= Time.deltaTime; // Use Time.deltaTime to make it decrease by 1 every second
         else infectCooldown = 0;
 
         uiManager.current.UpdateInfectCooldown(Mathf.RoundToInt(infectCooldown));
+
+        // LightOn();
     }
 
     private void FixedUpdate() {
@@ -88,6 +111,16 @@ public class Character : MonoBehaviourPunCallbacks { //, ITooltipable
             } 
             else body.transform.localPosition = new Vector3(0, -0.75f, 0);
         } 
+
+        // LightOn();
+    }
+
+    private void LightOn() {
+        //lightview check
+        lightView.SetActive(true);
+        lightView.GetComponent<Light>().enabled = true;
+        lightView.transform.GetChild(0).gameObject.SetActive(true);
+        lightView.transform.GetChild(0).GetComponent<Light>().enabled = true;
     }
 
     private void aiAnimCheck() {

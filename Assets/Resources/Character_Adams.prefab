@@ -391,6 +391,9 @@ MonoBehaviour:
   isShooting: 0
   moveAH: {fileID: 4124361055564922334}
   screamAH: {fileID: 1330666167981828916}
+  updating: {fileID: 0}
+  lightOn: {fileID: 0}
+  isPlayerUI: {fileID: 0}
 --- !u!114 &3715794930219847509
 MonoBehaviour:
   m_ObjectHideFlags: 0

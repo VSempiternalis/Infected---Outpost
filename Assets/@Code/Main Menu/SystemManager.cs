@@ -33,6 +33,8 @@ public class SystemManager : MonoBehaviourPunCallbacks {
     [SerializeField] private int maxCCU;
     [SerializeField] private TMP_Text userCount;
 
+    private ExitGames.Client.Photon.Hashtable myCustomProperties = new ExitGames.Client.Photon.Hashtable();
+
     private void Awake() {
         SetUserCount();
 
@@ -129,6 +131,10 @@ public class SystemManager : MonoBehaviourPunCallbacks {
 
         serverRegion.text = "REGION: " + PhotonNetwork.CloudRegion + "\nSERVER: " + appText;
         // serverSettings.DevRegion
+
+        //Set score to zero/0
+        myCustomProperties["Score"] = 0;
+        PhotonNetwork.LocalPlayer.CustomProperties = myCustomProperties;
 
         AudioManager.current.PlayUI(0);
 

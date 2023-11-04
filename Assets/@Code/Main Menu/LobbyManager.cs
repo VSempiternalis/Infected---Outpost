@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Photon.Pun;
 using Photon.Realtime;
 using TMPro;
+using System.Collections;
 
 public class LobbyManager : MonoBehaviourPunCallbacks {
     public static LobbyManager current;
@@ -102,6 +103,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks {
     public override void OnLeftRoom() {
         base.OnLeftRoom();
 
+        SetScoreTo(0);
         // panelServerBrowser.SetActive(true);
         // panelRoom.SetActive(false);
     }
@@ -123,10 +125,17 @@ public class LobbyManager : MonoBehaviourPunCallbacks {
         }
         playerItems.Clear();
 
-        foreach(KeyValuePair<int, Player> player in PhotonNetwork.CurrentRoom.Players) {
-            print("Adding player: " + player.Value.NickName);
+        foreach(KeyValuePair<int, Player> kvp in PhotonNetwork.CurrentRoom.Players) {
+            Player player = kvp.Value;
+            print("Adding player: " + player.NickName);
             PlayerItem newPlayerItem = Instantiate(playerItemPF, playerItemParent);
-            newPlayerItem.SetPlayerInfo(player.Value);
+            newPlayerItem.SetPlayerInfo(player);
+
+            //Score
+            int score = 0; // Default value if "Score" is not set
+            if(player.CustomProperties.TryGetValue("Score", out var scoreObj) && scoreObj is int) score = (int)scoreObj;
+            newPlayerItem.playerScore.text = score.ToString();
+
             playerItems.Add(newPlayerItem);
         }
 
@@ -134,6 +143,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks {
 
         //sfx
         AudioManager.current.PlayUI(3);
+
         print("Finished updating player list");
     }
 
@@ -153,5 +163,20 @@ public class LobbyManager : MonoBehaviourPunCallbacks {
     public void OnClickPlayButton() {
         print("CLICK PLAY BUTTON");
         PhotonNetwork.LoadLevel("SCENE - Outpost");
+    }
+
+    //================================================================================
+
+    // private void ResetScore() {
+    //     ExitGames.Client.Photon.Hashtable hash = PhotonNetwork.LocalPlayer.CustomProperties;
+    //     hash["Score"] = 0;
+    //     PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
+    // }
+
+    private void SetScoreTo(int newScore) {
+        print("SetLocalScoreTo: " + newScore);
+        ExitGames.Client.Photon.Hashtable hash = PhotonNetwork.LocalPlayer.CustomProperties;
+        hash["Score"] = newScore;
+        PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
     }
 }

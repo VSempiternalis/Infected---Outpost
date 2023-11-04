@@ -39,7 +39,11 @@ public class Escape : MonoBehaviourPunCallbacks, ITooltipable, IClickable {
     }
 
     public void OnClick() {
-        // if(Controller.current.characterType == 0) return;
+        print("Escape click");
+        if(Controller.current.character.type == 0) {
+            print("Infected cannot escape!");
+            return;
+        } 
 
         photonView.RPC("OnClickRPC", RpcTarget.MasterClient);
     }
@@ -48,6 +52,17 @@ public class Escape : MonoBehaviourPunCallbacks, ITooltipable, IClickable {
         print("ESCAPING!");
         if(!requirementsMet) return;
         WinManager.current.Endgame("Escape");
+
+        //Escapee scores
+        foreach(GameObject player in trigger.charactersInTrigger) {
+            if(player.GetComponent<Character>().type == 1) {
+                print("[ESCAPE] Adding score to: " + player.GetPhotonView().Owner.NickName);
+                ExitGames.Client.Photon.Hashtable hash = player.GetPhotonView().Owner.CustomProperties;
+                hash["Score"] = (int)hash["Score"] + 1;
+                print("AddScore: " + player.name + ". Score is now: " + (int)hash["Score"]);
+                player.GetPhotonView().Owner.SetCustomProperties(hash);
+            }
+        }
 
         // GAME ENDS IF INFECTED ESCAPES
         // //list escapees/survivors and check if one escapee is infected

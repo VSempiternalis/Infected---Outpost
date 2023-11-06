@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Photon.Pun;
 using Photon.Realtime;
 using TMPro;
-using System.Collections;
 
 public class LobbyManager : MonoBehaviourPunCallbacks {
     public static LobbyManager current;
@@ -59,10 +58,10 @@ public class LobbyManager : MonoBehaviourPunCallbacks {
         UpdatePlayerList();
     }
 
-    public override void OnRoomListUpdate(List<RoomInfo> roomParent) {
+    public override void OnRoomListUpdate(List<RoomInfo> roomList) {
         print("ON ROOM LIST UPDATE");
-        base.OnRoomListUpdate(roomParent);
-        UpdateRoomList(roomParent);
+        base.OnRoomListUpdate(roomList);
+        UpdateRoomList(roomList);
 
         // if(Time.time >= nextUpdateTime) {
         //     UpdateRoomList(roomParent);
@@ -80,11 +79,13 @@ public class LobbyManager : MonoBehaviourPunCallbacks {
 
         //Add new room items
         foreach(RoomInfo room in list) {
-            RoomItem newRoom = Instantiate(roomItemPF, roomParent);
-            newRoom.SetRoomName(room.Name);
-            newRoom.SetPlayerCount(room.PlayerCount + "/" + room.MaxPlayers);
-            // newRoom.SetPing(room.);
-            roomItemsList.Add(newRoom);
+            if(room.IsOpen && room.IsVisible && room.MaxPlayers > 0) {
+                RoomItem newRoom = Instantiate(roomItemPF, roomParent);
+                newRoom.SetRoomName(room.Name);
+                newRoom.SetPlayerCount(room.PlayerCount + "/" + room.MaxPlayers);
+                // newRoom.SetPing(room.);
+                roomItemsList.Add(newRoom);
+            }
         }
 
         roomParent.gameObject.SetActive(false);
@@ -162,6 +163,8 @@ public class LobbyManager : MonoBehaviourPunCallbacks {
 
     public void OnClickPlayButton() {
         print("CLICK PLAY BUTTON");
+        PhotonNetwork.CurrentRoom.IsOpen = false;
+        PhotonNetwork.CurrentRoom.IsVisible = false;
         PhotonNetwork.LoadLevel("SCENE - Outpost");
     }
 

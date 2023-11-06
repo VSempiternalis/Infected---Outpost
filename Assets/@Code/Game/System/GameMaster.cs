@@ -36,6 +36,9 @@ public class GameMaster : MonoBehaviour {
     
     public void OnClickLeaveAndExit() {
         print("LEAVE AND EXIT");
+        //Set room to visible
+        PhotonNetwork.CurrentRoom.IsOpen = true;
+        PhotonNetwork.CurrentRoom.IsVisible = true;
         PhotonNetwork.LeaveRoom();
         PhotonNetwork.LoadLevel("SCENE - MainMenu");
         // PhotonNetwor

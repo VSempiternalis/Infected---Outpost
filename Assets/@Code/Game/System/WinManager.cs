@@ -167,6 +167,10 @@ public class WinManager : MonoBehaviourPunCallbacks {
         photonView.RPC("AddScoreRPC", RpcTarget.MasterClient, reason);
         // AddScoreRPC(reason);
         photonView.RPC("EndgameRPC", RpcTarget.All, reason);
+
+        //Set room to visible
+        PhotonNetwork.CurrentRoom.IsOpen = true;
+        PhotonNetwork.CurrentRoom.IsVisible = true;
     }
 
     [PunRPC] private void EndgameRPC(string reason) {

@@ -73,9 +73,9 @@ public class Character : MonoBehaviourPunCallbacks { //, ITooltipable
         infectCooldown = 0;
         ah = GetComponent<AudioHandler>();
 
-        updating = GameObject.Find("TEXT - updating").GetComponent<TMP_Text>();
-        lightOn = GameObject.Find("TEXT - lightOn").GetComponent<TMP_Text>();
-        isPlayerUI = GameObject.Find("TEXT - isPlayerUI").GetComponent<TMP_Text>();
+        if(updating) updating = GameObject.Find("TEXT - updating").GetComponent<TMP_Text>();
+        if(lightOn) lightOn = GameObject.Find("TEXT - lightOn").GetComponent<TMP_Text>();
+        if(isPlayerUI) isPlayerUI = GameObject.Find("TEXT - isPlayerUI").GetComponent<TMP_Text>();
     }
 
     private void Update() {
@@ -88,11 +88,19 @@ public class Character : MonoBehaviourPunCallbacks { //, ITooltipable
         if(!isPlayer && PhotonNetwork.IsMasterClient) aiAnimCheck();
         else if(isPlayer) AnimCheck();
 
-        if(type != 0 || !isPlayer || !photonView.AmOwner) return;
+        //IS NOT A PLAYER NOR OWNED BY LOCAL PLAYER ==========
+        if(!isPlayer || !photonView.AmOwner) return;
+
+        //Update tooltip 2
+        if(onHandItem) uiManager.current.SetTooltip(onHandItem.GetHeader(), onHandItem.GetContent());
+        else uiManager.current.TooltipActive(false);
+
+        //IS INFECTED ========================================
+        if(type != 0) return;
 
         if(updating) updating.text = "UPDATING: " + Time.time;
         if(lightOn) lightOn.text = Time.time + " LIGHT ON: " + lightView.activeSelf;
-        print("LIGHT ON: " + lightView.activeSelf);
+        // print("LIGHT ON: " + lightView.activeSelf);
         if(isPlayerUI) isPlayerUI.text = Time.time + "IS PLAYER: true";
 
         if(infectCooldown > 0) infectCooldown -= Time.deltaTime; // Use Time.deltaTime to make it decrease by 1 every second

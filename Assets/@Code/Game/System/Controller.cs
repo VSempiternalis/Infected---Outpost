@@ -251,7 +251,7 @@ public class Controller : MonoBehaviour {
                 print("STORING! Player: item, Storage: no item " + Time.time);
                 character.onHandItem.SetParent(storage.transform, Vector3.zero);
                 storage.InsertItem(character.onHandItem);
-                character.onHandItem.GetComponent<Outline>().OutlineWidth = 3;
+                if(character.onHandItem.GetComponent<Outline>()) character.onHandItem.GetComponent<Outline>().OutlineWidth = 3;
 
                 //Outline on if gun
                 if(character.onHandItem.GetComponent<Gun>()) character.onHandItem.GetComponent<Outline>().enabled = true;

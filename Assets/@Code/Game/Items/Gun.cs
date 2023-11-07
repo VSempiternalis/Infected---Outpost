@@ -104,6 +104,7 @@ public class Gun : MonoBehaviourPunCallbacks, IUsable, IAimable {
     }
 
     public string GetContent() {
+        print("Getting gun content");
         return bulletCount + " bullets left in the chamber.";
     }
 }

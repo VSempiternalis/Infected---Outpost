@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class ItemHandler : MonoBehaviourPunCallbacks, IClickable, ITooltipable {
     public string itemName;
-    [SerializeField] private string desc;
+    [TextArea] [SerializeField] private string desc;
 
     [SerializeField] private Vector3 onhandRotation; //fuel (0, -90, 0). key (0, 0, 90). gun (90, 0, 0)
 
@@ -70,6 +70,7 @@ public class ItemHandler : MonoBehaviourPunCallbacks, IClickable, ITooltipable {
     }
 
     public string GetContent() {
+        print("Get Content");
         // string content = "Content";
         if(usable != null) return desc + "\n\n" + usable.GetContent();
         else return desc;

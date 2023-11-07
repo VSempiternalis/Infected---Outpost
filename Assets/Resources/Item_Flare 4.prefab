@@ -9856,7 +9856,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemName: Flare
-  desc: 'Use to create a light that lasts for '
+  desc: 'Used to light the area around it.
+
+    Makes a lot of noise.'
   onhandRotation: {x: -90, y: 0, z: 0}
 --- !u!114 &5990897214913851615
 MonoBehaviour:

@@ -33,6 +33,12 @@ public class uiManager : MonoBehaviour {
     private Vignette vignette;
     [SerializeField] private VolumeProfile infectedVP;
     [SerializeField] private VolumeProfile humanVP;
+
+    [Space(10)]
+    [Header("TOOLTIP 2")]
+    [SerializeField] private GameObject tooltip;
+    [SerializeField] private TMP_Text header;
+    [SerializeField] private TMP_Text content;
     
     private void Awake() {
         current = this;
@@ -136,5 +142,17 @@ public class uiManager : MonoBehaviour {
         //Activate type popper
         // playerType.transform.parent.gameObject.SetActive(true);
         SetPanels(type);
+    }
+
+    public void TooltipActive(bool isActive) {
+        tooltip.SetActive(isActive);
+    }
+
+    public void SetTooltip(string newHeader, string newContent) {
+        if(!tooltip.activeSelf) tooltip.SetActive(true);
+        if(content.text == newContent) return;
+
+        header.text = newHeader;
+        content.text = newContent;
     }
 }

@@ -117,6 +117,21 @@ public class SystemManager : MonoBehaviourPunCallbacks {
         }
     }
 
+    //Offline to server connect
+    public void OnClickConnectTo(string region) {
+        print("CONNECTING TO SERVER: " + region);
+        if(inputUsername.text.Length >= 1) {
+            serverSettings.DevRegion = region;
+            serverSettings.AppSettings.FixedRegion = region;
+
+            PhotonNetwork.NickName = inputUsername.text;
+            connectingText.text = "CONNECTING";
+            PhotonNetwork.AutomaticallySyncScene = true;
+            PhotonNetwork.ConnectUsingSettings();
+            isConnecting = true;
+        }
+    }
+
     //Server connect to lobby connect
     public override void OnConnectedToMaster() {
         print("SERVER TO LOBBY / OnConnectedToMaster");

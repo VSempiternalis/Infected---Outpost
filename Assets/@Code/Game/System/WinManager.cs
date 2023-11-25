@@ -223,7 +223,7 @@ public class WinManager : MonoBehaviourPunCallbacks {
             foreach(Character player in players) {
                 if(player.type == 1 || player.isAlive) AddScore(player);
             }
-        }  else if(reason == "Escape") {
+        } else if(reason == "Escape") {
 
         }
     }

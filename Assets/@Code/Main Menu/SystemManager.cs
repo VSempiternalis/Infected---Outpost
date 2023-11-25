@@ -2,7 +2,6 @@ using UnityEngine;
 using TMPro;
 using Photon.Pun;
 using System.Collections.Generic;
-using System.Linq;
 
 public class SystemManager : MonoBehaviourPunCallbacks {
     public static SystemManager current;
@@ -35,13 +34,19 @@ public class SystemManager : MonoBehaviourPunCallbacks {
 
     private ExitGames.Client.Photon.Hashtable myCustomProperties = new ExitGames.Client.Photon.Hashtable();
 
+    [SerializeField] private TMP_Text warning;
+    [SerializeField] private TMP_Text playersInGame;
+    [SerializeField] private int maxPlayerCount;
+
     private void Awake() {
-        SetUserCount();
+        // SetUserCount();
 
         current = this;
 
         //Set version text
         versionText.text = "VERSION: v" + Application.version;
+
+        warning.text = "POSSIBLE REASONS IF YOU CANNOT CONNECT:\n    - YOU ARE OFFLINE\n    - YOU ARE USING AN OUTDATED VERSION OF THE GAME\n    - THE SERVERS ARE FULL\n      [GLOBAL MAX CONCURRENT PLAYERS: " + maxPlayerCount + "]";
     }
 
     private void Start() {
@@ -90,6 +95,8 @@ public class SystemManager : MonoBehaviourPunCallbacks {
 
             timer = Time.time + interval;
         }
+
+        playersInGame.text = "USERS IN REGION: " + PhotonNetwork.CountOfPlayers + "/" + maxPlayerCount;
     }
 
     public void SetUserCount() {
@@ -111,13 +118,13 @@ public class SystemManager : MonoBehaviourPunCallbacks {
         if(inputUsername.text.Length >= 1) {
             PhotonNetwork.NickName = inputUsername.text;
             connectingText.text = "CONNECTING";
-            PhotonNetwork.AutomaticallySyncScene = true;
+            // PhotonNetwork.AutomaticallySyncScene = true;
             PhotonNetwork.ConnectUsingSettings();
             isConnecting = true;
         }
     }
 
-    //Offline to server connect
+    //Offline to server connect. Connects to specific region
     public void OnClickConnectTo(string region) {
         print("CONNECTING TO SERVER: " + region);
         if(inputUsername.text.Length >= 1) {
@@ -126,7 +133,6 @@ public class SystemManager : MonoBehaviourPunCallbacks {
 
             PhotonNetwork.NickName = inputUsername.text;
             connectingText.text = "CONNECTING";
-            PhotonNetwork.AutomaticallySyncScene = true;
             PhotonNetwork.ConnectUsingSettings();
             isConnecting = true;
         }
@@ -154,6 +160,8 @@ public class SystemManager : MonoBehaviourPunCallbacks {
         AudioManager.current.PlayUI(0);
 
         PhotonNetwork.JoinLobby();
+            
+        PhotonNetwork.AutomaticallySyncScene = true;
     }
 
     //lobby connect

@@ -282,7 +282,7 @@ public class Character : MonoBehaviourPunCallbacks { //, ITooltipable
     }
 
     [PunRPC] private void DropItemRPC(float xPos, float yPos, float zPos) {
-        if(onHandItem.GetComponent<Outline>()) onHandItem.GetComponent<Outline>().OutlineWidth = 3;
+        if(onHandItem && onHandItem.GetComponent<Outline>()) onHandItem.GetComponent<Outline>().OutlineWidth = 3;
 
         //Outline on if gun
         if(onHandItem.GetComponent<Gun>()) onHandItem.GetComponent<Outline>().enabled = true;
@@ -340,6 +340,7 @@ public class Character : MonoBehaviourPunCallbacks { //, ITooltipable
     private void MovingTheHead(Vector3 lookPos) {
         // print("Moving head: " + head);
         // print(name + "RPC movehead: ");
+        float additionalRotation = 37.5f;
 
         if(rb == null) return;
         // Calculate the direction from the head to the pointer, disregarding the Y-axis
@@ -350,10 +351,20 @@ public class Character : MonoBehaviourPunCallbacks { //, ITooltipable
         // Calculate the target rotation
         targetHeadRot = Quaternion.LookRotation(lookDirection);
 
+        if(isAiming) targetHeadRot *= Quaternion.Euler(0, additionalRotation, 0);
+
         // Rotate the head towards the target rotation with a delay
         head.rotation = Quaternion.Slerp(head.rotation, targetHeadRot, headSpeed * Time.deltaTime);
+
+        // if(isAiming) {
+
+        //     // Rotate the character model around the Y-axis
+        //     head.Rotate(0, additionalRotation, 0);
+        //     // head.rotation *= Quaternion.Euler(0, additionalRotation, 0);
+        // }
     }
 
+    //NPC
     public void MoveTo(Vector3 movePos) {
         if(rb == null) return;
 

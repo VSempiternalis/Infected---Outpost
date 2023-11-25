@@ -12,19 +12,11 @@ public class Gun : MonoBehaviourPunCallbacks, IUsable, IAimable {
     [SerializeField] private ParticleSystem muzzleFlashPS;
     [SerializeField] private GameObject lightFlash;
 
+    private LineRenderer lr;
+
     private void Start() {
         bulletCount = GameMaster.revolverBulletCountOnStart;
-    }
-
-    private void Update() {
-        // isAiming = false;
-        // GetComponent<LineRenderer>().enabled = false;
-        // if(lightFlash.activeSelf) lightFlash.SetActive(false);
-    }
-
-    private void LateUpdate() {
-        // isAiming = false;
-        // if(!isAiming) GetComponent<LineRenderer>().enabled = false;
+        lr = GetComponent<LineRenderer>();
     }
 
     public void UnAim() {
@@ -32,36 +24,42 @@ public class Gun : MonoBehaviourPunCallbacks, IUsable, IAimable {
     }
 
     [PunRPC] private void UnAimRPC() {
-        // print("UnAimRPC");
         isAiming = false;
-        GetComponent<LineRenderer>().enabled = false;
-        // GetComponent<Outline>().enabled = true;
+        lr.enabled = false;
     }
 
     public void Aim(Vector3 newAimPos) {
-        // print("Aiming");
         photonView.RPC("AimRPC", RpcTarget.All, newAimPos.x, newAimPos.y, newAimPos.z);
     }
 
     [PunRPC] private void AimRPC(float xPos, float yPos, float zPos) {
         if(!isAiming) {
-            print("Setting isAiming to true and playing sfx");
             isAiming = true;
-            // GetComponent<Outline>().enabled = false;
 
             //sfx
             GetComponent<AudioHandler>().PlayOneShot(0);
         }
         
         aimPos = new Vector3(xPos, yPos, zPos);
-        GetComponent<LineRenderer>().enabled = true;
-        GetComponent<LineRenderer>().SetPosition(0, transform.GetChild(0).position); //start laser from muzzle position
-        GetComponent<LineRenderer>().SetPosition(1, new Vector3(xPos, yPos, zPos));
+        lr.enabled = true;
+        lr.SetPosition(0, transform.GetChild(0).position); //start laser from muzzle position
+        
+        //old
+        lr.SetPosition(1, new Vector3(xPos, yPos, zPos));
+
+        //new
+        // RaycastHit hit;
+        // if (Physics.Raycast(transform.GetChild(0).position, transform.GetChild(0).TransformDirection(Vector3.right), out hit, Mathf.Infinity)) {
+        //     lr.SetPosition(1, hit.point);
+        //     // Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hit.distance, Color.yellow);
+        // } else {
+        //     // Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * 1000, Color.white);
+        // }
     }
 
     public void Use(GameObject target, int userType) {
         print("Using gun");
-        if(!GetComponent<LineRenderer>().enabled || userType == 0) return;
+        if(!lr.enabled || userType == 0) return;
         photonView.RPC("UseRPC", RpcTarget.All, target.name);
     }
 

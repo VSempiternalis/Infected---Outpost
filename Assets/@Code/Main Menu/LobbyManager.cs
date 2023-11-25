@@ -43,7 +43,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks {
 
     public void OnClickHost() {
         print("ON CLICK HOST");
-        if(inputRoomName.text.Length >= 1) PhotonNetwork.CreateRoom(inputRoomName.text, new RoomOptions(){MaxPlayers = 12});
+        if(inputRoomName.text.Length >= 1) PhotonNetwork.CreateRoom(inputRoomName.text, new RoomOptions(){MaxPlayers = 12, PublishUserId = true});
     }
 
     public override void OnJoinedRoom() {
@@ -163,6 +163,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks {
 
     public void OnClickPlayButton() {
         print("CLICK PLAY BUTTON");
+        mapSettings.Starting();
         PhotonNetwork.CurrentRoom.IsOpen = false;
         PhotonNetwork.CurrentRoom.IsVisible = false;
         PhotonNetwork.LoadLevel("SCENE - Outpost");

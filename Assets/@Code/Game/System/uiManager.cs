@@ -39,6 +39,8 @@ public class uiManager : MonoBehaviour {
     [SerializeField] private GameObject tooltip;
     [SerializeField] private TMP_Text header;
     [SerializeField] private TMP_Text content;
+
+    [SerializeField] private TMP_Text gameVersionText;
     
     private void Awake() {
         current = this;
@@ -50,6 +52,7 @@ public class uiManager : MonoBehaviour {
         // infectedUI.SetActive(false);
         // humanUI.SetActive(false);
         // spectatorUI.SetActive(false);
+        gameVersionText.text = "INFECTED: OUTPOST " + Application.version;
     }
 
     private void Update() {

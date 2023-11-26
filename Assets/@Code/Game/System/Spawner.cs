@@ -29,10 +29,23 @@ public class Spawner : MonoBehaviourPunCallbacks {
     [SerializeField] private TMP_Text ping;
 
     private int playersInGame;
+    private string playersInGameString;
     private bool isAllPlayersInGame;
     private int typesSet;
     // private int typesSet;
     private bool allTypesSet;
+
+    [SerializeField] private List<AudioSource> generators;
+
+    [SerializeField] private TMP_Text playersInGameCounter;
+    [SerializeField] private TMP_Text playersInGameStringUI;
+
+    [Header("DEBUG")]
+    [SerializeField] private TMP_Text isMasterText;
+    [SerializeField] private TMP_Text gameStartText;
+    [SerializeField] private TMP_Text isAllPlayersInGameText;
+    [SerializeField] private TMP_Text allTypesSetText;
+    [SerializeField] private TMP_Text playersSpawnedText;
 
     private void Awake() {
         current = this;
@@ -50,7 +63,8 @@ public class Spawner : MonoBehaviourPunCallbacks {
 
         //Ambience audio
         // loopAH.PlayClip(1);
-        photonView.RPC("InGameRPC", RpcTarget.MasterClient);
+        print("Calling InGameRPC: " + PhotonNetwork.LocalPlayer.NickName);
+        photonView.RPC("InGameRPC", RpcTarget.MasterClient, PhotonNetwork.LocalPlayer.NickName);
     }
 
     private void Update() {
@@ -61,6 +75,14 @@ public class Spawner : MonoBehaviourPunCallbacks {
 
         ping.text = "PING: " + pingNum;
         ping.color = color;
+
+        //DEBUG
+        isMasterText.text = "IS MASTER: " + (PhotonNetwork.IsMasterClient? "true" : "false");
+        gameStartText.text = "GAME START: " + (gameStart? "true" : "false");
+        isAllPlayersInGameText.text = "ALL PLAYERS IN GAME: " + (isAllPlayersInGame? "true" : "false");
+        allTypesSetText.text = "ALL TYPES SET: " + (allTypesSet? "true" : "false");
+        playersSpawnedText.text = "PLAYERS SPAWNED: " + (playersSpawned? "true" : "false");
+
     }
 
     private void FixedUpdate() {
@@ -105,13 +127,21 @@ public class Spawner : MonoBehaviourPunCallbacks {
 
     //============================================================
 
-    [PunRPC] private void InGameRPC() {
+    //Called to master client when local player is in game scene
+    [PunRPC] private void InGameRPC(string newPlayerName) {
         playersInGame ++;
-        print("Players in game: " + playersInGame + " / Players in room: " + PhotonNetwork.CurrentRoom.PlayerCount);
+        playersInGameString += newPlayerName + "\n";
+        print("InGameRPC: " + newPlayerName + ". Players in game: " + playersInGame + " / Players in room: " + PhotonNetwork.CurrentRoom.PlayerCount);
+        photonView.RPC("UpdatePlayerInGameCounterRPC", RpcTarget.All, playersInGame, playersInGameString);
 
         if(playersInGame == PhotonNetwork.CurrentRoom.PlayerCount) {
             isAllPlayersInGame = true;
         }
+    }
+
+    [PunRPC] private void UpdatePlayerInGameCounterRPC(int playersInGame, string playersInGameString) {
+        playersInGameCounter.text = playersInGame + "/" + PhotonNetwork.CurrentRoom.PlayerCount;
+        playersInGameStringUI.text = playersInGameString;
     }
 
     // private void GetPrefabs() {
@@ -126,7 +156,8 @@ public class Spawner : MonoBehaviourPunCallbacks {
         loadText.text = "Spawning Players...";
 
         foreach(Player player in PhotonNetwork.PlayerList) {
-            string playerName = player.NickName;
+            print("!Spawning player: " + player.NickName + " ID: " + player.UserId);
+            string playerName = player.UserId;
             if(playerSpawnedList.Contains(playerName)) return;
             playerSpawnedList.Add(playerName);
             while(true) {
@@ -143,10 +174,10 @@ public class Spawner : MonoBehaviourPunCallbacks {
     }
 
     [PunRPC] private void GiveSpawnRPC(string playerName, int spawnInt) {
-        print("[SPAWNER] Spawning Player: " + playerName);
-        loadText.text = "Spawning Player: " + playerName;
+        // loadText.text = "Spawning Player: " + playerName;
         //[!] Return if player running RPC isn't supposed to get this spawnInt
-        if(playerName != PhotonNetwork.LocalPlayer.NickName) return;
+        if(playerName != PhotonNetwork.LocalPlayer.UserId) return;
+        print("[SPAWNER] Spawning Player: " + playerName);
         //Control random character
         //GameObject player = characterList.transform.GetChild(spawnInt).gameObject;
         //Instantiate random character
@@ -179,7 +210,7 @@ public class Spawner : MonoBehaviourPunCallbacks {
  
     private void SetTypes() {
         print("Setting types");
-        loadText.text = "Setting player types...";
+        // loadText.text = "Setting player types...";
 
         if(allTypesSet) return;
         int randomHostIndex = Random.Range(0, spawnedList.Count);
@@ -190,7 +221,9 @@ public class Spawner : MonoBehaviourPunCallbacks {
 
     [PunRPC] private void SetTypesRPC(int hostInt) {
         print("Set types RPC: " + hostInt);
-        loadText.text = "Setting local player type...";
+        // loadText.text = "Setting local player type...";
+        // print("!localPlayer: ");
+        // print(localPlayer);
         if(localPlayer.GetComponent<Character>().spawnInt == hostInt) {
             localPlayer.GetComponent<Character>().SetPlayerType(0); //0 - Infected
         } else {
@@ -208,7 +241,7 @@ public class Spawner : MonoBehaviourPunCallbacks {
     //============================================================
 
     private void SpawnAI() {
-        loadText.text = "Spawning AI";
+        // loadText.text = "Spawning AI";
         int i = 0;
         for(i = 0; i < characterPrefabs.Length; i++) { 
             //Spawn character if not already controlled by player
@@ -227,23 +260,8 @@ public class Spawner : MonoBehaviourPunCallbacks {
     //============================================================
 
     private void SpawnItems() {
-        loadText.text = "Spawning Items";
+        // loadText.text = "Spawning Items";
         List<int> spawnInts = new List<int>(); //int of items already spawned
-        
-        //List of item ints
-        // List<int> toSpawnInts = new List<int>();
-        // for(int i = 0; i < items.childCount; i++) {
-        //     toSpawnInts.Add(i);
-        // }
-
-        // //
-        // for(int i = 0; i < items.childCount; i++) {
-        //     items.GetChild(i);
-
-        //     if(i >= storages.Length) return;
-
-        //     int randInt = Random.Range(0, toSpawnInts.Count);
-        // }
         
         foreach(GameObject item in itemPrefabs) {
             int spawnInt;
@@ -261,27 +279,8 @@ public class Spawner : MonoBehaviourPunCallbacks {
             }
             PhotonNetwork.Instantiate(item.name, storages[spawnInt].position, Quaternion.identity);
             storages[spawnInt].GetComponent<Storage>().InsertItem(item.GetComponent<ItemHandler>());
-            // this.photonView.RPC("InsertItemRPC", RpcTarget.All, item.name + "(Clone)", spawnInt);
         }
     }
-
-    // [PunRPC] private void InsertItemRPC(string itemName, int spawnInt) {
-    //     print("Inserting item: " + itemName + " to " + spawnInt);
-    //     Storage storage = storages[spawnInt].GetComponent<Storage>();
-    //     ItemHandler item = GameObject.Find(itemName).GetComponent<ItemHandler>();
-
-    //     storage.InsertItem(item);
-    // }
-
-    // [PunRPC] private void SpawnItem(string itemName, int spawnInt) {
-    //     loadText.text = "Spawning Items";
-    //     Transform spawnPoint = storages[spawnInt].transform;
-    //     GameObject item = GameObject.Find(itemName);
-
-    //     item.transform.parent = spawnPoint;
-    //     item.GetComponent<SpriteRenderer>().spriteSortPoint = item.transform.parent.GetComponent<SpriteRenderer>().spriteSortPoint - 1;
-    //     item.transform.localPosition = new Vector3(0, 0, 0);
-    // }
 
     //============================================================
 
@@ -296,6 +295,11 @@ public class Spawner : MonoBehaviourPunCallbacks {
         foreach(aiInput ai in GameObject.FindObjectsOfType<aiInput>()) {
             if(!ai.enabled) Destroy(ai);
         }
+
+        //Activate all generators
+        // foreach(AudioSource generatorAS in generators) {
+        //     generatorAS.Play();
+        // }
     }
 
     [PunRPC] private void ActivateTypePopupRPC() {

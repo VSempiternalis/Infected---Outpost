@@ -9,7 +9,7 @@ public class SlowFollower : MonoBehaviour {
 
     private void Start() {
         // rb = GetComponent<Rigidbody>();
-        offset = transform.position - toFollow.position;
+        if(toFollow) offset = transform.position - toFollow.position;
     }
 
     // private void FixedUpdate() {
@@ -24,6 +24,8 @@ public class SlowFollower : MonoBehaviour {
     // }
 
     private void LateUpdate() {
+        if(!toFollow) return;
+        
         Vector3 targetPosition = toFollow.position + offset;
         transform.position = Vector3.Lerp(transform.position, targetPosition, smoothSpeed * Time.deltaTime);
     }

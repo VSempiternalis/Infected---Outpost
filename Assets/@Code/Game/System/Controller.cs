@@ -1,6 +1,5 @@
 using UnityEngine;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using Photon.Voice.Unity;
 
 public class Controller : MonoBehaviour {
@@ -44,11 +43,25 @@ public class Controller : MonoBehaviour {
     [Space(10)]
     [Header("VOICE CHAT")]
     [SerializeField] private Recorder recorder;
+    [SerializeField] private GameObject speakerIMG;
 
     [Space(10)]
     // [Header("INFECTED")]
     // private bool isInfected;
     [SerializeField] private Follower playerDot; //Dot that follows player pos in map
+
+    [Space(10)]
+    [Header("KEYBINDS")]
+    private KeyCode Key_MoveUp;
+    private KeyCode Key_MoveDown;
+    private KeyCode Key_MoveLeft;
+    private KeyCode Key_MoveRight;
+    private KeyCode Key_ToggleMap;
+    private KeyCode Key_Run;
+    private KeyCode Key_UseItem;
+    private KeyCode Key_GrabDropModifier;
+    // private KeyCode Key_Aim;
+    private KeyCode Key_ProxChat;
 
     private void Awake() {
         current = this;
@@ -58,6 +71,8 @@ public class Controller : MonoBehaviour {
         mainCamera = Camera.main;
 
         stamina = staminaMax;
+
+        GetKeybinds();
     }
 
     private void Update() {
@@ -80,15 +95,27 @@ public class Controller : MonoBehaviour {
         Movement();
     }
 
+    private void GetKeybinds() {
+        Key_MoveUp = (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Key_MoveUp", "W"));
+        Key_MoveDown = (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Key_MoveDown", "S"));
+        Key_MoveLeft = (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Key_MoveLeft", "A"));
+        Key_MoveRight = (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Key_MoveRight", "D"));
+        Key_ToggleMap = (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Key_ToggleMap", "Tab"));
+        Key_Run = (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Key_Run", "LeftShift"));
+        Key_UseItem = (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Key_UseItem", "Mouse0"));
+        Key_GrabDropModifier = (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Key_GrabDropModifier", "LeftControl"));
+        Key_ProxChat = (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Key_ProxChat", "Space"));
+    }
+
     private void GetSpectatorInput() {
-        if(Input.GetKeyDown(KeyCode.A)) {
+        if(Input.GetKeyDown(Key_MoveLeft)) {
             print("SPECTATOR A");
             if(followInt <= 0) followInt = playerList.Count - 1;
             else followInt --;
         
             SetCamera(playerList[followInt].GetComponent<Rigidbody>());
             uiManager.current.SetFollowing(playerList[followInt].photonView.Owner.NickName, playerList[followInt].GetComponent<Character>().type);
-        } else if(Input.GetKeyDown(KeyCode.D)) {
+        } else if(Input.GetKeyDown(Key_MoveRight)) {
             print("SPECTATOR D");
             if(followInt >= (playerList.Count - 1)) followInt = 0;
             else followInt ++;
@@ -96,6 +123,10 @@ public class Controller : MonoBehaviour {
             SetCamera(playerList[followInt].GetComponent<Rigidbody>());
             uiManager.current.SetFollowing(playerList[followInt].photonView.Owner.NickName, playerList[followInt].GetComponent<Character>().type);
         }
+
+        if(Input.GetKeyDown(KeyCode.Escape)) uiManager.current.ToggleEsc();
+
+        if(Input.GetKeyDown(Key_ToggleMap)) uiManager.current.ToggleMap();
     }
 
     public void SetToSpectator() {
@@ -107,7 +138,7 @@ public class Controller : MonoBehaviour {
         player = newPlayer;
         character = newPlayer.GetComponent<Character>();
         playerDot.toFollow = player.transform;
-        player.AddComponent<AudioListener>();
+        player.gameObject.AddComponent<AudioListener>();
 
         // characterType = character.type;
         // print("Setting player: " + character.name + ". Type: " + characterType);
@@ -164,7 +195,7 @@ public class Controller : MonoBehaviour {
                     character.isAiming = false;
                 }
             } //FLARE
-            else if(Input.GetMouseButtonDown(0) && character.onHandItem && character.onHandItem.GetComponent<Flare>() && !character.onHandItem.GetComponent<Flare>().isOn && !Input.GetKey(KeyCode.LeftControl) && !pointed.GetComponent<Storage>()) {
+            else if(Input.GetMouseButtonDown(0) && character.onHandItem && character.onHandItem.GetComponent<Flare>() && !character.onHandItem.GetComponent<Flare>().isOn && !Input.GetKey(Key_GrabDropModifier) && !pointed.GetComponent<Storage>()) {
                 character.onHandItem.GetComponent<IUsable>().Use(pointed, character.type);
             }
             
@@ -172,7 +203,7 @@ public class Controller : MonoBehaviour {
             else if(Vector3.Distance(character.transform.position, hit.point) <= reachDist) {
                 if(Input.GetMouseButtonDown(0)) {
                     if(pointed.GetComponent<IClickable>() != null) {
-                        if(Input.GetKey(KeyCode.LeftControl)) {
+                        if(Input.GetKey(Key_GrabDropModifier)) {
                             //Ctrl + Click item on ground
                             if(pointed.GetComponent<ItemHandler>() != null) {
                                 //Switch items
@@ -207,7 +238,7 @@ public class Controller : MonoBehaviour {
                     }
                     //Drop item on floor
                     else if(pointed.GetComponent<IClickable>() == null && pointed.layer != 9) {
-                        if(Input.GetKey(KeyCode.LeftControl) && Vector3.Distance(character.transform.position, hit.point) <= reachDist && character.onHandItem != null) {
+                        if(Input.GetKey(Key_GrabDropModifier) && Vector3.Distance(character.transform.position, hit.point) <= reachDist && character.onHandItem != null) {
                             character.DropItem(hit.point);
                         }
                     }
@@ -295,21 +326,30 @@ public class Controller : MonoBehaviour {
             return;
         }
 
-        input = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
+        // input = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
+        //VERTICAL
+        if(Input.GetKey(Key_MoveUp)) input.z = 1;
+        else if(Input.GetKey(Key_MoveDown)) input.z = -1;
+        else input.z = 0;
+        //HORIZONTAL
+        if(Input.GetKey(Key_MoveRight)) input.x = 1;
+        else if(Input.GetKey(Key_MoveLeft)) input.x = -1;
+        else input.x = 0;
 
         // Check for sprinting input (Left Shift)
-        if(Input.GetKey(KeyCode.LeftShift) && stamina > 0) {
+        if(Input.GetKey(Key_Run) && stamina > 0) {
             input *= sprintMultiplier;
         }
 
         if(Input.GetKeyDown(KeyCode.Escape)) uiManager.current.ToggleEsc();
 
-        if(Input.GetKeyDown(KeyCode.Tab)) uiManager.current.ToggleMap();
+        if(Input.GetKeyDown(Key_ToggleMap)) uiManager.current.ToggleMap();
 
         //Proximity chat
         bool isTransmitting = false;
-        if(Input.GetKey(KeyCode.Space)) isTransmitting = true;
+        if(Input.GetKey(Key_ProxChat)) isTransmitting = true;
         recorder.TransmitEnabled = isTransmitting;
+        speakerIMG.SetActive(isTransmitting);
     }
 
     private void Movement() {
@@ -317,7 +357,7 @@ public class Controller : MonoBehaviour {
 
         if(stamina <= staminaMax) {
             //player running and no stamina
-            if(Input.GetKey(KeyCode.LeftShift) && stamina == 0) stamina -= staminaLoss;
+            if(Input.GetKey(Key_Run) && stamina == 0) stamina -= staminaLoss;
             //player running and has stamina
             else if(player.velocity.magnitude >= 3.5f && stamina > 0) stamina -= staminaLoss;
             //player stationary and stamina less than max

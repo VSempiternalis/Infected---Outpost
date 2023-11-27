@@ -47,6 +47,8 @@ public class Spawner : MonoBehaviourPunCallbacks {
     [SerializeField] private TMP_Text allTypesSetText;
     [SerializeField] private TMP_Text playersSpawnedText;
 
+    [SerializeField] private AudioHandler ambAH;
+
     private void Awake() {
         current = this;
         uiManager.current.loadingPanel.SetActive(true);
@@ -62,7 +64,8 @@ public class Spawner : MonoBehaviourPunCallbacks {
         //[2] rpc other players that this character is taken
 
         //Ambience audio
-        // loopAH.PlayClip(1);
+        ambAH.Play(2);
+
         print("Calling InGameRPC: " + PhotonNetwork.LocalPlayer.NickName);
         photonView.RPC("InGameRPC", RpcTarget.MasterClient, PhotonNetwork.LocalPlayer.NickName);
     }
@@ -295,14 +298,14 @@ public class Spawner : MonoBehaviourPunCallbacks {
         foreach(aiInput ai in GameObject.FindObjectsOfType<aiInput>()) {
             if(!ai.enabled) Destroy(ai);
         }
-
-        //Activate all generators
-        // foreach(AudioSource generatorAS in generators) {
-        //     generatorAS.Play();
-        // }
     }
 
     [PunRPC] private void ActivateTypePopupRPC() {
         uiManager.current.ActivateTypePopupRPC(localPlayer.GetComponent<Character>().type);
+
+        // Activate all generators
+        foreach(AudioSource generatorAS in generators) {
+            generatorAS.Play();
+        }
     }
 }

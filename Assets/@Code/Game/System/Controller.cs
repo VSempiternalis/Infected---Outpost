@@ -63,6 +63,8 @@ public class Controller : MonoBehaviour {
     // private KeyCode Key_Aim;
     private KeyCode Key_ProxChat;
 
+    [SerializeField] private AudioListener oldAudioListener;
+
     private void Awake() {
         current = this;
     }
@@ -138,6 +140,8 @@ public class Controller : MonoBehaviour {
         player = newPlayer;
         character = newPlayer.GetComponent<Character>();
         playerDot.toFollow = player.transform;
+
+        oldAudioListener.gameObject.SetActive(false);
         player.gameObject.AddComponent<AudioListener>();
 
         // characterType = character.type;

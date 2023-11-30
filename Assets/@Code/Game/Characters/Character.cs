@@ -200,7 +200,7 @@ public class Character : MonoBehaviourPunCallbacks { //, ITooltipable
         ChangeAnimState("Attack");
         
         //sfx
-        ah.PlayOneShot(0);
+        // ah.PlayOneShot(0);
     }
 
     [PunRPC] private void InfectRPC(string targetName) {

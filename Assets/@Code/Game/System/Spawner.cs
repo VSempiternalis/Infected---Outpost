@@ -289,7 +289,7 @@ public class Spawner : MonoBehaviourPunCallbacks {
 
     [PunRPC] private void StartGameRPC() {
         gameStart = true;
-        // lights.SetActive(false);
+        lights.SetActive(false);
         uiManager.current.loadingPanel.SetActive(false);
         WinManager.current.StartCountdown();
         WinManager.current.CountPlayers();

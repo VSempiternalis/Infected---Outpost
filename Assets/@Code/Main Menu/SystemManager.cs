@@ -46,7 +46,7 @@ public class SystemManager : MonoBehaviourPunCallbacks {
         //Set version text
         versionText.text = "VERSION: v" + Application.version;
 
-        warning.text = "POSSIBLE REASONS IF YOU CANNOT CONNECT:\n    - YOU ARE OFFLINE\n    - YOU ARE USING AN OUTDATED VERSION OF THE GAME\n    - THE SERVERS ARE FULL\n      [GLOBAL MAX CONCURRENT PLAYERS: " + maxPlayerCount + "]";
+        warning.text = maxPlayerCount.ToString();
     }
 
     private void Start() {
@@ -96,7 +96,7 @@ public class SystemManager : MonoBehaviourPunCallbacks {
             timer = Time.time + interval;
         }
 
-        playersInGame.text = "USERS IN REGION: " + PhotonNetwork.CountOfPlayers + "/" + maxPlayerCount;
+        playersInGame.text = "USERS IN REGION: " + PhotonNetwork.CountOfPlayers;// + "/" + maxPlayerCount;
     }
 
     public void SetUserCount() {

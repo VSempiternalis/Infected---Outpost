@@ -1240,7 +1240,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4465371839432745075}
   - component: {fileID: 8737389859400712366}
-  - component: {fileID: 6813619738427039183}
   m_Layer: 6
   m_Name: Model
   m_TagString: Untagged
@@ -1363,24 +1362,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &6813619738427039183
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1014432563518817437}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dd7fea91fe63f4e1b884ef1e16a975c3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playDelayConfig:
-    Low: 200
-    High: 200
-    Max: 1000
-    SpeedUpPerc: 5
-  restartOnDeviceChange: 1
 --- !u!1 &1163874991186268362
 GameObject:
   m_ObjectHideFlags: 0
@@ -5649,7 +5630,6 @@ GameObject:
   - component: {fileID: -7120309302644978773}
   - component: {fileID: -7934208231832759846}
   - component: {fileID: 4870064119356482508}
-  - component: {fileID: -3219676898306330785}
   m_Layer: 6
   m_Name: Character_Abara
   m_TagString: Character
@@ -5957,18 +5937,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.5, y: 0.25, z: 0.25}
   m_Center: {x: 0, y: 0.125, z: 0}
---- !u!114 &-3219676898306330785
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6399383246012178595}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 126494ae2a10a34499272ed97a6c9f5d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &6538294955437064635
 GameObject:
   m_ObjectHideFlags: 0

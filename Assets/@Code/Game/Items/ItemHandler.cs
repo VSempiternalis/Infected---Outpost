@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class ItemHandler : MonoBehaviourPunCallbacks, IClickable, ITooltipable {
     public string itemName;
+    public Character holder;
     [TextArea] [SerializeField] private string desc;
 
     [SerializeField] private Vector3 onhandRotation; //fuel (0, -90, 0). key (0, 0, 90). gun (90, 0, 0)

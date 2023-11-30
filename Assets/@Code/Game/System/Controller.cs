@@ -1,6 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
-using Photon.Voice.Unity;
+// using Photon.Voice.Unity;
 
 public class Controller : MonoBehaviour {
     public static Controller current;
@@ -42,7 +42,7 @@ public class Controller : MonoBehaviour {
 
     [Space(10)]
     [Header("VOICE CHAT")]
-    [SerializeField] private Recorder recorder;
+    // [SerializeField] private Recorder recorder;
     [SerializeField] private GameObject speakerIMG;
 
     [Space(10)]
@@ -349,11 +349,11 @@ public class Controller : MonoBehaviour {
 
         if(Input.GetKeyDown(Key_ToggleMap)) uiManager.current.ToggleMap();
 
-        //Proximity chat
-        bool isTransmitting = false;
-        if(Input.GetKey(Key_ProxChat)) isTransmitting = true;
-        recorder.TransmitEnabled = isTransmitting;
-        speakerIMG.SetActive(isTransmitting);
+        //Proximity chat (CURRENTLY OFF)
+        // bool isTransmitting = false;
+        // if(Input.GetKey(Key_ProxChat)) isTransmitting = true;
+        // recorder.TransmitEnabled = isTransmitting;
+        // speakerIMG.SetActive(isTransmitting);
     }
 
     private void Movement() {

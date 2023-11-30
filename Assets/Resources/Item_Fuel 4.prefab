@@ -118,6 +118,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemName: Fuel Can
+  holder: {fileID: 0}
   desc: Used to hold fuel, a versatile resource in the outpost.
   onhandRotation: {x: 0, y: -90, z: 0}
 --- !u!114 &-8794102985979839579
@@ -166,9 +167,9 @@ MonoBehaviour:
   ObservedComponentsFoldoutOpen: 1
   Group: 0
   prefixField: -1
-  Synchronization: 1
+  Synchronization: 3
   OwnershipTransfer: 0
-  observableSearch: 2
+  observableSearch: 0
   ObservedComponents: []
   sceneViewId: 0
   InstantiationId: 0

@@ -49,6 +49,7 @@ public class Storage : MonoBehaviourPunCallbacks, IClickable, ITooltipable {
         if(itemName.Contains("(Clone)")) item = GameObject.Find(itemName).GetComponent<ItemHandler>();
         else item = GameObject.Find(itemName + "(Clone)").GetComponent<ItemHandler>();
         item.SetParent(transform, Vector3.zero);
+        item.holder = null;
         // item.transform.SetParent(transform);
         // item.transform.localPosition = Vector3.zero;
         // item.GetComponent<Rigidbody>().isKinematic = true;

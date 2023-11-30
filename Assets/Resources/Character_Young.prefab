@@ -1495,7 +1495,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5679667706765210342}
   - component: {fileID: 4157727964084836016}
-  - component: {fileID: 4864246909174313407}
   m_Layer: 6
   m_Name: Model
   m_TagString: Untagged
@@ -1618,24 +1617,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &4864246909174313407
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2344788492293872536}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dd7fea91fe63f4e1b884ef1e16a975c3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playDelayConfig:
-    Low: 200
-    High: 200
-    Max: 1000
-    SpeedUpPerc: 5
-  restartOnDeviceChange: 1
 --- !u!1 &2348817626876933738
 GameObject:
   m_ObjectHideFlags: 0
@@ -2131,7 +2112,6 @@ GameObject:
   - component: {fileID: -1997727479499409900}
   - component: {fileID: -2196699309176284377}
   - component: {fileID: 9073653266292192576}
-  - component: {fileID: -5526815529764198760}
   m_Layer: 6
   m_Name: Character_Young
   m_TagString: Character
@@ -2439,18 +2419,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.5, y: 0.25, z: 0.25}
   m_Center: {x: 0, y: 0.125, z: 0}
---- !u!114 &-5526815529764198760
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3438537617149439525}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 126494ae2a10a34499272ed97a6c9f5d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &3473021639307540477
 GameObject:
   m_ObjectHideFlags: 0

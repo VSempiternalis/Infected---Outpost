@@ -16,7 +16,7 @@ MonoBehaviour:
     AppIdRealtime: e88d16cd-184b-4bd4-b4e2-753fdf21654c
     AppIdFusion: 
     AppIdChat: 
-    AppIdVoice: 9cc5ae1d-5450-4159-8760-91ac66029c96
+    AppIdVoice: 
     AppVersion: 
     UseNameServer: 1
     FixedRegion: asia
@@ -34,19 +34,18 @@ MonoBehaviour:
   RunInBackground: 1
   StartInOfflineMode: 0
   RpcList:
-  - CantHearYou
-  - ChangeColour
-  - ClickRpc
-  - DestroyRpc
-  - HeresWhy
   - ActivateTypePopupRPC
+  - AddScoreRPC
   - AimRPC
   - ChangeAnimStateRPC
   - ChangeStateRPC
+  - ClickRpc
+  - DestroyRpc
   - DestroySpaceship
   - DropItemRPC
   - EndgameRPC
   - Fire
+  - GetSettingsFromMasterRPC
   - GiveSpawnRPC
   - InfectRPC
   - InGameRPC
@@ -56,24 +55,18 @@ MonoBehaviour:
   - RemoveRequirementFromStorageRPC
   - RespawnSpaceship
   - rpcMoveHead
+  - SetClientSettingsRPC
   - SetIsPlayerRPC
   - SetPlayerTypeRPC
   - SetTypesRPC
   - StartGameRPC
+  - StartingRPC
   - TakeItemRPC
   - UnAimRPC
   - UpdateGeneratorTimerUIRPC
+  - UpdatePlayerInGameCounterRPC
   - UpdateRequirementsRPC
   - UseRPC
-  - SetGeneratorTimeRPC
-  - SetInfectCooldownRPC
-  - SetFuelAddTimeRPC
-  - GetSettingsFromMasterRPC
-  - SetSettingsRPC
-  - SetClientSettingsRPC
-  - AddScoreRPC
-  - UpdatePlayerInGameCounterRPC
-  - StartingRPC
   DisableAutoOpenWizard: 1
   ShowSettings: 1
-  DevRegionSetOnce: 1
+  DevRegionSetOnce: 0

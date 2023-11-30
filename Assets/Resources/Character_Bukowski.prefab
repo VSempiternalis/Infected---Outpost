@@ -2811,7 +2811,6 @@ GameObject:
   - component: {fileID: 1268305628751288622}
   - component: {fileID: -5370146390023802100}
   - component: {fileID: 964617432864363385}
-  - component: {fileID: 987503330061508617}
   m_Layer: 6
   m_Name: Character_Bukowski
   m_TagString: Character
@@ -3119,18 +3118,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.5, y: 0.25, z: 0.25}
   m_Center: {x: 0, y: 0.125, z: 0}
---- !u!114 &987503330061508617
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4636794578565623995}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 126494ae2a10a34499272ed97a6c9f5d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &4637241826923874321
 GameObject:
   m_ObjectHideFlags: 0
@@ -5603,7 +5590,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4580567616343770444}
   - component: {fileID: 7230185561062078670}
-  - component: {fileID: 5854345802321077777}
   m_Layer: 6
   m_Name: Model
   m_TagString: Untagged
@@ -5726,24 +5712,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &5854345802321077777
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7642014093970400705}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dd7fea91fe63f4e1b884ef1e16a975c3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playDelayConfig:
-    Low: 200
-    High: 200
-    Max: 1000
-    SpeedUpPerc: 5
-  restartOnDeviceChange: 1
 --- !u!1 &7819979820163753293
 GameObject:
   m_ObjectHideFlags: 0

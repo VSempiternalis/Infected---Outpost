@@ -273,6 +273,15 @@ public class Character : MonoBehaviourPunCallbacks { //, ITooltipable
         GetComponent<CapsuleCollider>().enabled = false;
         GetComponent<BoxCollider>().enabled = true;
 
+        //reset velocity to avoid sliding
+        rb.isKinematic = true;
+
+        //remove from controller.playerlist which is used to spectate
+        if(Controller.current.playerList.Contains(this)) {
+            print("REMOVING " + name + " FROM PLAYER LIST!");
+            Controller.current.playerList.Remove(this);
+        }
+
         //sfx
         screamAH.PlayOneShot(0);
     }
@@ -288,6 +297,7 @@ public class Character : MonoBehaviourPunCallbacks { //, ITooltipable
         if(onHandItem.GetComponent<Gun>()) onHandItem.GetComponent<Outline>().enabled = true;
 
         onHandItem.SetParent(null, new Vector3(xPos, yPos, zPos));
+        onHandItem.holder = null;
         // onHandItem.isOwned = false;
         // onHandItem.transform.SetParent(null);
         // onHandItem.transform.position = new Vector3(xPos, yPos, zPos);
@@ -301,20 +311,28 @@ public class Character : MonoBehaviourPunCallbacks { //, ITooltipable
 
     public void TakeItem(ItemHandler item) {
         print("Taking item " + item.name);
-        if(item.transform.parent && item.transform.parent.GetComponent<Character>()) {
-            print("ITEM IS OWNED BY: " + item.transform.parent.name);
-            return;
-        } 
+        // if(item.holder != null) {
+        //     print("ITEM IS OWNED BY: " + item.transform.parent.name);
+
+        //     return;
+        // } 
         photonView.RPC("TakeItemRPC", RpcTarget.All, item.name);
     }
 
     [PunRPC] private void TakeItemRPC(string itemName) {
         ItemHandler item = GameObject.Find(itemName).GetComponent<ItemHandler>();
         print("Taking item rpc: " + itemName + ". item: " + item);
+
+        //if item is being held by other player
+        if(item.holder != null) {
+            item.holder.onHandItem = null;
+        }
+
         onHandItem = item;
         if(onHandItem.GetComponent<Outline>()) onHandItem.GetComponent<Outline>().OutlineWidth = 0;
         //Outline off if gun
         if(onHandItem.GetComponent<Gun>()) onHandItem.GetComponent<Outline>().enabled = false;
+        item.holder = this;
         onHandItem.SetParent(hand, Vector3.zero);
         // onHandItem.isOwned = true;
         // item.transform.SetParent(hand);

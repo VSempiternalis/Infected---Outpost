@@ -26,6 +26,8 @@ public class LobbyManager : MonoBehaviourPunCallbacks {
     [SerializeField] private GameObject buttonStart;
     [SerializeField] private MapSettings mapSettings;
 
+    [SerializeField] private TMP_InputField password;
+
     private void Awake() {
         current = this;
         print("LOBBY MAN AWAKE");
@@ -43,7 +45,16 @@ public class LobbyManager : MonoBehaviourPunCallbacks {
 
     public void OnClickHost() {
         print("ON CLICK HOST");
-        if(inputRoomName.text.Length >= 1) PhotonNetwork.CreateRoom(inputRoomName.text, new RoomOptions(){MaxPlayers = 12, PublishUserId = true});
+        ExitGames.Client.Photon.Hashtable table = new ExitGames.Client.Photon.Hashtable();
+        table.Add("Password", password.text);    
+
+        RoomOptions roomOptions = new RoomOptions(){MaxPlayers = 12, PublishUserId = true};
+        roomOptions.CustomRoomProperties = table;
+        roomOptions.CustomRoomPropertiesForLobby = new string[] {"Password"};
+        // print("HOST PASSWORD: " + (string)roomOptions.CustomRoomProperties["Password"]);
+        // if(inputRoomName.text.Length >= 1) PhotonNetwork.CreateRoom(inputRoomName.text, new RoomOptions(){MaxPlayers = 12, PublishUserId = true});
+        
+        if(inputRoomName.text.Length >= 1) PhotonNetwork.CreateRoom(inputRoomName.text, roomOptions);
     }
 
     public override void OnJoinedRoom() {
@@ -84,6 +95,8 @@ public class LobbyManager : MonoBehaviourPunCallbacks {
                 newRoom.SetRoomName(room.Name);
                 newRoom.SetPlayerCount(room.PlayerCount + "/" + room.MaxPlayers);
                 // newRoom.SetPing(room.);
+                newRoom.SetPassword((string)room.CustomProperties["Password"]);
+                // print("PASSWORD: " + (string)room.CustomProperties["Password"]);
                 roomItemsList.Add(newRoom);
             }
         }
@@ -112,7 +125,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks {
     public override void OnConnectedToMaster() {
         base.OnConnectedToMaster();
 
-        PhotonNetwork.JoinLobby();
+        // PhotonNetwork.JoinLobby();
     }
 
     public void UpdatePlayerList() {

@@ -294,7 +294,7 @@ public class Character : MonoBehaviourPunCallbacks { //, ITooltipable
         if(onHandItem && onHandItem.GetComponent<Outline>()) onHandItem.GetComponent<Outline>().OutlineWidth = 3;
 
         //Outline on if gun
-        if(onHandItem.GetComponent<Gun>()) onHandItem.GetComponent<Outline>().enabled = true;
+        if(onHandItem && onHandItem.GetComponent<Gun>()) onHandItem.GetComponent<Outline>().enabled = true;
 
         onHandItem.SetParent(null, new Vector3(xPos, yPos, zPos));
         onHandItem.holder = null;

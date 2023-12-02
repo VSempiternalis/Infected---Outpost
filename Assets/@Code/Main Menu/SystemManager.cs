@@ -43,6 +43,7 @@ public class SystemManager : MonoBehaviourPunCallbacks {
 
     [Space(10)]
     [Header("STEAM AUTHENTICATION")]
+    [SerializeField] private bool doAuthenticate;
     HAuthTicket hAuthTicket;
     string steamAuthSessionTicket; //I assume, the string converted version of the hAuthTicket
 
@@ -61,7 +62,7 @@ public class SystemManager : MonoBehaviourPunCallbacks {
         // print("STEAM MANAGER INIT: " + SteamManager.Initialized);
 
         //STEAM AUTHENTICATION
-        if(SteamManager.Initialized) SteamAuthentication();
+        if(doAuthenticate && SteamManager.Initialized) SteamAuthentication();
 
         panelConnecting.SetActive(false);
         panelMainMenu.SetActive(true);
@@ -201,7 +202,7 @@ public class SystemManager : MonoBehaviourPunCallbacks {
         base.OnConnectedToMaster();
 
         //FINISH STEAM AUTHENTICATION
-        CancelAuthTicket(hAuthTicket);
+        if(doAuthenticate) CancelAuthTicket(hAuthTicket);
 
         //DISPLAY PHOTON SERVER APPID
         string appID = serverSettings.AppSettings.AppIdRealtime;

@@ -1,7 +1,10 @@
 using UnityEngine;
 using TMPro;
 using Photon.Pun;
+using Photon.Realtime;
 using System.Collections.Generic;
+using Steamworks;
+using System.Text;
 
 public class SystemManager : MonoBehaviourPunCallbacks {
     public static SystemManager current;
@@ -38,6 +41,11 @@ public class SystemManager : MonoBehaviourPunCallbacks {
     [SerializeField] private TMP_Text playersInGame;
     [SerializeField] private int maxPlayerCount;
 
+    [Space(10)]
+    [Header("STEAM AUTHENTICATION")]
+    HAuthTicket hAuthTicket;
+    string steamAuthSessionTicket; //I assume, the string converted version of the hAuthTicket
+
     private void Awake() {
         // SetUserCount();
 
@@ -50,6 +58,11 @@ public class SystemManager : MonoBehaviourPunCallbacks {
     }
 
     private void Start() {
+        // print("STEAM MANAGER INIT: " + SteamManager.Initialized);
+
+        //STEAM AUTHENTICATION
+        if(SteamManager.Initialized) SteamAuthentication();
+
         panelConnecting.SetActive(false);
         panelMainMenu.SetActive(true);
 
@@ -99,6 +112,50 @@ public class SystemManager : MonoBehaviourPunCallbacks {
         playersInGame.text = "USERS IN REGION: " + PhotonNetwork.CountOfPlayers;// + "/" + maxPlayerCount;
     }
 
+    private void SteamAuthentication() {
+        hAuthTicket = new HAuthTicket();
+
+        //Set steamAuthSessionTicket and hAuthTicket
+        steamAuthSessionTicket = GetSteamAuthTicket(out hAuthTicket);
+
+        //Debug
+        print("H AUTH TICKET: " + hAuthTicket);
+        print("STEAM AUTH TICKET: " + steamAuthSessionTicket);
+
+        //Photon Authorization
+        PhotonNetwork.AuthValues = new AuthenticationValues();
+        PhotonNetwork.AuthValues.UserId = SteamUser.GetSteamID().ToString();
+        PhotonNetwork.AuthValues.AuthType = CustomAuthenticationType.Steam;
+        PhotonNetwork.AuthValues.AddAuthParameter("ticket", steamAuthSessionTicket);
+
+        //Display Steam user name
+    }
+
+    // hAuthTicket should be saved so you can use it to cancel the ticket as soon as you are done with it
+    public string GetSteamAuthTicket(out HAuthTicket hAuthTicket) {
+        SteamNetworkingIdentity pSteamNetID = new SteamNetworkingIdentity();
+
+        byte[] ticketByteArray = new byte[1024];
+        uint ticketSize;
+        hAuthTicket = SteamUser.GetAuthSessionTicket(ticketByteArray, ticketByteArray.Length, out ticketSize, ref pSteamNetID);
+        System.Array.Resize(ref ticketByteArray, (int)ticketSize);
+        StringBuilder sb = new StringBuilder();
+        for(int i=0; i < ticketSize; i++) {
+            sb.AppendFormat("{0:x2}", ticketByteArray[i]);
+        }
+        return sb.ToString();
+    }
+
+    private void CancelAuthTicket(HAuthTicket ticket) {
+        if(ticket != null) SteamUser.CancelAuthTicket(ticket);  
+    }
+
+    public override void OnCustomAuthenticationFailed(string debugMessage) {
+        base.OnCustomAuthenticationFailed(debugMessage);
+
+        print("ON CUSTOM AUTH FAILED: " + debugMessage);
+    }
+
     public void SetUserCount() {
         int ccu = PhotonNetwork.CountOfPlayers;
         print("CCU: " + ccu);
@@ -143,6 +200,10 @@ public class SystemManager : MonoBehaviourPunCallbacks {
         print("SERVER TO LOBBY / OnConnectedToMaster");
         base.OnConnectedToMaster();
 
+        //FINISH STEAM AUTHENTICATION
+        CancelAuthTicket(hAuthTicket);
+
+        //DISPLAY PHOTON SERVER APPID
         string appID = serverSettings.AppSettings.AppIdRealtime;
         string appText = "";
         //Display only first five letters of appID

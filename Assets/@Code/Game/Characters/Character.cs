@@ -291,7 +291,9 @@ public class Character : MonoBehaviourPunCallbacks { //, ITooltipable
     }
 
     [PunRPC] private void DropItemRPC(float xPos, float yPos, float zPos) {
-        if(onHandItem && onHandItem.GetComponent<Outline>()) onHandItem.GetComponent<Outline>().OutlineWidth = 3;
+        if(!onHandItem) return;
+
+        if(onHandItem.GetComponent<Outline>()) onHandItem.GetComponent<Outline>().OutlineWidth = 3;
 
         //Outline on if gun
         if(onHandItem.GetComponent<Gun>()) onHandItem.GetComponent<Outline>().enabled = true;
